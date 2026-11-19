@@ -2,6 +2,13 @@
 
 版本号以 `toolkit.json` 与 `pyproject.toml` 为准，四个公共 CLI 的 `--version` 统一来自 Python 包元数据。
 
+## 0.1.1
+
+- 新增 `.github/workflows/release.yml` 与 `python tasks.py check-release`，在推送 `v*` 标签后通过 PyPI Trusted Publishing（OIDC）自动执行版本核对、构建、跨平台验收并发布发行包；完善 `pyproject.toml` `[project.urls]` 与 `docs/pypi-readme.md` 公开链接。
+- 将 `core:workbook:initialize` 重构为 `core:workbook:project-setup`，按“基础配置与资源核对 → 目录骨架搭建 → 项目级核心文档维护”三大核心底座、可选扩展管理（工作 4）与显式触发的存量迁移清单（工作 5）分层；从 `toolkit-steward` 抽离扩展管理，统一按路径读取扩展 setup。
+- 将 `extension-setup-game` 与 `extension-setup-toolkit-maintenance` 规范为四段正交结构，并关闭模型自动调用（`disable-model-invocation: true` 与 `agents/openai.yaml`）。
+- 同步更新 `plan-toolkit`、`project-state` 重建提示语及协议文档中的 `project-setup` 引用；新增根 [README.md](README.md)，并在公开文档中补全正式 GitHub／PyPI 来源与精简安装命令。
+
 ## 0.1.0
 
 - 统一发布 Python CLI 包 `trigrams-toolkit`，提供 `plan-toolkit`、`project-state`、`handbook` 与 `harness-install` 四个标准入口，并随包交付协议 schema、核心类型与宿主 adapter 模板。

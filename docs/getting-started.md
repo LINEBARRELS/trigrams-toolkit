@@ -10,7 +10,7 @@ Trigrams toolkit 采用统一 Python CLI 包、Vercel skills 与项目级扩展�
 python -m pip install -e '.[dev]'
 ```
 
-安装后提供 `project-state`、`plan-toolkit`、`handbook`、`harness-install` 四个标准入口，运行版本统一来自包元数据。当前发布版本为 `0.1.0`，数据协议版本和资料版本独立维护。CLI 运行依赖由 `pyproject.toml` 声明。
+安装后提供 `project-state`、`plan-toolkit`、`handbook`、`harness-install` 四个标准入口，运行版本统一来自包元数据（当前发布版本见 [pyproject.toml](../pyproject.toml) 与[更新记录](../CHANGELOG.md)），数据协议版本和资料版本独立维护。CLI 运行依赖由 `pyproject.toml` 声明。
 
 四个公共 CLI 的帮助（`-h`／`--help`）和版本（`-v`／`--version`）可在任意目录查看。其余命令须在目标项目根目录执行。
 
