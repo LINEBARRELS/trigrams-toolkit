@@ -21,6 +21,12 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["build>=1.2.2,<2", "mypy>=1.15,<2", "types-PyYAML", "types-jsonschema"]
 
+[project.urls]
+Homepage = "https://github.com/LINEBARRELS/trigrams-toolkit"
+Repository = "https://github.com/LINEBARRELS/trigrams-toolkit"
+Issues = "https://github.com/LINEBARRELS/trigrams-toolkit/issues"
+Changelog = "https://github.com/LINEBARRELS/trigrams-toolkit/blob/main/CHANGELOG.md"
+
 [project.scripts]
 project-state = "trigrams_toolkit.state.cli:main"
 plan-toolkit = "trigrams_toolkit.plan.cli:main"

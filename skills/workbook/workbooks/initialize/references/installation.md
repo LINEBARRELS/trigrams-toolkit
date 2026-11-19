@@ -21,7 +21,7 @@ Pi Web 入口开启 `load_skills` 并继承父会话模型；使用前在宿主�
 
 按[主 workbook](../WORKBOOK.md#必要工作流程)准备扩展并装配。调用命令时，目标平台对应两类参数：Vercel skills 的 `agent`（单选：`codex`、`claude-code`、`pi`）与宿主 adapter 的 `platforms`（多选：`codex`、`claude`、`pi-web`）。其余输入字段与参数通过 `harness-install install preview --help`、`harness-install install apply --help` 及 `--help schema` 查询。
 
-1. **安装扩展 Skill**。若选用了扩展，运行 `npx skills add <扩展源> --skill '*' -a <agent>`，使用与后续装配相同的 `agent`。
+1. **安装扩展 Skill**。若选用了扩展，运行 `npx skills add LINEBARRELS/trigrams-toolkit/extensions/<extension>/skills --skill '*' -a <agent>`（官方扩展支持 `game`、`toolkit-maintenance`；第三方扩展替换为对应来源），使用与后续装配相同的 `agent`。
 2. **预览装配并说明写入范围**。将 `agent`、`extensions` 与 `platforms` 写入安装输入，运行 `harness-install install preview --input <输入文件>`。预览只读，可离线生成。审阅变更、冲突及预览结果中的 `projectRoot`，并向用户说明本次装配的项目范围（项目根与将写入的受管路径）、目标 `agent`，以及 `apply` 可能写入目标 `agent` 的全局 Skill 目录（补齐缺失的 `archify`、`smell-check`）。
 3. **应用装配**。如果出现本地修改或同名冲突，先与用户确认保留或归档策略并重新预览。取得确认后，运行 `harness-install install apply --input <确认文件> --request-id <请求ID> --expected-revision <baseRevision>`。确认文件包含原样的 `preview` 和 `confirmedBy`。
 

@@ -34,8 +34,8 @@ CI 在 Ubuntu 与 Windows 的 Python 3.11／3.13 上运行检查：PR 运行类�
 
 分发层次与安装归属见[架构说明](../skills/toolkit-steward/references/architecture.md#5-包层次与分发边界)与[全局安装指引](../skills/toolkit-steward/references/deployment.md)：
 
-1. **安装全局 CLI 与 core Skill**。用 `uv tool install trigrams-toolkit` 安装统一 Python 包。用 `npx skills add <公共源>/skills --skill '*' -g -a <agent>` 全局安装 core Skill，支持 `codex`、`claude-code`、`pi`。Node.js 与 `npx` 遵循当前 Vercel skills 的运行要求。
-2. **新项目或已有工程首次接入**。以全局 `toolkit-steward` 为入口，按[项目接入与扩展管理](../skills/toolkit-steward/references/project-integration.md)加载 `core:workbook:initialize`。在目标项目根安装所选扩展 Skill，运行 `harness-install` 预览并应用装配。首次装配会检查并补齐目标 `agent` 的全局 `archify`、`smell-check`。再读取已安装的 `extension-setup-<extension>`，建立或迁移项目文档与 `AGENTS.md`。
-3. **已接入项目增补扩展**。按[项目接入与扩展管理](../skills/toolkit-steward/references/project-integration.md)，在目标项目根安装新增扩展 Skill。用完整的目标扩展集合预览并应用装配，再读取新增 setup 并合并项目约定。
+1. **安装全局 CLI 与 core Skill**。用 `uv tool install trigrams-toolkit` 安装统一 Python 包。用 `npx skills add LINEBARRELS/trigrams-toolkit/skills --skill '*' -g -a <agent>` 全局安装 core Skill，支持 `codex`、`claude-code`、`pi`。Node.js 与 `npx` 遵循当前 Vercel skills 的运行要求。
+2. **新项目或已有工程首次接入**。以全局 `toolkit-steward` 为入口，按[项目接入与扩展管理](../skills/toolkit-steward/references/project-integration.md)加载 `core:workbook:initialize`。在目标项目根用 `npx skills add LINEBARRELS/trigrams-toolkit/extensions/<extension>/skills --skill '*' -a <agent>` 安装所选官方扩展 Skill（如 `game`、`toolkit-maintenance`），运行 `harness-install` 预览并应用装配。首次装配会检查并补齐目标 `agent` 的全局 `archify`、`smell-check`。再读取已安装的 `extension-setup-<extension>`，建立或迁移项目文档与 `AGENTS.md`。
+3. **已接入项目增补扩展**。按[项目接入与扩展管理](../skills/toolkit-steward/references/project-integration.md)，在目标项目根用 `npx skills add LINEBARRELS/trigrams-toolkit/extensions/<extension>/skills --skill '*' -a <agent>` 安装新增扩展 Skill。用完整的目标扩展集合预览并应用装配，再读取新增 setup 并合并项目约定。
 
 工具契约与命令细节见[装配协议](../src/trigrams_toolkit/resources/installation/PROTOCOL.md)及 [Project State 协议](../src/trigrams_toolkit/resources/state/PROTOCOL.md)。

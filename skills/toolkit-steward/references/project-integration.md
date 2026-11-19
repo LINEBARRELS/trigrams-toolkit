@@ -16,9 +16,9 @@
 ## 2. 已接入项目增补扩展
 
 1. **核对当前配置**。查看 `.agents/harness.json` 记录的目标 `agent`（`codex`、`claude-code`、`pi`）、已启用 `extensions` 列表与宿主 `platforms`（`codex`、`claude`、`pi-web`）。增补扩展沿用同一 `agent`。
-2. **安装目标扩展 Skill**。为当前 `agent` 安装 `extension-setup-<extension>` 及所需领域 Skill。
+2. **安装目标扩展 Skill**。为当前 `agent` 安装 `extension-setup-<extension>` 及所需领域 Skill（官方扩展如 `game`、`toolkit-maintenance` 位于 `LINEBARRELS/trigrams-toolkit/extensions/<extension>/skills`，第三方扩展使用其对应来源）：
    ```sh
-   npx skills add <扩展源> --skill '*' -a <agent>
+   npx skills add LINEBARRELS/trigrams-toolkit/extensions/<extension>/skills --skill '*' -a <agent>
    ```
    确认项目 Skill 目录中已出现对应的 `extension-setup-<extension>/SKILL.md`，且无同项目异源同名冲突。
 3. **保留既有扩展并装配快照**：`harness-install` 按输入中的 `extensions` 完整集合装配 `.agents/extensions/<extension>/` 快照，不会自动合并旧列表。

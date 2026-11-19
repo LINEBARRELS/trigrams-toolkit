@@ -43,6 +43,11 @@ harness-install --help
 
 All other subcommands operate on the current working directory and should be run from the target project root.
 
+## Links
+
+- Source & Skills: https://github.com/LINEBARRELS/trigrams-toolkit
+- Issues: https://github.com/LINEBARRELS/trigrams-toolkit/issues
+
 ## License
 
 MIT. See the bundled `LICENSE` and `THIRD_PARTY_NOTICES.md` files for details.
