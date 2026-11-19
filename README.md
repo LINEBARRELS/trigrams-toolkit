@@ -12,8 +12,8 @@
 ### 1. 安装全局 CLI 与 core Skill
 
 ```sh
-# 安装四个全局公共 CLI（project-state / plan-toolkit / handbook / harness-install）
-uv tool install trigrams-toolkit
+# 安装或更新四个全局公共 CLI（project-state / plan-toolkit / handbook / harness-install）
+uv tool install -U trigrams-toolkit
 
 # 将 14 个 core Skill 与核心资料全局安装至通用 ~/.agents/skills/ 目录
 npx skills add LINEBARRELS/trigrams-toolkit/skills --skill '*' -g

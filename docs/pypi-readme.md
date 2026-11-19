@@ -8,10 +8,10 @@ Command-line tools, schemas, core types and platform adapters for **Trigrams too
 
 ## Installation
 
-Install the CLI package globally with `uv`:
+Install or upgrade the CLI package globally with `uv`:
 
 ```sh
-uv tool install trigrams-toolkit
+uv tool install -U trigrams-toolkit
 ```
 
 Or install with `pip`:
