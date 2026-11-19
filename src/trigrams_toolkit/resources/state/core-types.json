@@ -1,0 +1,5 @@
+{
+  "artifactTypes": ["core:document", "core:architecture-spec", "core:code-architecture", "core:review"],
+  "relationTypes": [],
+  "sameArtifactKindRelations": ["core:supersedes"]
+}

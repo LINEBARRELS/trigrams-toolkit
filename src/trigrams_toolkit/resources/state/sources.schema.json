@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:trigrams:legacy-state-sources",
+  "$defs": {
+    "strings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "relation": {
+      "type": "object",
+      "required": [
+        "kind",
+        "fromKinds",
+        "toKinds"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "fromKinds": {
+          "$ref": "#/$defs/strings"
+        },
+        "toKinds": {
+          "$ref": "#/$defs/strings"
+        },
+        "maxOutgoing": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "maxIncoming": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "acyclic": {
+          "type": "boolean"
+        }
+      }
+    },
+    "package": {
+      "type": "object",
+      "required": [
+        "schemaVersion"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "source"
+          ]
+        },
+        {
+          "required": [
+            "extension"
+          ]
+        }
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "source": {
+          "type": "string"
+        },
+        "extension": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "artifactTypes": {
+          "$ref": "#/$defs/strings"
+        },
+        "relationTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relation"
+          }
+        }
+      }
+    }
+  }
+}

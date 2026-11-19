@@ -1,0 +1,5 @@
+interface:
+  display_name: "Toolkit Steward"
+  short_description: "解答 Trigrams toolkit 架构与组件分工问题，推荐 Skill、workbook 和工具，引导首次接入、扩展增补与状态诊断。"
+policy:
+  allow_implicit_invocation: true

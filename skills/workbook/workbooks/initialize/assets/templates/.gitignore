@@ -1,0 +1,19 @@
+# Local secrets & scratch
+.env
+.env.*
+.tmp/
+.tmp*/
+
+# Trigrams toolkit runtime locks, rollback journals & migration archives
+# Note: .project-state/state.json SHOULD be committed with registered docs.
+.project-state/*.lock.sqlite*
+**/.plan.lock
+.harness/
+.harness-archive/
+
+# Local per-agent Skill installations (installed via Vercel skills CLI)
+# Note: .agents/harness.json and .agents/extensions/ are pinned project snapshots
+# and SHOULD be committed so collaborators and worktrees share the same version.
+.agents/skills/
+.claude/skills/
+skills-lock.json

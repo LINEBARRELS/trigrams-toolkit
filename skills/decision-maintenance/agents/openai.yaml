@@ -1,0 +1,5 @@
+interface:
+  display_name: "Decision Maintenance"
+  short_description: "仅在用户显式触发时，从对话提炼宏观决策或修订、演进既有决策记录"
+policy:
+  allow_implicit_invocation: false

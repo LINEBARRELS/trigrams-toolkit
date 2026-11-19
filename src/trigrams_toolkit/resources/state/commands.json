@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "tool": "project-state",
+  "protocolVersion": 1,
+  "commands": [
+    {
+      "name": "register module",
+      "mutation": true,
+      "input": "urn:harness:state-cli#/$defs/moduleInput",
+      "output": "urn:harness:state-cli#/$defs/response"
+    },
+    {
+      "name": "register feature",
+      "mutation": true,
+      "input": "urn:harness:state-cli#/$defs/featureInput",
+      "output": "urn:harness:state-cli#/$defs/response"
+    },
+    {
+      "name": "register artifact",
+      "mutation": true,
+      "input": "urn:harness:state-cli#/$defs/artifactInput",
+      "output": "urn:harness:state-cli#/$defs/response"
+    },
+    {
+      "name": "locate",
+      "mutation": false,
+      "input": "urn:harness:state-cli#/$defs/idInput",
+      "output": "urn:harness:state-cli#/$defs/locateResponse"
+    },
+    {
+      "name": "list",
+      "mutation": false,
+      "input": "urn:harness:state-cli#/$defs/listInput",
+      "output": "urn:harness:state-cli#/$defs/listResponse"
+    },
+    {
+      "name": "related",
+      "mutation": false,
+      "input": "urn:harness:state-cli#/$defs/relatedInput",
+      "output": "urn:harness:state-cli#/$defs/relatedResponse"
+    },
+    {
+      "name": "relate",
+      "mutation": true,
+      "input": "urn:harness:state-cli#/$defs/relateInput",
+      "output": "urn:harness:state-cli#/$defs/response"
+    },
+    {
+      "name": "validate",
+      "mutation": false,
+      "input": "urn:harness:state-cli#/$defs/emptyInput",
+      "output": "urn:harness:state-cli#/$defs/response"
+    }
+  ]
+}

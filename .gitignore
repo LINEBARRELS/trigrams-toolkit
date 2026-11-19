@@ -1,0 +1,31 @@
+# Python & packaging
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+uv.lock
+
+# Scratch & local secrets
+.tmp/
+.tmp*/
+.env
+.env.*
+
+# Toolkit runtime locks, rollback journals & archives
+.project-state/*.lock.sqlite*
+**/.plan.lock
+.harness/
+.harness-archive/
+
+# Local dogfooding installation (keeps source repo clean & avoids skills discovery duplication)
+.agents/skills/
+.agents/extensions/
+.agents/harness.json
+.claude/
+.codex/
+.pi/
+skills-lock.json

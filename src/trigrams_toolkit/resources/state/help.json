@@ -1,0 +1,86 @@
+{
+  "register module": {
+    "usage": "register module NAME [--id ID]",
+    "summary": "Create a Module, or update its name with an existing ID.",
+    "options": [
+      [
+        "--id ID",
+        "Stable Module ID to create or update; omitted generates a new ID."
+      ]
+    ]
+  },
+  "register feature": {
+    "usage": "register feature NAME [--module MODULE_ID] [--id ID]",
+    "summary": "Create or update a Feature and its Module ownership.",
+    "options": [
+      [
+        "--module MODULE_ID",
+        "Required for new Features; omitted on update retains ownership."
+      ],
+      [
+        "--id ID",
+        "Stable Feature ID to create or update; omitted generates a new ID."
+      ]
+    ]
+  },
+  "register artifact": {
+    "usage": "register artifact PATH [--kind TYPE] [--module MODULE_ID] [--feature FEATURE_ID]...",
+    "summary": "Register identity and write ownership to the document at PATH and the Registry.",
+    "details": "Specify a project path. Relative paths start at the project root.",
+    "options": [
+      [
+        "--kind TYPE",
+        "Artifact kind; defaults to the existing kind, otherwise core:document."
+      ],
+      [
+        "--module MODULE_ID",
+        "Replace ownership with this Module and supplied Features; omit to retain ownership."
+      ],
+      [
+        "--feature FEATURE_ID",
+        "Repeat for each Feature; requires --module in the same command."
+      ]
+    ]
+  },
+  "locate": {
+    "usage": "locate ID",
+    "summary": "Return only the target public view; only Artifacts have a path.",
+    "details": "data: Module id/kind/name; Feature also moduleId; Artifact id/kind/title/moduleId?/featureIds/path. No related documents are expanded. Unregistered ID or missing body: invalid_reference; duplicate body: identity_conflict."
+  },
+  "list": {
+    "usage": "list [--kind TYPE]",
+    "summary": "List public entity views without resolving document paths.",
+    "details": "data.items contains id/kind and name or title with ownership fields. No path or internal locator fields are returned; missing bodies do not block listing.",
+    "options": [
+      [
+        "--kind TYPE",
+        "Filter by module, feature, artifact or an Artifact kind."
+      ]
+    ]
+  },
+  "related": {
+    "usage": "related ID [--direction DIRECTION]",
+    "summary": "Return one-hop neighbors in items and matched edges in relations.",
+    "details": "data contains only items and relations. Items use the locate view, including Artifact paths; relations contain kind/from/to/source. Module documents require related MODULE_ID; Feature queries do not expand them. Only selected neighbors are located. Unregistered ID or missing body: invalid_reference; duplicate body: identity_conflict.",
+    "options": [
+      [
+        "--direction DIRECTION",
+        "both (default), incoming or outgoing."
+      ]
+    ]
+  },
+  "relate": {
+    "usage": "relate FROM RELATION TO [--remove]",
+    "summary": "Add an extra relation between IDs, such as core:supersedes. Ownership uses register feature/artifact.",
+    "options": [
+      [
+        "--remove",
+        "Remove the declared relation instead of adding it."
+      ]
+    ]
+  },
+  "validate": {
+    "usage": "validate",
+    "summary": "Check identities, ownership, document references and extra relations. Missing Registry is valid."
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "tool": "plan-toolkit",
+  "commands": [
+    {
+      "name": "validate",
+      "usage": "PLAN [--sync]",
+      "mutation": true
+    },
+    {
+      "name": "get-task",
+      "usage": "PLAN",
+      "mutation": false
+    },
+    {
+      "name": "inspect",
+      "usage": "PLAN [TASK] [--full]",
+      "mutation": false
+    },
+    {
+      "name": "mark",
+      "usage": "PLAN [TASK] STATE [--note TEXT]",
+      "mutation": true
+    },
+    {
+      "name": "block",
+      "usage": "PLAN [TASK] --reason TEXT",
+      "mutation": true
+    },
+    {
+      "name": "cancel",
+      "usage": "PLAN [TASK] --reason TEXT",
+      "mutation": true
+    }
+  ]
+}

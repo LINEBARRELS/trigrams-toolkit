@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "name": "trigrams-toolkit",
+  "version": "0.1.0",
+  "core": {
+    "manifest": "skills/resources.json",
+    "skills": "skills",
+    "tools": "src/trigrams_toolkit"
+  },
+  "extensions": {
+    "toolkit-maintenance": {
+      "manifest": "extensions/toolkit-maintenance/skills/extension-setup-toolkit-maintenance/assets/extension.json",
+      "skills": "extensions/toolkit-maintenance/skills"
+    },
+    "game": {
+      "manifest": "extensions/game/skills/extension-setup-game/assets/extension.json",
+      "skills": "extensions/game/skills"
+    }
+  },
+  "adapters": {
+    "codex": "src/trigrams_toolkit/resources/adapters/codex",
+    "claude": "src/trigrams_toolkit/resources/adapters/claude",
+    "pi-web": "src/trigrams_toolkit/resources/adapters/pi-web"
+  }
+}

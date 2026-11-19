@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:harness:installation-cli",
+  "$defs": {
+    "installPreviewInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platforms"
+      ],
+      "properties": {
+        "packages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:harness:common#/$defs/text"
+          }
+        },
+        "extensions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "allOf": [
+              {
+                "$ref": "urn:harness:common#/$defs/token"
+              },
+              {
+                "not": {
+                  "enum": [
+                    "core",
+                    "project"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "platforms": {
+          "$ref": "urn:harness:installation#/$defs/platforms"
+        },
+        "agent": {
+          "$ref": "urn:harness:installation#/$defs/agent"
+        }
+      }
+    },
+    "applyInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preview",
+        "confirmedBy"
+      ],
+      "properties": {
+        "preview": {
+          "$ref": "urn:harness:installation#/$defs/preview"
+        },
+        "confirmedBy": {
+          "$ref": "urn:harness:common#/$defs/actor"
+        }
+      }
+    },
+    "operationResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operationId",
+        "phase",
+        "changed",
+        "stateRevision"
+      ],
+      "properties": {
+        "operationId": {
+          "type": "string",
+          "pattern": "^operation_[A-Za-z0-9_-]+$"
+        },
+        "phase": {
+          "const": "committed"
+        },
+        "changed": {
+          "type": "boolean"
+        },
+        "stateRevision": {
+          "$ref": "urn:harness:common#/$defs/revision"
+        }
+      }
+    }
+  }
+}

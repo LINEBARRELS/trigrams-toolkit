@@ -1,0 +1,5 @@
+include LICENSE THIRD_PARTY_NOTICES.md
+include docs/pypi-readme.md
+graft src/trigrams_toolkit
+prune tests
+global-exclude __pycache__ *.py[cod]

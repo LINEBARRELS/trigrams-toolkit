@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "extension": "validation",
+  "version": "1.0.0",
+  "resourceRoots": [
+    "workbooks"
+  ],
+  "artifactTypes": [
+    "validation:document"
+  ],
+  "relationTypes": [],
+  "install": [
+    {
+      "source": "materials",
+      "target": ".agents/extensions/validation/materials"
+    }
+  ]
+}

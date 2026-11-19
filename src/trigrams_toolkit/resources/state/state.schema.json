@@ -1,0 +1,200 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "modules",
+    "features",
+    "artifacts",
+    "relations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/module"
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/feature"
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relation"
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:harness:state",
+  "$defs": {
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^module_[A-Za-z0-9_-]+(?![\\s\\S])"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "feature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "moduleId"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^feature_[A-Za-z0-9_-]+(?![\\s\\S])"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "moduleId": {
+          "type": "string",
+          "pattern": "^module_[A-Za-z0-9_-]+(?![\\s\\S])"
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "title",
+        "locatorHint",
+        "identityMode",
+        "featureIds"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^artifact_[A-Za-z0-9_-]+(?![\\s\\S])"
+        },
+        "kind": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+:[A-Za-z0-9_-]+(?![\\s\\S])"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locatorHint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identityMode": {
+          "enum": [
+            "frontmatter",
+            "manifest"
+          ]
+        },
+        "moduleId": {
+          "type": "string",
+          "pattern": "^module_[A-Za-z0-9_-]+(?![\\s\\S])"
+        },
+        "featureIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^feature_[A-Za-z0-9_-]+(?![\\s\\S])"
+          }
+        }
+      }
+    },
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "kind",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "to": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "entity": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/module"
+        },
+        {
+          "$ref": "#/$defs/feature"
+        },
+        {
+          "$ref": "#/$defs/artifact"
+        }
+      ]
+    },
+    "identityManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "id",
+        "members"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "id": {
+          "$ref": "urn:harness:common#/$defs/artifactId"
+        },
+        "members": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:harness:common#/$defs/path"
+          }
+        },
+        "moduleId": {
+          "$ref": "#/$defs/artifact/properties/moduleId"
+        },
+        "featureIds": {
+          "$ref": "#/$defs/artifact/properties/featureIds"
+        }
+      }
+    }
+  }
+}

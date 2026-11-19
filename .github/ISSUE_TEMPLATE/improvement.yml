@@ -1,0 +1,28 @@
+name: 改进建议
+description: 提出文档、Skill、脚本或扩展的改进。
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: 改动范围
+      options:
+        - 文档与使用体验
+        - core
+        - game
+        - adapters
+        - 安装与发布
+    validations:
+      required: true
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 使用场景与当前障碍
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: 希望改变的行为
+      description: 给出可以检查的结果，注明已有替代方式。
+    validations:
+      required: true

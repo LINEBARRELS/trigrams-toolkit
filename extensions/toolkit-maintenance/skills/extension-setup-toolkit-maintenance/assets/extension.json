@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "extension": "toolkit-maintenance",
+  "version": "0.1.0",
+  "resourceRoots": [
+    "principles",
+    "workbooks"
+  ],
+  "install": []
+}

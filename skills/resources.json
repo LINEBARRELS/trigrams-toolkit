@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "source": "core",
+  "version": "0.1.0",
+  "resourceRoots": [
+    "principles/principles",
+    "workbook/workbooks"
+  ],
+  "install": []
+}

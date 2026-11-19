@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "stateRevision": 1,
+  "agent": "codex",
+  "extensions": [
+    {
+      "extension": "example",
+      "version": "1.0.0"
+    }
+  ],
+  "platforms": [],
+  "managed": [
+    {
+      "path": ".agents/extensions/example/extension.json",
+      "source": "example",
+      "kind": "file",
+      "contentDigest": "sha256:9ef3b7dcd7daa43322c66511f806e551176d2d41b6c065302f0bef9f8265f959"
+    }
+  ]
+}

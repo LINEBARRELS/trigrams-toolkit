@@ -1,0 +1,295 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:harness:installation",
+  "$defs": {
+    "platforms": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "codex",
+          "claude",
+          "pi-web"
+        ]
+      }
+    },
+    "managed": {
+      "$ref": "#/$defs/snapshotFile"
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "action",
+        "before",
+        "after"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "urn:harness:common#/$defs/path"
+        },
+        "action": {
+          "enum": [
+            "write",
+            "remove"
+          ]
+        },
+        "before": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/managed"
+            }
+          ]
+        },
+        "after": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/managed"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "write"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "after": {
+                "$ref": "#/$defs/managedFile"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "remove"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "after": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "preview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "operationId",
+        "kind",
+        "projectRoot",
+        "parameters",
+        "baseRevision",
+        "changes",
+        "conflicts",
+        "sources"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "operationId": {
+          "type": "string",
+          "pattern": "^operation_[A-Za-z0-9_-]+$"
+        },
+        "kind": {
+          "const": "install"
+        },
+        "projectRoot": {
+          "$ref": "urn:harness:common#/$defs/text"
+        },
+        "parameters": {
+          "$ref": "urn:harness:installation-cli#/$defs/installPreviewInput"
+        },
+        "baseRevision": {
+          "$ref": "urn:harness:common#/$defs/revision"
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/change"
+          }
+        },
+        "conflicts": {
+          "$ref": "urn:harness:common#/$defs/texts"
+        },
+        "sources": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "urn:harness:common#/$defs/text"
+          }
+        }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "requestId",
+        "request",
+        "phase",
+        "backups",
+        "result"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "requestId": {
+          "type": "string",
+          "pattern": "^req_[A-Za-z0-9_-]+$"
+        },
+        "request": {
+          "type": "object"
+        },
+        "phase": {
+          "enum": [
+            "applying",
+            "committed",
+            "rolled_back"
+          ]
+        },
+        "backups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/change"
+          }
+        },
+        "result": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "managedFile": {
+      "$ref": "#/$defs/snapshotFile"
+    },
+    "installation": {
+      "$ref": "#/$defs/snapshotInstallation"
+    },
+    "snapshotInstallation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "stateRevision",
+        "extensions",
+        "platforms",
+        "managed",
+        "agent"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "stateRevision": {
+          "$ref": "urn:harness:common#/$defs/revision"
+        },
+        "extensions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/snapshotExtension"
+          }
+        },
+        "platforms": {
+          "$ref": "#/$defs/platforms"
+        },
+        "managed": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/snapshotFile"
+          }
+        },
+        "agent": {
+          "$ref": "#/$defs/agent"
+        }
+      }
+    },
+    "agent": {
+      "enum": [
+        "codex",
+        "claude-code",
+        "pi"
+      ]
+    },
+    "snapshotExtension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "extension",
+        "version"
+      ],
+      "properties": {
+        "extension": {
+          "allOf": [
+            {
+              "$ref": "urn:harness:common#/$defs/token"
+            },
+            {
+              "not": {
+                "enum": [
+                  "core",
+                  "project"
+                ]
+              }
+            }
+          ]
+        },
+        "version": {
+          "$ref": "urn:harness:guides#/$defs/version"
+        }
+      }
+    },
+    "snapshotFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "source",
+        "kind",
+        "contentDigest"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "urn:harness:common#/$defs/path"
+        },
+        "source": {
+          "$ref": "urn:harness:common#/$defs/token"
+        },
+        "kind": {
+          "const": "file"
+        },
+        "contentDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

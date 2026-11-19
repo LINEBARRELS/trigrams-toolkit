@@ -1,0 +1,97 @@
+name: Toolkit checks
+
+on:
+  pull_request:
+  push:
+    tags:
+      - 'v*'
+  schedule:
+    # Daily at 03:17 Asia/Tokyo (02:17 Asia/Shanghai).
+    - cron: '17 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: toolkit-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      should_run: ${{ steps.changes.outputs.should_run }}
+      run_package_acceptance: ${{ steps.changes.outputs.run_package_acceptance }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Determine check scope
+        id: changes
+        shell: pwsh
+        run: |
+          $event = $env:GITHUB_EVENT_NAME
+          $shouldRun = $event -ne 'schedule'
+          if ($event -eq 'schedule') {
+            $since = [DateTimeOffset]::UtcNow.AddHours(-24).ToUnixTimeSeconds()
+            $recentCommit = git log --since-as-filter="@$since" -1 --format=%H
+            if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect commit history' }
+            $shouldRun = -not [string]::IsNullOrWhiteSpace($recentCommit)
+          }
+          $runPackage = $event -ne 'pull_request'
+          "should_run=$($shouldRun.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+          "run_package_acceptance=$($runPackage.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+
+  platform-checks:
+    needs: check-changes
+    if: needs.check-changes.outputs.should_run == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.11', '3.13']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Python package and development checks
+        run: python -m pip install -e '.[dev]' uv
+      - name: Check Python types
+        run: python -m mypy
+      - name: Validate repository resources
+        run: python scripts/verify_toolkit.py
+      - name: Validate protocol contracts
+        run: python scripts/check_protocols.py
+      - name: Test project state, installation and source business
+        env:
+          TRIGRAMS_ACCEPTANCE_EVIDENCE: .tmp/ci/source-business.json
+        run: python -m unittest discover -s tests -v
+      - name: Test Plan and guide behavior
+        run: python -m unittest discover -s tests/runtime -v
+      - name: Build release artifacts into dist/
+        if: needs.check-changes.outputs.run_package_acceptance == 'true'
+        run: python tasks.py build
+      - name: Verify isolated standard entries and business
+        if: needs.check-changes.outputs.run_package_acceptance == 'true'
+        run: python tasks.py verify-package --output .tmp/ci/package
+      - name: Save release candidate verification artifacts
+        if: always() && needs.check-changes.outputs.run_package_acceptance == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: trigrams-${{ matrix.os }}-py${{ matrix.python }}-${{ github.sha }}
+          if-no-files-found: warn
+          include-hidden-files: true
+          retention-days: 14
+          path: |
+            .tmp/ci/source-business.json
+            .tmp/ci/package/package-check.json
+            .tmp/ci/package/business.json
+            dist/*

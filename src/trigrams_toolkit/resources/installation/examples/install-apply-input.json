@@ -1,0 +1,48 @@
+{
+  "preview": {
+    "schemaVersion": 2,
+    "operationId": "operation_example",
+    "kind": "install",
+    "projectRoot": "C:/isolated/project",
+    "parameters": {
+      "agent": "codex",
+      "extensions": [
+        "example"
+      ],
+      "platforms": []
+    },
+    "baseRevision": 0,
+    "sources": {
+      "example": "C:/isolated/project/.agents/skills/extension-setup-example/assets"
+    },
+    "changes": [
+      {
+        "path": ".agents/extensions/example/extension.json",
+        "action": "write",
+        "before": null,
+        "after": {
+          "path": ".agents/extensions/example/extension.json",
+          "source": "example",
+          "kind": "file",
+          "contentDigest": "sha256:9ef3b7dcd7daa43322c66511f806e551176d2d41b6c065302f0bef9f8265f959"
+        }
+      },
+      {
+        "path": ".agents/harness.json",
+        "action": "write",
+        "before": null,
+        "after": {
+          "path": ".agents/harness.json",
+          "source": "core",
+          "kind": "file",
+          "contentDigest": "sha256:d2965e6966727dc8877cca52c795513835109ac7c0fbb79a962f5eb9fe6a56f1"
+        }
+      }
+    ],
+    "conflicts": []
+  },
+  "confirmedBy": {
+    "id": "developer",
+    "kind": "human"
+  }
+}

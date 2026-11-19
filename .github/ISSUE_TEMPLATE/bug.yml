@@ -1,0 +1,35 @@
+name: 缺陷反馈
+description: 报告可复现的工具包问题。
+body:
+  - type: input
+    id: version
+    attributes:
+      label: 工具包版本
+      description: 填写 <cli> --version 或 toolkit.json 版本（如 0.1.0）及使用的提交。
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 运行环境
+      description: 操作系统、Python / CLI 版本、Agent 客户端及安装方式。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 提供最小输入与实际执行的命令，移除凭据和项目私有数据。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果与实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 日志或截图
+      description: 只附复现所需的脱敏材料。

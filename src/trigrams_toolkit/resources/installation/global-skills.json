@@ -1,0 +1,6 @@
+{
+  "dependencies": [
+    {"name": "archify", "source": "https://archify.si", "package": "skills@latest"},
+    {"name": "smell-check", "source": "Zhen-Bo/smell-check", "package": "skills"}
+  ]
+}

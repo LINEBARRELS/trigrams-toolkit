@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "tool": "handbook",
+  "commands": [
+    {
+      "name": "scopes",
+      "mutation": false,
+      "usage": "scopes [--kind workbook|principle]"
+    },
+    {
+      "name": "list",
+      "mutation": false,
+      "usage": "list [--kind workbook|principle] [--scope SCOPE]"
+    },
+    {
+      "name": "load",
+      "mutation": false,
+      "usage": "load ID [ID ...]"
+    },
+    {
+      "name": "validate",
+      "mutation": false,
+      "usage": "validate"
+    },
+    {
+      "name": "import-principle",
+      "mutation": true,
+      "usage": "import-principle FILE --scope SCOPE --name NAME [--replace]"
+    }
+  ]
+}

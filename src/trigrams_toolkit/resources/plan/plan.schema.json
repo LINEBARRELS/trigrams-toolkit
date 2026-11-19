@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:harness:plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "tasks",
+    "stubs"
+  ],
+  "properties": {
+    "status": {
+      "$ref": "#/$defs/status"
+    },
+    "note": {
+      "$ref": "#/$defs/text"
+    },
+    "reason": {
+      "$ref": "#/$defs/text"
+    },
+    "tasks": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^T[0-9]+$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/task"
+      }
+    },
+    "stubs": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^S[0-9]+$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/stub"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/$defs/reasonRule"
+    }
+  ],
+  "$defs": {
+    "status": {
+      "enum": [
+        "pending",
+        "doing",
+        "rework",
+        "blocked",
+        "done",
+        "cancelled"
+      ]
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "note": {
+          "$ref": "#/$defs/text"
+        },
+        "reason": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/$defs/reasonRule"
+        }
+      ]
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "dependsOn",
+        "installs",
+        "fills",
+        "uses"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "note": {
+          "$ref": "#/$defs/text"
+        },
+        "reason": {
+          "$ref": "#/$defs/text"
+        },
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^T[0-9]+$"
+          }
+        },
+        "installs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^S[0-9]+$"
+          }
+        },
+        "fills": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^S[0-9]+$"
+          }
+        },
+        "uses": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^S[0-9]+$"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/$defs/reasonRule"
+        }
+      ]
+    },
+    "stub": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "status"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "status": {
+          "enum": [
+            "uninstalled",
+            "installed",
+            "filled"
+          ]
+        }
+      }
+    },
+    "reasonRule": {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "blocked",
+              "cancelled"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "reason"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "reason"
+          ]
+        }
+      }
+    }
+  }
+}

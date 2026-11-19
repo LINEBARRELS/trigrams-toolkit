@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "tool": "harness-install",
+  "commands": [
+    {
+      "name": "install preview",
+      "mutation": false,
+      "input": "urn:harness:installation-cli#/$defs/installPreviewInput",
+      "output": "urn:harness:installation#/$defs/preview"
+    },
+    {
+      "name": "install apply",
+      "mutation": true,
+      "input": "urn:harness:installation-cli#/$defs/applyInput",
+      "output": "urn:harness:installation-cli#/$defs/operationResult"
+    },
+    {
+      "name": "archive",
+      "mutation": true,
+      "usage": "archive PATH [PATH ...]"
+    }
+  ]
+}

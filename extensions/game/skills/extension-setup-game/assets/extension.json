@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "extension": "game",
+  "version": "0.1.0",
+  "resourceRoots": [
+    "principles",
+    "workbooks"
+  ],
+  "artifactTypes": [
+    "game:gameplay-spec"
+  ],
+  "relationTypes": [
+    {
+      "kind": "game:composes",
+      "fromKinds": ["game:gameplay-spec"],
+      "toKinds": ["game:gameplay-spec"],
+      "maxOutgoing": null,
+      "maxIncoming": null,
+      "acyclic": true
+    }
+  ],
+  "install": []
+}
