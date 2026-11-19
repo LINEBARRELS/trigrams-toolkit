@@ -1,20 +1,68 @@
 # 八卦 Trigrams toolkit
 
-本仓库维护跨领域的 Agent 工具包，采用 Vercel skills 分发、统一 Python CLI 包与项目级扩展装配。
+## 项目概况
 
-自有 Skill 位于 `skills/`，扩展资源位于各 setup 的 `assets/`；四个公共 CLI（`project-state`、`plan-toolkit`、`handbook`、`harness-install`）统一维护在 `src/trigrams_toolkit/`，契约、核心类型与平台 adapter 随包内 `resources/` 交付。
+本仓库维护跨领域的 Agent 工具包 Trigrams toolkit，采用 Vercel skills 分发、统一 Python CLI 包与项目级扩展快照装配。Skill 负责行为，workbook 定义工作方法，principle 提供判断标准；Plan 组织交接与执行。
 
-## 常用入口
+## 开发文档
 
-- [开发与接入](docs/getting-started.md)：开发环境准备、源码校验与三段安装接入流程。
-- [维护与发布](docs/maintenance.md)：唯一维护源、定向验证与打包发布入口。
-- [架构说明](skills/toolkit-steward/references/architecture.md)：体系职责、知识分层与分发边界。
-- [项目决策索引](docs/knowledge/decisions/index.md)：已确立的核心架构与工具契约取舍。
+| 文档 | 固定路径 | 用途与读取时机 |
+| --- | --- | --- |
+| 开发与接入 | [docs/getting-started.md](docs/getting-started.md) | 开发环境准备、源码校验与目标项目三段接入流程；搭建环境或核对接入方式时读取 |
+| 维护与发布 | [docs/maintenance.md](docs/maintenance.md) | 唯一维护源、定向验证矩阵、CI 与标签发布步骤；修改维护源或发布版本时读取 |
 
-## 工作约定
 
-- 代码开发时，从[现有原则目录](skills/principles/principles)按任务和语言查找相关 `PRINCIPLE.md`，直接读取并用于设计、实现与审查。
-- 四个公共 CLI 的帮助（`-h`／`--help`）和版本（`-v`／`--version`）可在任意目录查看。其余命令须在目标项目根目录执行。
-- 临时文件、过程日志和调试输出放在项目根 `.tmp/`。
-- 历史 Plan、Task、交付证据和审核记录保留原样。
-- 修改维护源后，运行 `python tasks.py check` 及对应测试；打包、验收与发布统一使用根目录 [tasks.py](tasks.py)。
+| 路径 | 用途与读取时机 |
+| --- | --- |
+| `docs/plans/` | Plan；规划与整体协调读取 summary，执行或审核 Task 读取正文及选中片段 |
+
+对于项目架构或工作流程理解有疑问可以使用全局安装的 `toolkit-steward` skill 进行咨询。
+
+## 工程目录
+
+下列路径相对仓库根目录，均为本工具包的唯一维护源或配套验证入口：
+
+| 路径 | 职责 |
+| --- | --- |
+| `skills/` | 通用 core Skill 唯一维护源；核心 workbook 与 principle 随对应 Skill 维护 |
+| `extensions/` | 官方扩展唯一维护源（`extensions/game/`、`extensions/toolkit-maintenance/`）；各扩展通过 `skills/extension-setup-<extension>/assets/` 维护自身的 `extension.json`、`principles/` 与 `workbooks/` |
+| `src/trigrams_toolkit/` | 统一 Python CLI 包源码（`project-state`、`plan-toolkit`、`handbook`、`harness-install`）；协议、核心类型与平台 adapter 随 `src/trigrams_toolkit/resources/` 交付 |
+| `scripts/` | 仓库只读校验与发行包验收脚本（`verify_toolkit.py`、`check_protocols.py`、`check_package.py`） |
+| `tests/` | 单元测试、运行时测试（`tests/runtime/`）与多工具源码验收测试 |
+| `tasks.py`、`toolkit.json` | 跨平台检查、测试、构建与发布统一入口，以及源码仓清单 |
+
+## 开发与验证
+
+以下命令均在仓库根目录运行。完整开发、CI 与标签发布流程见[开发与接入](docs/getting-started.md)和[维护与发布](docs/maintenance.md)。
+
+| 命令 | 用途 | 前提与验证状态 |
+| --- | --- | --- |
+| `handbook validate` | 校验全局 core 与当前项目已装配扩展资源 | 已验证 |
+| `PYTHONPATH=src python scripts/verify_toolkit.py` | 校验仓库源码资料、Skill 元数据与本地链接 | 已验证（无需安装 editable 包） |
+| `PYTHONPATH=src python scripts/check_protocols.py` | 校验命令声明与 JSON Schema 引用闭包 | 已验证（无需安装 editable 包） |
+
+## 项目约束
+
+- 严禁修改非当前任务所属或已完成（`done`）的历史 Plan、Task、交付证据与审核记录。
+- 历史 Plan 内的旧引用、旧签名与当时快照属于不可篡改的历史审计证据，不得逆向同步。
+- 修改维护源时，应同步更新实际调用方、协议契约与文档说明，并运行 `python tasks.py check` 及对应范围测试。
+- 打包、隔离验收与发布统一使用根目录 [tasks.py](tasks.py)。
+- 代码开发时，应按任务和语言查阅[现有原则目录](skills/principles/principles)中的相关 `PRINCIPLE.md`，用于设计、实现与审查。
+- 临时文件、过程日志与调试输出应放在项目根 `.tmp/`。
+
+### 项目术语
+
+- **core 资料**：随全局 `principles`、`workbook` Skill 分发的通用原则与工作方法，资源 ID 前缀为 `core:`。
+- **扩展快照（extension snapshot）**：由 `harness-install` 固化到目标项目 `.agents/extensions/<extension>/` 的扩展清单、原则与工作方法副本。
+- **平台 adapter**：随 Python CLI 包交付并装配到目标项目宿主目录（`.codex/agents/`、`.claude/agents/`、`.pi/agents/`）的角色入口文件。
+
+### 公共工具与项目配置
+
+四个公共 CLI 的帮助（`-h`）和版本（`-v`）可在任意目录查看。其余命令应在项目根目录执行。
+
+| 命令 | 用途 |
+| --- | --- |
+| `plan-toolkit` | 计划读取、依赖检查与当前状态 |
+| `project-state` | 项目内架构实体、成果与关系的登记和查询 |
+| `handbook` | workbook 与 principle 的发现和加载 |
+| `harness-install` | 项目资源装配、全局 Skill 补齐与旧运行状态归档 |
