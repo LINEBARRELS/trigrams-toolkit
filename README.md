@@ -15,22 +15,24 @@
 # 安装四个全局公共 CLI（project-state / plan-toolkit / handbook / harness-install）
 uv tool install trigrams-toolkit
 
-# 为目标 Agent（codex / claude-code / pi）全局安装 14 个 core Skill 与核心资料
-npx skills add LINEBARRELS/trigrams-toolkit/skills --skill '*' -g -a codex
+# 将 14 个 core Skill 与核心资料全局安装至通用 ~/.agents/skills/ 目录
+npx skills add LINEBARRELS/trigrams-toolkit/skills --skill '*' -g
 ```
+
+> 使用 Claude Code 时如需同步链接至 `~/.claude/skills/`，可在命令末尾附加 `-a claude-code`。
 
 四个公共 CLI 的帮助（`-h`／`--help`）与版本（`-v`／`--version`）可在任意目录查看；业务命令须在目标项目根目录执行。
 
 ### 2. 项目首次接入与安装扩展
 
-在目标项目根目录中，如需启用官方扩展（如 `game` 或 `toolkit-maintenance`），先按同一 `<agent>` 安装对应扩展 Skill：
+在目标项目根目录中，如需启用官方扩展（如 `game` 或 `toolkit-maintenance`），先安装对应扩展 Skill（进入项目 `.agents/skills/`；Claude Code 可附加 `-a claude-code`）：
 
 ```sh
 # 示例：安装 game 扩展 Skill
-npx skills add LINEBARRELS/trigrams-toolkit/extensions/game/skills --skill '*' -a codex
+npx skills add LINEBARRELS/trigrams-toolkit/extensions/game/skills --skill '*'
 
 # 示例：安装 toolkit-maintenance 扩展 Skill
-npx skills add LINEBARRELS/trigrams-toolkit/extensions/toolkit-maintenance/skills --skill '*' -a codex
+npx skills add LINEBARRELS/trigrams-toolkit/extensions/toolkit-maintenance/skills --skill '*'
 ```
 
 随后以全局 `toolkit-steward` Skill 为入口，按[项目接入与扩展管理](skills/toolkit-steward/references/project-integration.md)加载 `core:workbook:initialize`，运行 `harness-install` 预览并应用项目快照（`.agents/extensions/<extension>/`）与宿主 adapter；首次应用装配时会自动检查并补齐目标 `agent` 的全局必需依赖 `archify` 与 `smell-check`。
