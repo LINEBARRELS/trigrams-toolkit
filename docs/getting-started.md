@@ -12,7 +12,7 @@ python -m pip install -e '.[dev]'
 
 安装后提供 `project-state`、`plan-toolkit`、`handbook`、`harness-install` 四个标准入口，运行版本统一来自包元数据（当前发布版本见 [pyproject.toml](../pyproject.toml) 与[更新记录](../CHANGELOG.md)），数据协议版本和资料版本独立维护。CLI 运行依赖由 `pyproject.toml` 声明。
 
-四个公共 CLI 的帮助（`-h`／`--help`）和版本（`-v`／`--version`）可在任意目录查看。其余命令须在目标项目根目录执行。
+四个公共 CLI 的帮助（`-h`／`--help`）和版本（`-v`／`--version`）可在任意目录查看；`handbook`、`project-state`、`plan-toolkit` 会自动向上查找 `.agents/harness.json` 对齐项目根目录，`harness-install` 作用于当前目录。
 
 ## 验证、构建与发布
 

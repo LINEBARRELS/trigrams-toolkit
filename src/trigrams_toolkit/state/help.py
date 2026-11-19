@@ -20,6 +20,6 @@ def help_text(command: str) -> str:
         options.append(("-v, --version", "Show toolkit version."))
     prefix = "project-state" + (" " + command if command else "")
     return "\n".join([f"Usage: {prefix} COMMAND [options]", "",
-                      "Run commands from the project root to manage architecture entities and relations.",
+                      "Manage project architecture entities, artifacts and relations.",
                       "", "Commands:", *help_rows(rows), "", "Options:", *help_rows(options), "",
                       f"Use {prefix} COMMAND -h for command details.", ""])

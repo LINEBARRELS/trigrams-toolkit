@@ -12,6 +12,6 @@ Trigrams toolkit 的全局工具与核心 Skill 通过标准包管理器安装�
 
 ## 诊断与恢复
 
-1. **CLI 命令缺失或版本异常**。确认已完成 `uv tool install`（或开发态可编辑安装）并将工具目录加入 `PATH`。可在任意目录运行 `<工具> -v` 核对四个命令的版本，或运行 `<工具> -h` 查看用法。业务命令在目标项目根执行。
+1. **CLI 命令缺失或版本异常**。确认已完成 `uv tool install`（或开发态可编辑安装）并将工具目录加入 `PATH`。可在任意目录运行 `<工具> -v` 核对四个命令的版本，或运行 `<工具> -h` 查看用法。
 2. **core Skill 缺失或不同步**：核对目标 agent 的全局 Skill 目录（Codex／Pi 为 `~/.agents/skills/`，Claude Code 为 `~/.claude/skills/` 或 `$CLAUDE_CONFIG_DIR/skills/`），使用同一 `<agent>` 重新运行 `npx skills add` 补齐或更新，消除同名异源冲突。
 3. **全局依赖补齐失败**。按 `harness-install install apply` 报告的 Skill 和目标 `agent` 排查环境。确认本机 Node.js 与 `npx` 能运行当前 Vercel skills，并核对上游来源可达。修复后重试 `apply`，已装成功的 Skill 会被复用。预览及帮助可离线运行。

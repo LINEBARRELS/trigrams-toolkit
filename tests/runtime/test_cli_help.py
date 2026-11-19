@@ -23,7 +23,7 @@ from trigrams_toolkit.installation.harness_install import main as installation_m
 class CliHelpTests(unittest.TestCase):
     def invoke(self, arguments: list[str]) -> tuple[int, str]:
         output = io.StringIO()
-        with patch("trigrams_toolkit.plan.cli.current_project_root", side_effect=AssertionError("Project IO")), redirect_stdout(output):
+        with patch("trigrams_toolkit.plan.cli.discover_project_root", side_effect=AssertionError("Project IO")), redirect_stdout(output):
             code = main(arguments)
         return code, output.getvalue()
 
@@ -96,7 +96,7 @@ class PublicCliHelpTests(unittest.TestCase):
     def invoke(self, entry: Callable[[list[str]], int], arguments: list[str]) -> tuple[int, str]:
         output = io.StringIO()
         with redirect_stdout(output), \
-                patch("trigrams_toolkit.handbook.cli.current_project_root", side_effect=AssertionError("Project IO")), \
+                patch("trigrams_toolkit.handbook.cli.discover_project_root", side_effect=AssertionError("Project IO")), \
                 patch("trigrams_toolkit.installation.harness_install.current_project_root", side_effect=AssertionError("Project IO")), \
                 patch("trigrams_toolkit.installation.archive_project.archive_project", side_effect=AssertionError("Archive IO")):
             return_code = entry(arguments)
@@ -116,8 +116,8 @@ class PublicCliHelpTests(unittest.TestCase):
                     self.assertIn("-h, --help", short[1])
                     self.assertLessEqual(max(map(len, short[1].splitlines())), 100)
                     self.assertLessEqual(len(short[1].splitlines()), 30)
+        self.assertIn("project root", self.invoke(installation_main, ["-h"])[1])
         for entry in (global_main, installation_main):
-            self.assertIn("project root", self.invoke(entry, ["-h"])[1])
             self.assertEqual(self.invoke(entry, ["-v"]), self.invoke(entry, ["--version"]))
         archive = self.invoke(installation_main, ["archive", "-h"])[1]
         self.assertIn("Arguments:\n", archive)

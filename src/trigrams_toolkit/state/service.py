@@ -4,7 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from trigrams_toolkit.project_context import current_project_root
+from trigrams_toolkit.project_context import current_project_root, discover_project_root
 from trigrams_toolkit.project_context.paths import confined
 from trigrams_toolkit.shared.errors import ProtocolError, require
 from trigrams_toolkit.shared.files import atomic_write
@@ -70,7 +70,8 @@ def _query(project_root: Path, state: RegistryState, invocation: Invocation) -> 
 
 
 def execute(invocation: Invocation, *, cwd: Path | None = None) -> dict[str, Any]:
-    project_root = current_project_root(cwd)
+    start = current_project_root(cwd)
+    project_root = discover_project_root(start)
     state_file = _registry_path(project_root)
     if not invocation.command.startswith("register ") and invocation.command != "relate":
         return _query(project_root, read_state(state_file), invocation)
@@ -82,7 +83,7 @@ def execute(invocation: Invocation, *, cwd: Path | None = None) -> dict[str, Any
             edge: Edge = {"from": invocation.args[0], "kind": invocation.args[1], "to": invocation.args[2]}
             data: dict[str, Any] = {"changed": change_relation(state, edge, "--remove" in invocation.options, provider_types(project_root))}
         else:
-            data = register(state, project_root, invocation)
+            data = register(state, project_root, invocation, cwd=start)
         validate_record(state)
         after = json_bytes(state)
         if after != before:

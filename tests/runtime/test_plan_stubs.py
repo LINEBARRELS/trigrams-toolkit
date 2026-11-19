@@ -280,7 +280,7 @@ class StubSchedulingTests(unittest.TestCase):
     def test_cli_sync_selection_and_structured_cycle_errors(self) -> None:
         def invoke(*arguments):
             output = io.StringIO()
-            with patch("trigrams_toolkit.plan.cli.current_project_root", return_value=self.root), redirect_stdout(output):
+            with patch("trigrams_toolkit.plan.cli.discover_project_root", return_value=self.root), redirect_stdout(output):
                 code = main(list(arguments))
             return code, json.loads(output.getvalue())
         code, result = invoke("validate", str(self.plan), "--sync")

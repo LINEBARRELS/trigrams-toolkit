@@ -34,3 +34,19 @@ def confined(root: Path, value: Path | str) -> Path:
     target = physical_path(root / value)
     require(within(root.resolve(strict=True), target), "path_outside_root", f"Real path escapes project: {value}")
     return target
+
+
+def resolve_project_path(root: Path, value: Path | str, *, cwd: Path | None = None, confine: bool = True) -> Path:
+    """Resolve a CLI path argument against root, falling back to cwd for existing relative paths."""
+    require(bool(str(value)) and "\0" not in str(value), "invalid_reference", "Expected a project path.")
+    candidate = Path(value)
+    if candidate.is_absolute():
+        return confined(root, candidate) if confine else candidate
+    target = root / candidate
+    if cwd is not None:
+        cwd_resolved = physical_path(cwd)
+        if path_key(cwd_resolved) != path_key(physical_path(root)):
+            cwd_target = cwd_resolved / candidate
+            if not target.exists() and cwd_target.exists():
+                target = cwd_target
+    return confined(root, target) if confine else target

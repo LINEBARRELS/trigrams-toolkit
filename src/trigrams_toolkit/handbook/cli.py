@@ -14,7 +14,8 @@ from trigrams_toolkit.shared.errors import ProtocolError, require
 from .guides import GuideCatalog
 from .location import sources_for_project
 from .principle_import import import_principle
-from trigrams_toolkit.project_context import current_project_root
+from trigrams_toolkit.project_context import discover_project_root
+from trigrams_toolkit.project_context.paths import resolve_project_path
 from trigrams_toolkit.resources import schema_paths
 from trigrams_toolkit.shared.schema import SchemaCatalog
 from trigrams_toolkit.shared.serialization import read_json
@@ -32,7 +33,7 @@ def _agent_option(parser: Parser) -> None:
 
 
 def _parser() -> Parser:
-    parser = Parser(prog="handbook", description=f"{__doc__} Run commands from the target project root.",
+    parser = Parser(prog="handbook", description=__doc__,
                     formatter_class=HelpFormatter)
     _agent_option(parser)
     parser.add_argument("-v", "--version", action="store_true", help="Show the deployed toolkit version.")
@@ -77,7 +78,8 @@ def _catalog(root: Path, args: argparse.Namespace) -> GuideCatalog:
 def _dispatch(args: argparse.Namespace, root: Path) -> dict:
     if args.command == "import-principle":
         schemas = SchemaCatalog(schema_paths())
-        return import_principle(root, root / args.file, args.scope, args.name,
+        source = resolve_project_path(root, args.file, cwd=Path.cwd(), confine=False)
+        return import_principle(root, source, args.scope, args.name,
                                 schemas, replace=args.replace, agent=getattr(args, "agent", None)).as_dict()
     catalog = _catalog(root, args)
     if args.command == "scopes":
@@ -103,7 +105,7 @@ def main(argv: list[str] | None = None) -> int:
             print(version())
             return 0
         require(args.command is not None, "invalid_arguments", "Choose a command; use handbook --help.")
-        result = _dispatch(args, current_project_root())
+        result = _dispatch(args, discover_project_root())
         print(json.dumps(result, ensure_ascii=False))
         return 0
     except ProtocolError as error:

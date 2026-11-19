@@ -205,7 +205,7 @@ class PlanStateTests(_PlanCase):
 class PlanCliTests(_PlanCase):
     def invoke(self, *arguments: str) -> tuple[int, dict]:
         output = io.StringIO()
-        with patch("trigrams_toolkit.plan.cli.current_project_root", return_value=self.root), redirect_stdout(output):
+        with patch("trigrams_toolkit.plan.cli.discover_project_root", return_value=self.root), redirect_stdout(output):
             code = main(list(arguments))
         return code, json.loads(output.getvalue())
 
@@ -284,7 +284,7 @@ class PlanCliTests(_PlanCase):
             ["block", str(self.plan), "T01", "--reason", "  "]):
             with self.subTest(arguments=arguments):
                 output = io.StringIO()
-                with patch("trigrams_toolkit.plan.cli.current_project_root", side_effect=AssertionError("Project IO")), redirect_stdout(output):
+                with patch("trigrams_toolkit.plan.cli.discover_project_root", side_effect=AssertionError("Project IO")), redirect_stdout(output):
                     code = main(arguments)
                 self.assertEqual(code, 1)
                 self.assertEqual(json.loads(output.getvalue())["error"]["code"], "invalid_arguments")

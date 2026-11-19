@@ -9,8 +9,8 @@ from pathlib import Path
 import sys
 from typing import NoReturn, Sequence
 
-from trigrams_toolkit.project_context import current_project_root
-from trigrams_toolkit.project_context.paths import confined
+from trigrams_toolkit.project_context import discover_project_root
+from trigrams_toolkit.project_context.paths import resolve_project_path
 from trigrams_toolkit.shared.cli_help import HelpFormatter
 from trigrams_toolkit.shared.errors import ProtocolError, require
 from trigrams_toolkit.state import locate_identity
@@ -36,8 +36,8 @@ class Parser(argparse.ArgumentParser):
 
 
 def parser() -> Parser:
-    root = Parser(prog="plan-toolkit", description="Validate Plan handoffs and record current state. "
-                  "Run commands from the target project root.", formatter_class=HelpFormatter)
+    root = Parser(prog="plan-toolkit", description="Validate Plan handoffs and record current state.",
+                  formatter_class=HelpFormatter)
     root.add_argument("-v", "--version", action="version", version=version())
     commands = root.add_subparsers(dest="operation", required=True, title="Commands")
     for operation, description in (
@@ -85,8 +85,8 @@ def _record(args: argparse.Namespace) -> JsonObject | None:
 def parse_invocation(argv: Sequence[str]) -> Invocation:
     args = parser().parse_args(argv)
     record = _record(args)
-    project_root = current_project_root()
-    plan = confined(project_root, args.plan)
+    project_root = discover_project_root()
+    plan = resolve_project_path(project_root, args.plan, cwd=Path.cwd())
     return Invocation(args.operation, plan, getattr(args, "target", None), project_root, record,
                       sync=getattr(args, "sync", False), full=getattr(args, "full", False))
 

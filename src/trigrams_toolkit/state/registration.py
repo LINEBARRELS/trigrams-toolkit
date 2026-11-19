@@ -6,7 +6,7 @@ import secrets
 import string
 from typing import Any, TypeVar, cast
 
-from trigrams_toolkit.project_context.paths import confined, path_key
+from trigrams_toolkit.project_context.paths import path_key, resolve_project_path
 from trigrams_toolkit.shared.errors import ProtocolError, require
 from trigrams_toolkit.shared.files import atomic_write
 from .arguments import Invocation
@@ -53,10 +53,10 @@ def _named(state: RegistryState, invocation: Invocation) -> dict[str, Any]:
     return {"entity": entity, "changed": False}
 
 
-def register(state: RegistryState, project_root: Path, invocation: Invocation) -> dict[str, Any]:
+def register(state: RegistryState, project_root: Path, invocation: Invocation, *, cwd: Path | None = None) -> dict[str, Any]:
     if invocation.command != "register artifact":
         return _named(state, invocation)
-    path = confined(project_root, invocation.args[0])
+    path = resolve_project_path(project_root, invocation.args[0], cwd=cwd)
     source, declaration = read_declaration(project_root, path, ignore_ownership=True)
     identity = declaration.identity or _identity("artifact")
     existing = next((a for a in state["artifacts"] if a["id"] == identity), None)

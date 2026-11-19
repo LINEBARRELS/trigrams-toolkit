@@ -14,7 +14,7 @@ class GuideCliTests(RuntimeCase):
     def cli(self, *arguments: str) -> tuple[int, dict | str]:
         stream = io.StringIO()
         with redirect_stdout(stream), \
-                patch("trigrams_toolkit.handbook.cli.current_project_root", return_value=self.project), \
+                patch("trigrams_toolkit.handbook.cli.discover_project_root", return_value=self.project), \
                 patch("trigrams_toolkit.handbook.cli.sources_for_project", return_value=self.catalog.packages):
             code = global_main(list(arguments))
         try:
@@ -41,7 +41,7 @@ class GuideCliTests(RuntimeCase):
         self.guide("programming", "workbook", {"includes": ["core:workbook:research"]})
         self.refresh()
         with patch("trigrams_toolkit.handbook.cli.GuideCatalog.discover", wraps=self.catalog.discover) as discover, \
-                patch("trigrams_toolkit.handbook.cli.current_project_root", return_value=self.project) as project_root:
+                patch("trigrams_toolkit.handbook.cli.discover_project_root", return_value=self.project) as project_root:
             stream = io.StringIO()
             with redirect_stdout(stream), \
                     patch("trigrams_toolkit.handbook.cli.sources_for_project", return_value=self.catalog.packages):
@@ -115,7 +115,7 @@ class GuideCliTests(RuntimeCase):
             self.assertEqual(code, 0, output)
             self.assertIsInstance(output, str)
             self.assertNotIn("--source", output)
-        with redirect_stdout(io.StringIO()), patch("trigrams_toolkit.handbook.cli.current_project_root", side_effect=AssertionError("project IO")):
+        with redirect_stdout(io.StringIO()), patch("trigrams_toolkit.handbook.cli.discover_project_root", side_effect=AssertionError("project IO")):
             self.assertEqual(global_main(["load", "--help"]), 0)
 
     def test_version_uses_the_current_toolkit_regardless_of_external_home(self) -> None:
