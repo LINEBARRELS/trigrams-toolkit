@@ -28,6 +28,6 @@ def read_state(path: Path) -> RegistryState:
     except ProtocolError as error:
         if error.code != "invalid_schema":
             raise
-        raise ProtocolError("invalid_schema", f"Unsupported Registry format: {path}. Archive the existing state and rebuild it with initialize.") from error
+        raise ProtocolError("invalid_schema", f"Unsupported Registry format: {path}. Archive the existing state and rebuild it with project-setup.") from error
     validate_identity_graph(state)
     return state

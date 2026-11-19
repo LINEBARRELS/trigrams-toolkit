@@ -176,7 +176,7 @@ class PlanStateTests(_PlanCase):
                     with self.assertRaises(ProtocolError) as failure:
                         operation()
                     self.assertEqual(failure.exception.code, "unsupported_plan")
-                    self.assertIn("initialize", str(failure.exception))
+                    self.assertIn("project-setup", str(failure.exception))
                 self.assertEqual({item.relative_to(self.plan): item.read_bytes()
                                   for item in self.plan.rglob("*") if item.is_file()}, before)
                 if original is None:

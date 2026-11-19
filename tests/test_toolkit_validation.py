@@ -188,3 +188,11 @@ class SourceValidationTests(unittest.TestCase):
                 self.assertEqual(job["needs"], ["build", "verify"])
             else:
                 self.assertNotIn("permissions", job)
+
+    def test_extension_setup_skills_disable_model_invocation(self) -> None:
+        setup_skills = sorted((ROOT / "extensions").glob("*/skills/extension-setup-*/SKILL.md"))
+        self.assertTrue(setup_skills)
+        for path in setup_skills:
+            with self.subTest(skill=path.parent.name):
+                data = verify_toolkit.frontmatter(path)
+                self.assertIs(data.get("disable-model-invocation"), True)

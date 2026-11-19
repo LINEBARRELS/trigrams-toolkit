@@ -72,7 +72,7 @@ Artifact 的 `kind` 表示文稿类型，只保存在索引，不写入 YAML 头
 
 索引的 `schemaVersion` 固定为 `1`，保存在项目根的 `.project-state/state.json`。内容只有 Module、Feature、Artifact 和额外关系。写入使用文件锁与同目录原子替换，锁冲突直接报错。登记先验证身份与归属，再写文件头，最后写索引。两份文件不构成原子事务。索引失败后以相同归属参数重跑，仍复用同一身份。仅修复文件头时，结果中的 `changed` 也为 `true`。
 
-格式不符时，命令返回 `invalid_schema`。先归档原状态，再按 `initialize` workbook 重新登记。
+格式不符时，命令返回 `invalid_schema`。先归档原状态，再按 `project-setup` workbook 重新登记。
 
 ## 开发与验证
 

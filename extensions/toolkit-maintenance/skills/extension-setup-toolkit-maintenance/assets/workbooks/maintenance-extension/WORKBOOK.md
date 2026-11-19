@@ -20,7 +20,7 @@ includes:
 | 结构 | 职责与维护要求 |
 | --- | --- |
 | `assets/extension.json` | 在 `extension-setup-<extension>` 内声明扩展名、版本、资源根、附加 `install` 材料与可选领域类型／关系。新扩展接入仓库 `toolkit.json` 与 Skill 发现入口 |
-| `extension-setup-<extension>` | 维护接入前提、目标目录、文档与 `AGENTS.md` 合并、领域迁移及验收增量。首次接入与后续增补均从已安装 Skill 正文及其相对引用读取 |
+| `extension-setup-<extension>` | 设置 `disable-model-invocation: true`（避免常驻日常上下文），维护接入前提、目标目录、文档与 `AGENTS.md` 合并、领域迁移及验收增量；由 `core:workbook:project-setup` 按项目 Skill 路径直接读取 |
 | `workbooks/`、`principles/`、领域 Skill | 分别保存工作方法、判断标准和行为入口；按代表目标选择材料，维护可发现的身份与读取关系 |
 | 附加材料、公共工具与 adapter | 确需装配到项目的材料在 `extension.json` 的 `install` 中声明；公共 CLI 与宿主 adapter 由统一工具包维护，安装与装配方式向 `toolkit-steward` 查询 |
 

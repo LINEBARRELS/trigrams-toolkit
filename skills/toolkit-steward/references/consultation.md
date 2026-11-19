@@ -22,10 +22,9 @@
 | 架构设计、组件关系、principle 机制与项目知识分层 | [architecture.md](architecture.md) |
 | Skill、公共工具职责与工作流协作分工 | [capabilities.md](capabilities.md) |
 | 数据事实来源、状态机门禁与交接契约 | [contracts.md](contracts.md) |
-| 项目首次接入、状态重建及扩展增补、同步与移除 | [project-integration.md](project-integration.md) |
 | 全局 CLI、core Skill 与外部依赖的安装与恢复 | [deployment.md](deployment.md) |
 
-资料不可读时，报告受影响的咨询范围，仅答复已有证据支持的部分。
+项目配置、目录文档搭建、扩展增删同步与存量迁移流程由 `core:workbook:project-setup` 统一维护，不在此处重复。资料不可读时，报告受影响的咨询范围，仅答复已有证据支持的部分。
 
 ## 职责边界
 

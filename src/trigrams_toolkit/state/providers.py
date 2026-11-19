@@ -27,7 +27,7 @@ class Types:
 def _validate_project_package(value: Any) -> None:
     schema = read_json(resource_path("state/sources.schema.json"))
     error = next(Draft202012Validator({"$defs": schema["$defs"], "$ref": "#/$defs/package"}).iter_errors(value), None)
-    require(error is None, "invalid_schema", "Unsupported source format. Archive the existing state and rebuild it with initialize.")
+    require(error is None, "invalid_schema", "Unsupported source format. Archive the existing state and rebuild it with project-setup.")
 
 
 def _package_at(path: Path) -> dict[str, Any] | None:

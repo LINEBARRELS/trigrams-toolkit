@@ -80,6 +80,6 @@ Artifact 的类型使用 Registry 中的 `kind` 字段，登记时通过 `--kind
 
 写入持有索引文件锁，用同目录临时文件原子替换。校验失败不改写文稿或索引。文件头先于索引落盘，两次写入不是跨文件原子事务；若索引写入失败，以相同参数重试会复用已有身份。仅文件头修复也返回 `changed: true`。新节点创建的结果不确定时，调用方先查询已有节点。
 
-格式不符时，命令返回 `invalid_schema`。调用方先归档原状态，再按 `initialize` workbook 重新登记。
+格式不符时，命令返回 `invalid_schema`。调用方先归档原状态，再按 `project-setup` workbook 重新登记。
 
 CLI 的输入与响应目录见 [cli.schema.json](cli.schema.json)。这些 schema 用于本地契约验证。

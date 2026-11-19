@@ -84,6 +84,6 @@ inspect 默认省略调度声明数组、空集合与重复路径。整体查询
 
 协议失败返回 `{"ok":false,"error":{"code":"...","message":"...","issues":[...]}}`。issues 提供字段路径、Task、Stub 或依赖链；IO 失败仅有 code 与 message。调用方检查退出码与 ok，validate 另检查 data.valid。
 
-原先无 Stub 的精简状态只允许显式 --sync 补齐，并保留已有状态。更早的版本化状态或冻结文稿返回 unsupported_plan，应通过 initialize 归档重建。
+原先无 Stub 的精简状态只允许显式 --sync 补齐，并保留已有状态。更早的版本化状态或冻结文稿返回 unsupported_plan，应通过 project-setup 归档重建。
 
 plan.schema.json 的身份为 urn:harness:plan。[commands.json](commands.json) 是 6 个命令的清单。

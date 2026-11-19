@@ -35,7 +35,7 @@ npx skills add LINEBARRELS/trigrams-toolkit/extensions/game/skills --skill '*'
 npx skills add LINEBARRELS/trigrams-toolkit/extensions/toolkit-maintenance/skills --skill '*'
 ```
 
-随后以全局 `toolkit-steward` Skill 为入口，按[项目接入与扩展管理](skills/toolkit-steward/references/project-integration.md)加载 `core:workbook:initialize`，运行 `harness-install` 预览并应用项目快照（`.agents/extensions/<extension>/`）与宿主 adapter；首次应用装配时会自动检查并补齐目标 `agent` 的全局必需依赖 `archify` 与 `smell-check`。
+随后以全局 `toolkit-steward` Skill 为入口（或直接加载 [project-setup workbook](skills/workbook/workbooks/project-setup/WORKBOOK.md)，即 `core:workbook:project-setup`），按项目现状组合执行基础配置、扩展装配、目录骨架、项目级核心文档及按需迁移清单；应用装配时会自动检查并补齐目标 `agent` 的全局必需依赖 `archify` 与 `smell-check`。
 
 ## 组成与能力
 

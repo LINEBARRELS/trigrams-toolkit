@@ -23,7 +23,7 @@ class Status(StrEnum):
 
 MARK_STATES: Final = (Status.PENDING, Status.DOING, Status.REWORK, Status.DONE)
 ACTIVE_STATES: Final = (Status.PENDING, Status.DOING, Status.REWORK)
-REBUILD_INSTRUCTION: Final = "Archive the old state and rebuild the Plan with initialize."
+REBUILD_INSTRUCTION: Final = "Archive the old state and rebuild the Plan with project-setup."
 STUB_FIELDS: Final = ("installs", "fills", "uses")
 SCHEDULE_FIELDS: Final = ("dependsOn", *STUB_FIELDS)
 

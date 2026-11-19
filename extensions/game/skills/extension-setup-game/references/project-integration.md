@@ -26,13 +26,13 @@
    - 仅对已确定的正式玩法创建 `docs/gameplays/`，对尚未定稿的探索草稿按主题使用 `docs/research/gameplay/<topic>/`，对明确需要表现设计的范围创建 `docs/GAME-VISUALS.md`；严禁创建无实际内容的空占位文件。
    - 在 `PRODUCT.md` 中补充阶段体验与版本目标，按需补充跨玩法通用的业务术语。
 2. **AGENTS.md 合并**：
-   - 在“项目结构”的文档表中按实际范围补充或更新 `DESIGN.md` 与 `docs/GAME-VISUALS.md`，在路径表中合入 `docs/gameplays/` 与 `docs/research/gameplay/`，标注各自读取时机；迁移期目标导航与验收收敛沿用 core `initialize`，不列入空路径或加设“适用条件”列。
+   - 在“项目结构”的文档表中按实际范围补充或更新 `DESIGN.md` 与 `docs/GAME-VISUALS.md`，在路径表中合入 `docs/gameplays/` 与 `docs/research/gameplay/`，标注各自读取时机；不列入不存在的路径或加设“适用条件”列。
    - 在“项目约束 → 项目术语 → 术语检索说明”中合并两级路由：全局业务术语指向 `PRODUCT.md`，各玩法局部术语指向 `docs/gameplays/` 中对应 `gameplay-spec` 内的定义。
-   - 首次接入时，将上述目标目录、路径、术语路由和领域迁移项写入 `initialize` 的目标结构说明（新项目）或 `migration/checklist.md`（旧项目），待确认及旧项目明确开工后落盘；已接入项目增补扩展时直接增量合并。
+   - 上述目录、路径与术语路由均并入 `core:workbook:project-setup` 的对应原子工作与最终 `AGENTS.md` 收敛步骤，不重复编写独立安装流。
 
 ## 存量项目迁移
 
-以下领域资料的调查与处置纳入项目根 `migration/` 清单，执行时机遵循 core `initialize`：
+以下领域资料的调查与处置并入 `core:workbook:project-setup` 工作 5 的建议清单（`migration/checklist.md`），仅在用户确认执行时落盘：
 
 1. **迁移 gameplay-spec 与研究草稿**：
    - 将旧 `docs/gameplay-specs/` 下已定稿的正式稿移入 `docs/gameplays/`，尚未定稿的探索草稿按主题移入 `docs/research/gameplay/<topic>/`，修复内部相对链接。

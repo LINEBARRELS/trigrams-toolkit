@@ -36,6 +36,6 @@
 | 组织 Plan 全流程执行 | `execute-plan` | 开发与审核调度、成果整合、状态推进与总体结论 |
 | 执行具体开发任务 | `execute-task` 或领域 Skill | 实际交付产物、验证记录与未决事项 |
 | 独立核对交付质量 | `delivery-review` | 审核结论、缺陷证据与整改要求 |
-| 项目接入、迁移或扩展管理 | `toolkit-steward` | 项目导航、正式文稿、扩展快照与状态登记 |
+| 项目配置、接入、扩展管理与迁移准备 | `toolkit-steward` → `core:workbook:project-setup` | `.agents/harness.json`、扩展快照、目录骨架、项目核心文档与按需迁移清单 |
 
 `core` 提供跨领域通用能力；领域扩展（如 `game`、`toolkit-maintenance`）补充领域专属 Skill、workbook、principle 与可选成果类型；平台 adapter 为 Codex、Claude Code 和 Pi Web 提供角色子代理入口。

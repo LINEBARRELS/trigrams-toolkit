@@ -48,7 +48,7 @@ mark 接受 pending、doing、rework、done。block 和 cancel 写入 blocked �
 
 写命令使用普通文件锁与原子替换；失败不覆盖原文件。sync 不静默删除已开工 Task，不修改 doing / done Task 的调度声明，也不修复损坏的状态。完整字段、响应与错误见 [PROTOCOL.md](PROTOCOL.md)。
 
-原先无 Stub 的精简状态可通过显式 validate --sync 补齐快照并保留进展。更早的冻结文稿或版本化状态仍返回 unsupported_plan，应通过 initialize 归档并重建。
+原先无 Stub 的精简状态可通过显式 validate --sync 补齐快照并保留进展。更早的冻结文稿或版本化状态仍返回 unsupported_plan，应通过 project-setup 归档并重建。
 
 ## 验证
 

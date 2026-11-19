@@ -17,11 +17,13 @@
 | --- | --- |
 | `docs/implementation-specs/` | Implementation Spec（含模块级技术术语）；设计或实现对应功能时读取 |
 | `docs/plans/` | Plan；规划与整体协调读取 summary，执行或审核 Task 读取正文及选中片段 |
+| `docs/knowledge/decisions/` | 项目宏观决策记录与索引；追溯设计选择、约束与取舍理由时读取 |
+| `docs/knowledge/retrospectives/` | 项目复盘与关键变更记录；查证历史故障与演化背景时读取 |
 | `docs/research/` | 研究草稿；探索对应问题时读取 |
 | `docs/references/` | 外部参考资料；查证对应设计或技术依据时读取 |
 | `docs/archives/` | 退役资料归档 |
 
-<!-- 按已启用扩展的 extension-setup-<extension> 补充项目文档与工程路径。导航聚焦项目核心内容，不列入 .project-state/、.agents/ 及宿主入口。最终导航只记录实际存在的路径；迁移期目标导航与临时说明按 project-docs.md 装配，验收后删除临时说明与模板注释。 -->
+<!-- 按已启用扩展的 extension-setup-<extension> 补充项目文档与工程路径。导航聚焦项目核心内容，不列入 .project-state/、.agents/ 及宿主入口。最终导航只记录实际存在的路径，装配完成后删除模板注释。 -->
 
 ## 工程目录
 
