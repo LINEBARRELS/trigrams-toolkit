@@ -190,9 +190,18 @@ class SourceValidationTests(unittest.TestCase):
                 self.assertNotIn("permissions", job)
 
     def test_extension_setup_skills_disable_model_invocation(self) -> None:
+        required_sections = (
+            "## 1. 资源结构与依赖检查",
+            "## 2. 特定目录路径",
+            "## 3. 项目级文档补充与新增",
+            "## 4. 存量迁移与归档建议（按需）",
+        )
         setup_skills = sorted((ROOT / "extensions").glob("*/skills/extension-setup-*/SKILL.md"))
         self.assertTrue(setup_skills)
         for path in setup_skills:
             with self.subTest(skill=path.parent.name):
                 data = verify_toolkit.frontmatter(path)
                 self.assertIs(data.get("disable-model-invocation"), True)
+                body = path.read_text(encoding="utf-8")
+                for heading in required_sections:
+                    self.assertIn(heading, body)
