@@ -1,0 +1,121 @@
+name: Release to PyPI
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: toolkit-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Validate release metadata and build artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.13'
+      - name: Install Python package and development checks
+        run: python -m pip install -e '.[dev]' uv
+      - name: Check tag and release version alignment
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: python tasks.py check-release --tag "$RELEASE_TAG"
+      - name: Run static checks
+        run: python tasks.py check
+      - name: Build release artifacts into dist/
+        run: python tasks.py build
+      - name: Upload release distributions
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-dist
+          if-no-files-found: error
+          retention-days: 14
+          path: dist
+      - name: Upload direct wheel for parity verification
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-direct-wheel
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14
+          path: .tmp/direct-wheel
+
+  verify:
+    name: Verify release (${{ matrix.os }}, py${{ matrix.python }})
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.11', '3.13']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Download release distributions
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-dist
+          path: dist
+      - name: Download direct wheel
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-direct-wheel
+          path: .tmp/direct-wheel
+      - name: Install Python package and development checks
+        run: python -m pip install -e '.[dev]' uv
+      - name: Run static checks
+        run: python tasks.py check
+      - name: Run unit and acceptance test suites
+        env:
+          TRIGRAMS_ACCEPTANCE_EVIDENCE: .tmp/ci/source-business.json
+        run: python tasks.py test
+      - name: Verify isolated standard entries and business
+        run: python tasks.py verify-package --output .tmp/ci/package
+      - name: Save release verification receipts
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: trigrams-release-${{ matrix.os }}-py${{ matrix.python }}-${{ github.sha }}
+          if-no-files-found: warn
+          include-hidden-files: true
+          retention-days: 14
+          path: |
+            .tmp/ci/source-business.json
+            .tmp/ci/package/package-check.json
+            .tmp/ci/package/business.json
+
+  publish-pypi:
+    name: Publish to PyPI (OIDC Trusted Publishing)
+    needs: [build, verify]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: pypi
+      url: https://pypi.org/p/trigrams-toolkit
+    permissions:
+      id-token: write
+    steps:
+      - name: Download verified release distributions
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-dist
+          path: dist
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
+        with:
+          packages-dir: dist/

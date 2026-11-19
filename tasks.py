@@ -2,8 +2,10 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -41,6 +43,69 @@ def _cmd_check(_args: argparse.Namespace) -> None:
     _run([sys.executable, "scripts/verify_toolkit.py"])
     _run([sys.executable, "scripts/check_protocols.py"])
     _run([sys.executable, "-m", "mypy"])
+
+
+def check_release_metadata(root: Path = ROOT, *, tag: str | None = None, check_changelog: bool = True) -> dict:
+    pyproject = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
+    project = pyproject["project"]
+    package = str(project["name"])
+    version = str(project["version"])
+    issues: list[str] = []
+    checked: list[str] = ["pyproject.toml"]
+
+    if tag is not None and tag != f"v{version}":
+        issues.append(f"Git tag {tag!r} does not match pyproject.toml version {version!r} (expected 'v{version}').")
+
+    toolkit_path = root / "toolkit.json"
+    toolkit = json.loads(toolkit_path.read_text(encoding="utf-8"))
+    checked.append("toolkit.json")
+    if toolkit.get("version") != version:
+        issues.append(f"toolkit.json version {toolkit.get('version')!r} != {version!r}.")
+
+    manifests: list[str] = []
+    core_manifest = toolkit.get("core", {}).get("manifest")
+    if isinstance(core_manifest, str):
+        manifests.append(core_manifest)
+    for ext_data in toolkit.get("extensions", {}).values():
+        ext_manifest = ext_data.get("manifest") if isinstance(ext_data, dict) else None
+        if isinstance(ext_manifest, str):
+            manifests.append(ext_manifest)
+
+    for rel in manifests:
+        path = root / rel
+        checked.append(rel)
+        if not path.is_file():
+            issues.append(f"Missing manifest: {rel}")
+            continue
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if data.get("version") != version:
+            issues.append(f"{rel} version {data.get('version')!r} != {version!r}.")
+
+    if check_changelog:
+        changelog_path = root / "CHANGELOG.md"
+        checked.append("CHANGELOG.md")
+        if not changelog_path.is_file():
+            issues.append("Missing CHANGELOG.md.")
+        else:
+            text = changelog_path.read_text(encoding="utf-8")
+            if not re.search(rf"^##\s+{re.escape(version)}(?:\s|$)", text, re.MULTILINE):
+                issues.append(f"CHANGELOG.md does not contain a '## {version}' section.")
+
+    return {
+        "ok": not issues,
+        "package": package,
+        "version": version,
+        "tag": tag,
+        "checked": checked,
+        "issues": issues,
+    }
+
+
+def _cmd_check_release(args: argparse.Namespace) -> None:
+    report = check_release_metadata(ROOT, tag=args.tag, check_changelog=not args.skip_changelog)
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    if not report["ok"]:
+        raise SystemExit(1)
 
 
 def _cmd_test(_args: argparse.Namespace) -> None:
@@ -133,6 +198,12 @@ def _parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="task", required=True)
     sub.add_parser("check", help="Run verify_toolkit, check_protocols and mypy.")
+    check_release = sub.add_parser(
+        "check-release",
+        help="Verify version alignment across pyproject.toml, manifests, CHANGELOG.md and an optional Git tag.",
+    )
+    check_release.add_argument("--tag", help="Expected Git release tag (e.g. v0.1.0).")
+    check_release.add_argument("--skip-changelog", action="store_true", help="Skip checking CHANGELOG.md heading.")
     sub.add_parser("test", help="Run tests/ and tests/runtime/ unit test suites.")
 
     build = sub.add_parser("build", help="Clean and build sdist + wheel into dist/ (plus direct wheel in .tmp/).")
@@ -154,6 +225,7 @@ def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     handlers = {
         "check": _cmd_check,
+        "check-release": _cmd_check_release,
         "test": _cmd_test,
         "build": _cmd_build,
         "verify-package": _cmd_verify_package,

@@ -2,9 +2,6 @@ name: Toolkit checks
 
 on:
   pull_request:
-  push:
-    tags:
-      - 'v*'
   schedule:
     # Daily at 03:17 Asia/Tokyo (02:17 Asia/Shanghai).
     - cron: '17 18 * * *'

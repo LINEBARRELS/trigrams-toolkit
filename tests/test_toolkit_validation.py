@@ -1,13 +1,18 @@
 """Historical Plan links do not suppress validation of current documents."""
 from pathlib import Path
 import json
+import re
 import sys
 import tempfile
 import unittest
 from unittest.mock import patch
 
+import yaml
+
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
+import tasks
 import verify_toolkit
 from trigrams_toolkit.handbook.guides import GuideCatalog
 
@@ -132,3 +137,54 @@ class SourceValidationTests(unittest.TestCase):
             self.assertTrue(any("new.py" in issue for issue in result["issues"]), result)
             self.assertEqual(result["resources"], 17)
             self.assertEqual(result["sources"], ["fixture"])
+
+    def test_release_metadata_check_validates_versions_tag_and_changelog(self) -> None:
+        current = tasks.check_release_metadata(ROOT)
+        self.assertTrue(current["ok"], current)
+        tagged = tasks.check_release_metadata(ROOT, tag=f"v{current['version']}")
+        self.assertTrue(tagged["ok"], tagged)
+        wrong_tag = tasks.check_release_metadata(ROOT, tag="v9.9.9")
+        self.assertFalse(wrong_tag["ok"])
+        self.assertTrue(any("Git tag" in issue for issue in wrong_tag["issues"]), wrong_tag)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "1.2.3"\n', encoding="utf-8")
+            (root / "toolkit.json").write_text(json.dumps({
+                "version": "1.2.0",
+                "core": {"manifest": "skills/resources.json"},
+                "extensions": {"ext": {"manifest": "extensions/ext/extension.json"}},
+            }), encoding="utf-8")
+            (root / "skills").mkdir()
+            (root / "skills/resources.json").write_text('{"version": "1.2.3"}', encoding="utf-8")
+            (root / "extensions/ext").mkdir(parents=True)
+            (root / "extensions/ext/extension.json").write_text('{"version": "1.0.0"}', encoding="utf-8")
+            (root / "CHANGELOG.md").write_text("# Changelog\n\n## 1.0.0\n", encoding="utf-8")
+            failed = tasks.check_release_metadata(root, tag="v1.2.3")
+            self.assertFalse(failed["ok"])
+            self.assertEqual(len(failed["issues"]), 3, failed)
+
+    def test_github_workflows_pin_actions_and_scope_oidc_permissions(self) -> None:
+        pinned_re = re.compile(r"^[^@]+@[0-9a-f]{40}$")
+        workflows = {}
+        for name in ("ci.yml", "release.yml"):
+            data = yaml.safe_load((ROOT / ".github/workflows" / name).read_text(encoding="utf-8"))
+            workflows[name] = data
+            self.assertEqual(data["permissions"], {"contents": "read"})
+            for job_name, job in data["jobs"].items():
+                for step in job.get("steps", []):
+                    uses = step.get("uses")
+                    if uses:
+                        self.assertRegex(uses, pinned_re, f"{name}:{job_name} action must pin 40-char SHA: {uses}")
+        ci_triggers = workflows["ci.yml"].get("on", workflows["ci.yml"].get(True))
+        self.assertNotIn("push", ci_triggers)
+        release = workflows["release.yml"]
+        release_triggers = release.get("on", release.get(True))
+        self.assertEqual(release_triggers["push"]["tags"], ["v*"])
+        for job_name, job in release["jobs"].items():
+            if job_name == "publish-pypi":
+                self.assertEqual(job["permissions"], {"id-token": "write"})
+                self.assertEqual(job["environment"]["name"], "pypi")
+                self.assertEqual(job["needs"], ["build", "verify"])
+            else:
+                self.assertNotIn("permissions", job)
