@@ -1,6 +1,6 @@
 # 参与维护
 
-八卦 Trigrams toolkit 的贡献入口使用仓库 Issue 与 PR，日常讨论围绕具体场景、行为和验证证据展开。开发环境与源码验证见[开发与接入](docs/getting-started.md)和[维护与发布](docs/maintenance.md)。
+通过仓库 Issue 与 PR 参与 Trigrams toolkit 开发。讨论时说明具体场景、预期行为和验证证据。开发环境与源码验证见[开发与接入](docs/getting-started.md)和[维护与发布](docs/maintenance.md)。
 
 ## 提出改动
 

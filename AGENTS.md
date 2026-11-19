@@ -1,4 +1,4 @@
-# 八卦 Trigrams toolkit
+# Trigrams toolkit
 
 ## 项目概况
 

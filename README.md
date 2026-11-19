@@ -1,68 +1,83 @@
-# 八卦 Trigrams toolkit
+```text
+图难于其易，为大于其细。
+```
 
-面向软件与游戏工程的跨领域 Agent 工具包，连接项目接入、架构设计、计划调度、任务交付与状态登记。体系由统一 Python CLI 包（[PyPI: `trigrams-toolkit`](https://pypi.org/project/trigrams-toolkit/)）、通过 Vercel skills 分发的 core／扩展 Skill，以及受内容基线保护的项目级扩展快照组成。
+![水墨山雾中，白衣龙娘在山崖上运功，墨迹随掌势展开](docs/assets/trigrams-banner.webp)
 
-- **GitHub 仓库**：https://github.com/LINEBARRELS/trigrams-toolkit
-- **PyPI 发行包**：https://pypi.org/project/trigrams-toolkit/
-- **运行要求**：Python 3.11+、Node.js（用于 `npx skills`）
-- **开源许可**：[MIT License](LICENSE)
+# Trigrams toolkit
+
+面向软件与游戏工程的 **Agent 工具包**。把工程判断与工作方法沉淀成可复用的资料，用 Plan 与 Task 组织多阶段工作、角色交接和交付验收。
+
+[![PyPI 版本](https://img.shields.io/pypi/v/trigrams-toolkit?style=flat&label=PyPI&color=386964)](https://pypi.org/project/trigrams-toolkit/)
+[![MIT License](https://img.shields.io/badge/license-MIT-386964?style=flat)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-386964?style=flat)](pyproject.toml)
+
+[快速开始](#快速开始) · [体系架构](skills/toolkit-steward/references/architecture.md) · [官方扩展](#官方扩展) · [参与开发](CONTRIBUTING.md)
 
 ## 快速开始
 
-### 1. 安装全局 CLI 与 core Skill
+准备好 `uv`、Python 3.11+ 和用于运行 `npx` 的 Node.js。
 
-```sh
-# 安装或更新四个全局公共 CLI（project-state / plan-toolkit / handbook / harness-install）
-uv tool install -U trigrams-toolkit
+1. **安装全局 CLI 与 core Skill。**
 
-# 将 14 个 core Skill 与核心资料全局安装至通用 ~/.agents/skills/ 目录
-npx skills add LINEBARRELS/trigrams-toolkit/skills --skill '*' -g
-```
+   ```sh
+   uv tool install -U trigrams-toolkit
+   npx skills add LINEBARRELS/trigrams-toolkit/skills --skill '*' -g
+   ```
 
-> 使用 Claude Code 时如需同步链接至 `~/.claude/skills/`，可在命令末尾附加 `-a claude-code`。
+2. **接入目标项目。** 在目标项目中，请 Agent 使用 [`toolkit-steward`](skills/toolkit-steward/SKILL.md) 按 [`project-setup` workbook](skills/workbook/workbooks/project-setup/WORKBOOK.md) 核对基础配置、建立目录骨架并维护项目文档。已有项目可从核对现状开始。
 
-四个公共 CLI 的帮助（`-h`／`--help`）与版本（`-v`／`--version`）可在任意目录查看；业务命令须在目标项目根目录执行。
+<details>
+<summary>Claude Code 与安装排查</summary>
 
-### 2. 项目首次接入与安装扩展
+使用 Claude Code 时，可在 `npx skills add` 命令末尾附加 `-a claude-code`。CLI 的帮助与版本可在任意目录查看。`handbook`、`plan-toolkit` 和 `project-state` 可从项目子目录识别项目根，`harness-install` 在当前目录装配。
 
-在目标项目根目录中，如需启用官方扩展（如 `game` 或 `toolkit-maintenance`），先安装对应扩展 Skill（进入项目 `.agents/skills/`；Claude Code 可附加 `-a claude-code`）：
+参阅[全局安装与恢复指引](skills/toolkit-steward/references/deployment.md)或[开发与接入指南](docs/getting-started.md)。
 
-```sh
-# 示例：安装 game 扩展 Skill
-npx skills add LINEBARRELS/trigrams-toolkit/extensions/game/skills --skill '*'
+</details>
 
-# 示例：安装 toolkit-maintenance 扩展 Skill
-npx skills add LINEBARRELS/trigrams-toolkit/extensions/toolkit-maintenance/skills --skill '*'
-```
+## 设计哲学
 
-随后以全局 `toolkit-steward` Skill 为入口（或直接加载 [project-setup workbook](skills/workbook/workbooks/project-setup/WORKBOOK.md)，即 `core:workbook:project-setup`），优先按需完成基础配置、目录骨架与项目级核心文档，再按需叠加扩展管理或按明确要求产出存量迁移清单；应用装配时会自动检查并补齐目标 `agent` 的全局必需依赖 `archify` 与 `smell-check`。
+### 以爻成卦
 
-## 组成与能力
+一爻虽简，入于不同卦位，自有不同用处。**principle** 提供判断标准，**workbook** 定义工作方法。Agent 按当前工作加载所需资料，workbook 也可复用其他 workbook 和 principle。新增一种工作时，已有的判断与方法仍可独立使用。
 
-| 组成 | 位置 / 入口 | 职责 |
-| --- | --- | --- |
-| **公共 CLI（4 个）** | [src/trigrams_toolkit/](src/trigrams_toolkit/__init__.py) | `project-state`（架构实体与关系登记）、`plan-toolkit`（计划快照与任务调度）、`handbook`（workbook／principle 检索、校验与入库）、`harness-install`（扩展快照装配、全局依赖补齐与路径归档） |
-| **core Skill（14 个）** | [skills/](skills/resources.json) | `toolkit-steward`、`workbook`、`principles`、`to-plan`、`execute-plan`、`execute-task`、`delivery-review`、`architect`、`doc-polish`、`how`、`why`、`effect`、`principle-maintenance`、`decision-maintenance` |
-| **game 扩展** | [extensions/game/](extensions/game/README.md) | 玩法设计（`game-designer`）、美术与 UI 规范（`art-designer`）、`extension-setup-game` 及配套玩法／体验／规则／运行证据原则与 workbook |
-| **toolkit-maintenance 扩展** | [extensions/toolkit-maintenance/](extensions/toolkit-maintenance/README.md) | 工具包扩展开发、知识库、workbook、工具部署与 Skill 审核规程与原则 |
-| **宿主 adapter** | [src/trigrams_toolkit/resources/adapters/](src/trigrams_toolkit/resources/adapters/codex/README.md) | 随 Python 包交付的 Codex、Claude Code 与 Pi Web 角色子代理入口模板 |
+### 随势布阵
 
-## 文档导航
+布阵先定方位，再定进退。**Plan** 统筹目标与依赖，**Task** 约定依据、产物和验收。开发者按依赖安排先后，把独立任务交给执行者并行推进，再凭产物和证据审核交付。单步工作可直接调用对应的 Skill。
 
-- [开发与接入指南](docs/getting-started.md)：开发环境准备、`tasks.py` 校验／构建／发布入口与三段接入流程。
-- [维护与发布说明](docs/maintenance.md)：唯一维护源、定向测试范围与 CI／发布策略。
-- [体系架构与核心设计](skills/toolkit-steward/references/architecture.md)：职责分工、知识分层、渐进式加载与分发边界。
-- [全局安装与恢复指引](skills/toolkit-steward/references/deployment.md)：全局 CLI、core Skill 与故障诊断。
-- [项目决策索引](docs/knowledge/decisions/index.md)：核心架构与工具契约的 ADR 索引。
-- [参与维护](CONTRIBUTING.md)：贡献流程、验证要求与本仓狗食 `.gitignore` 约定。
-- [更新记录](CHANGELOG.md) · [第三方内容声明](THIRD_PARTY_NOTICES.md)
+## Core Skill
 
-## 本地开发与验证
+Skill 定义 Agent 的行为。公共 CLI 提供资料检索、计划查询、状态登记和扩展装配。官方扩展在项目中补充领域能力。
 
-```sh
-python -m pip install -e '.[dev]'
-python tasks.py check            # 资源校验、协议校验与 mypy
-python tasks.py test             # 运行 tests/ 与 tests/runtime/ 全部测试
-python tasks.py build            # 构建 sdist 与 wheel 至 dist/
-python tasks.py verify-package   # 隔离安装并验收 dist/ 发行包
-```
+| 要做的事 | Core Skill |
+| --- | --- |
+| **接入项目，加载工作依据** | [`toolkit-steward`](skills/toolkit-steward/SKILL.md) · [`workbook`](skills/workbook/SKILL.md) · [`principles`](skills/principles/SKILL.md) |
+| **调查现状，推敲设计** | [`how`](skills/how/SKILL.md) · [`why`](skills/why/SKILL.md) · [`effect`](skills/effect/SKILL.md) · [`architect`](skills/architect/SKILL.md) |
+| **规划工作，执行与审核交付** | [`to-plan`](skills/to-plan/SKILL.md) · [`execute-plan`](skills/execute-plan/SKILL.md) · [`execute-task`](skills/execute-task/SKILL.md) · [`delivery-review`](skills/delivery-review/SKILL.md) |
+| **维护文档、原则与决策** | [`doc-polish`](skills/doc-polish/SKILL.md) · [`principle-maintenance`](skills/principle-maintenance/SKILL.md) · [`decision-maintenance`](skills/decision-maintenance/SKILL.md) |
+
+<details>
+<summary>公共 CLI 与协议</summary>
+
+| 工具 | 职责 |
+| --- | --- |
+| [`handbook`](src/trigrams_toolkit/resources/handbook/PROTOCOL.md) | 检索、加载和校验 workbook 与 principle |
+| [`plan-toolkit`](src/trigrams_toolkit/resources/plan/PROTOCOL.md) | 读取计划快照，查询依赖、可运行任务和当前状态 |
+| [`project-state`](src/trigrams_toolkit/resources/state/PROTOCOL.md) | 登记和查询架构实体、成果及其关系 |
+| [`harness-install`](src/trigrams_toolkit/resources/installation/PROTOCOL.md) | 预览并装配扩展快照与宿主角色入口 |
+
+</details>
+
+## 官方扩展
+
+- **[game](extensions/game/README.md)** 为游戏项目提供玩法设计、美术与 UI 规范，以及配套的 workbook 和 principle。
+- **[toolkit-maintenance](extensions/toolkit-maintenance/README.md)** 为开发和维护工具包提供扩展开发、知识库、工作方法维护、工具部署与 Skill 审核规程。
+
+官方扩展按项目启用。项目快照固定所用的扩展资料，后续可用 `harness-install` 预览并同步。安装步骤见[目标安装与项目接入](docs/getting-started.md#目标安装与项目接入)。
+
+## 深入了解
+
+- **设计与决策**　[体系架构](skills/toolkit-steward/references/architecture.md) · [项目决策索引](docs/knowledge/decisions/index.md)
+- **开发与维护**　[开发环境](docs/getting-started.md) · [参与开发](CONTRIBUTING.md) · [维护与发布](docs/maintenance.md) · [更新记录](CHANGELOG.md)
+- **许可**　[MIT License](LICENSE) · [第三方内容声明](THIRD_PARTY_NOTICES.md)

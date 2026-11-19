@@ -2,6 +2,13 @@
 
 版本号以 `toolkit.json` 与 `pyproject.toml` 为准，四个公共 CLI 的 `--version` 统一来自 Python 包元数据。
 
+## 0.2.0
+
+- `handbook`、`plan-toolkit` 与 `project-state` 从当前目录向上查找最近的 `.agents/harness.json`，在项目子目录中也能定位项目资源、Plan 与登记状态。查找范围受 `.git` 和 `.tmp` 边界限制。扩展装配命令 `harness-install` 以当前目录为准。
+- 统一上述三个 CLI 的项目内相对路径解析规则，并补充项目根发现、边界与子目录调用的回归测试。
+- 按 `project-setup` 基线整理仓库的 `AGENTS.md`，预留 Plan 与复盘目录。
+- 更新 GitHub 首页，加入水墨横幅、快速接入说明与 core Skill 导航。项目展示名称统一为 Trigrams toolkit。
+
 ## 0.1.1
 
 - 新增 `.github/workflows/release.yml` 与 `python tasks.py check-release`，在推送 `v*` 标签后通过 PyPI Trusted Publishing（OIDC）自动执行版本核对、构建、跨平台验收并发布发行包；完善 `pyproject.toml` `[project.urls]` 与 `docs/pypi-readme.md` 公开链接。

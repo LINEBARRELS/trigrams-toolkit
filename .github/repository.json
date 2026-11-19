@@ -1,4 +1,4 @@
 {
-  "description": "八卦 Trigrams toolkit：连接项目接入、技术设计、任务执行与状态管理的 Agent Skill 与 Python CLI 工具包。",
+  "description": "Trigrams toolkit 是面向软件与游戏工程的 Agent Skill 与 Python CLI 工具包，连接项目接入、技术设计、计划调度与交付验收。",
   "topics": ["ai-agents", "agent-skills", "developer-tools", "codex", "claude-code", "workflow", "game-development"]
 }
