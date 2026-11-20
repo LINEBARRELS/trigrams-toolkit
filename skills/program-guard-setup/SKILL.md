@@ -1,6 +1,7 @@
 ---
 name: program-guard-setup
 description: 根据项目编程语言与既有工具链现状，将可机械化校验的编程 principle 转化为编译器、Linter 与架构依赖检查配置，用于项目初始化装配或开发纠错后的增量规则沉淀。
+disable-model-invocation: true
 metadata:
   harness-toolkit-type: workflow
 ---

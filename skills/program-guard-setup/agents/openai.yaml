@@ -1,0 +1,5 @@
+interface:
+  display_name: "Program Guard Setup"
+  short_description: "按项目语言与现状将可机械化编程原则转化为编译器、Linter 与架构检查配置"
+policy:
+  allow_implicit_invocation: false
