@@ -1,18 +1,21 @@
-```text
-图难于其易，为大于其细。
-```
+<div align="center">
+
+`图难于其易，为大于其细。`
 
 ![水墨山雾中，白衣龙娘在山崖上运功，墨迹随掌势展开](docs/assets/trigrams-banner.webp)
 
 # Trigrams toolkit
 
-面向软件与游戏工程的 **Agent 工具包**。把工程判断与工作方法沉淀成可复用的资料，用 Plan 与 Task 组织多阶段工作、角色交接和交付验收。
+面向软件与游戏工程的 **Agent 工具包**。<br>
+把工程判断与工作方法沉淀成可复用的资料，用 Plan 与 Task 组织多阶段工作、角色交接和交付验收。
 
 [![PyPI 版本](https://img.shields.io/pypi/v/trigrams-toolkit?style=flat&label=PyPI&color=386964)](https://pypi.org/project/trigrams-toolkit/)
 [![MIT License](https://img.shields.io/badge/license-MIT-386964?style=flat)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-386964?style=flat)](pyproject.toml)
 
 [快速开始](#快速开始) · [体系架构](skills/toolkit-steward/references/architecture.md) · [官方扩展](#官方扩展) · [参与开发](CONTRIBUTING.md)
+
+</div>
 
 ## 快速开始
 
@@ -38,9 +41,9 @@ npx skills add LINEBARRELS/trigrams-toolkit/skills --skill '*' -g
 开始前先简单告诉我要改什么、接下来怎么用。
 ```
 
-## 设计哲学
-
 ![雨后梯田里，穿靛青汉服的猫娘移开石板，水从田埂缺口流入下一畦](docs/assets/trigrams-terraces.webp)
+
+## 设计哲学
 
 ### 复用判断与工作方法
 
