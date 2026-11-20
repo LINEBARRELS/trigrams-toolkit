@@ -18,33 +18,41 @@
 
 准备好 `uv`、Python 3.11+ 和用于运行 `npx` 的 Node.js。
 
-1. **安装全局 CLI 与 core Skill。**
+### 安装全局工具
 
-   ```sh
-   uv tool install -U trigrams-toolkit
-   npx skills add LINEBARRELS/trigrams-toolkit/skills --skill '*' -g
-   ```
+```sh
+# 安装或升级四个全局 CLI（project-state、plan-toolkit、handbook、harness-install）
+uv tool install -U trigrams-toolkit
 
-2. **接入目标项目。** 在目标项目中，请 Agent 使用 [`toolkit-steward`](skills/toolkit-steward/SKILL.md) 按 [`project-setup` workbook](skills/workbook/workbooks/project-setup/WORKBOOK.md) 核对基础配置、建立目录骨架并维护项目文档。已有项目可从核对现状开始。
+# 全局安装 core Skill（含 toolkit-steward）及随附的 workbook 和 principle
+npx skills add LINEBARRELS/trigrams-toolkit/skills --skill '*' -g
+```
 
-<details>
-<summary>Claude Code 与安装排查</summary>
+### 接入目标项目
 
-使用 Claude Code 时，可在 `npx skills add` 命令末尾附加 `-a claude-code`。CLI 的帮助与版本可在任意目录查看。`handbook`、`plan-toolkit` 和 `project-state` 可从项目子目录识别项目根，`harness-install` 在当前目录装配。
+在目标项目中打开 Agent，粘贴下面这段话。
 
-参阅[全局安装与恢复指引](skills/toolkit-steward/references/deployment.md)或[开发与接入指南](docs/getting-started.md)。
-
-</details>
+```text
+请用 toolkit-steward 帮我把 Trigrams toolkit 安装到这个项目。
+先看看仓库现在是怎么组织的，不破坏现有内容，按需把缺的配置、目录和项目文档补齐。
+开始前先简单告诉我要改什么、接下来怎么用。
+```
 
 ## 设计哲学
 
-### 以爻成卦
+![雨后梯田里，穿靛青汉服的猫娘移开石板，水从田埂缺口流入下一畦](docs/assets/trigrams-terraces.webp)
 
-一爻虽简，入于不同卦位，自有不同用处。**principle** 提供判断标准，**workbook** 定义工作方法。Agent 按当前工作加载所需资料，workbook 也可复用其他 workbook 和 principle。新增一种工作时，已有的判断与方法仍可独立使用。
+### 复用判断与工作方法
 
-### 随势布阵
+<sub>以爻成卦</sub>
 
-布阵先定方位，再定进退。**Plan** 统筹目标与依赖，**Task** 约定依据、产物和验收。开发者按依赖安排先后，把独立任务交给执行者并行推进，再凭产物和证据审核交付。单步工作可直接调用对应的 Skill。
+**principle** 提供判断标准，**workbook** 定义工作方法。Agent 按任务加载所需资料。比如新功能和重构可以沿用同一条验证原则，各自用 workbook 约定工作步骤和交接要求。
+
+### 用 Plan 和 Task 组织交付
+
+<sub>随势布阵</sub>
+
+**Plan** 明确目标和任务依赖，**Task** 写清工作依据、交付物和验收条件。前置任务完成后再推进依赖它的工作，独立任务可以并行。交付时，根据产物和验证证据审核结果。单步工作可直接调用对应的 Skill。
 
 ## Core Skill
 
