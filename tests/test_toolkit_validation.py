@@ -205,3 +205,20 @@ class SourceValidationTests(unittest.TestCase):
                 body = path.read_text(encoding="utf-8")
                 for heading in required_sections:
                     self.assertIn(heading, body)
+
+    def test_program_guard_setup_principle_references_are_validated(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            valid = root / "skills/principles/principles/programming-scale/keep-code-within-scale-limits/PRINCIPLE.md"
+            valid.parent.mkdir(parents=True)
+            valid.write_text("---\ndescription: Fixture\n---\n", encoding="utf-8")
+            ref_file = root / "skills/program-guard-setup/references/typescript/static.md"
+            ref_file.parent.mkdir(parents=True)
+            ref_file.write_text(
+                "## `core:principle:programming-scale/keep-code-within-scale-limits`\n"
+                "## `core:principle:programming-scale/missing-rule`\n",
+                encoding="utf-8",
+            )
+            issues = verify_toolkit._validate_guard_references(root)
+            self.assertEqual(len(issues), 1, issues)
+            self.assertIn("core:principle:programming-scale/missing-rule", issues[0])

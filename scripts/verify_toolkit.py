@@ -22,6 +22,7 @@ IGNORED = {"node_modules", "__pycache__", ".venv", "dist", "bin", ".git", ".cach
 ROOT_FILES = ("AGENTS.md", "CONTRIBUTING.md", "CHANGELOG.md", "LICENSE", "README.md",
               "THIRD_PARTY_NOTICES.md", "toolkit.json", "pyproject.toml", "MANIFEST.in", "setup.cfg", "tasks.py")
 LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
+CORE_PRINCIPLE_REF = re.compile(r"\bcore:principle:[a-z][a-z0-9-]*/[a-z][a-z0-9-]*\b")
 
 
 SOURCE_DIRECTORIES = ("skills", "src", "extensions", "scripts", "tests", "docs", ".github")
@@ -116,6 +117,21 @@ def _validate_adapters(root: Path) -> list[str]:
     return issues
 
 
+def _validate_guard_references(root: Path) -> list[str]:
+    references = root / "skills/program-guard-setup/references"
+    if not references.is_dir():
+        return []
+    principles_root = root / "skills/principles/principles"
+    issues = []
+    for path in sorted(references.rglob("*.md")):
+        text = path.read_text(encoding="utf-8-sig")
+        for ref in sorted(set(CORE_PRINCIPLE_REF.findall(text))):
+            scope, name = ref.removeprefix("core:principle:").split("/", 1)
+            if not (principles_root / scope / name / "PRINCIPLE.md").is_file():
+                issues.append(f"Unknown principle reference in {path.relative_to(root)}: {ref}")
+    return issues
+
+
 def validate() -> dict:
     catalog = validate_source_catalog(ROOT)
     manifest = json.loads((ROOT / "toolkit.json").read_text(encoding="utf-8"))
@@ -124,6 +140,7 @@ def validate() -> dict:
     source_issues, links = _validate_sources(ROOT)
     issues.extend(source_issues)
     issues.extend(_validate_adapters(ROOT))
+    issues.extend(_validate_guard_references(ROOT))
     return {"ok": not issues, "skills": sorted(skills), "resources": catalog["resources"],
             "sources": catalog["sources"], "local_links": links,
             "issues": issues}
