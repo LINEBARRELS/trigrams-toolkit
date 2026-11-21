@@ -7,7 +7,7 @@
 | 组件 | 维护与安装方式 | 项目内位置与说明 |
 | --- | --- | --- |
 | 平台角色 adapter | `harness-install` 从统一 Python CLI 包复制 | `.codex/agents/`、`.claude/agents/` 或 `.pi/agents/`；`platforms` 支持 `codex`、`claude`、`pi-web`（与 `agent` 独立选择） |
-| 外部必需 Skill | `harness-install install apply` 补齐 `archify` 与 `smell-check` | 目标 `agent` 的全局 Skill 目录 |
+| 外部必需 Skill | `harness-install install apply` 补齐 `answer-me-with-html` 与 `smell-check` | 目标 `agent` 的全局 Skill 目录 |
 | 扩展 Skill 与快照 | 见[扩展管理](extensions.md) | `.agents/skills/`（Claude Code 为 `.claude/skills/`）与 `.agents/extensions/<extension>/` |
 | 项目自有资料 | 项目自行维护 | `docs/resources.json` 不纳入 `.agents/harness.json` |
 
@@ -29,5 +29,5 @@
 
 工作 1 与工作 4 的所有 `.agents/harness.json`、adapter 与扩展快照写入均遵循同一两步门禁：
 
-1. **预览装配并说明影响**：将 `agent`、`extensions` 与 `platforms` 写入输入，运行 `harness-install install preview --input <输入文件>`（只读，可离线运行）。审阅变更、冲突与 `projectRoot`，向用户说明项目内将写入的受管路径、目标 `agent`，以及 `apply` 可能写入目标 `agent` 全局 Skill 目录以补齐缺失的 `archify`、`smell-check`。出现本地修改或同名冲突时，先确认保留或归档策略并重新预览。
+1. **预览装配并说明影响**：将 `agent`、`extensions` 与 `platforms` 写入输入，运行 `harness-install install preview --input <输入文件>`（只读，可离线运行）。审阅变更、冲突与 `projectRoot`，向用户说明项目内将写入的受管路径、目标 `agent`，以及 `apply` 可能写入目标 `agent` 全局 Skill 目录以补齐缺失的 `answer-me-with-html`、`smell-check`。出现本地修改或同名冲突时，先确认保留或归档策略并重新预览。
 2. **应用装配**：取得确认后运行 `harness-install install apply --input <确认文件> --request-id <请求ID> --expected-revision <baseRevision>`（确认文件包含原样 `preview` 与 `confirmedBy`）。全局依赖补齐失败时，按返回的 Skill 与 agent 排查环境后重试。

@@ -37,7 +37,7 @@ def copy_extension(project: Path, provider: str) -> Path:
 
 def offline_global_skills(root: Path) -> dict[str, str]:
     profile = root / "profile"
-    for name in ("archify", "smell-check"):
+    for name in ("answer-me-with-html", "smell-check"):
         write_skill(profile / ".agents/skills" / name, name)
     binary = root / "bin"
     write_source_commands(binary, {"npx": [sys.executable, "-c", "raise SystemExit(97)"]})

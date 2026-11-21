@@ -59,7 +59,7 @@ class GlobalDependencyTests(unittest.TestCase):
         name = command[command.index("--skill") + 1]
         agent = command[command.index("--agent") + 1]
         self.calls.append((agent, name))
-        package, source = {"archify": ("skills@latest", "https://archify.si"),
+        package, source = {"answer-me-with-html": ("skills", "QingYunA/answer-me-with-html"),
                            "smell-check": ("skills", "Zhen-Bo/smell-check")}[name]
         self.assertEqual(command, ["npx", "-y", package, "add", source, "--skill", name,
                                    "--agent", agent, "--global", "--copy", "--yes"])
@@ -82,7 +82,7 @@ class GlobalDependencyTests(unittest.TestCase):
             preview = self.preview()
         self.assertFalse((self.project / ".harness").exists())
         self.assertFalse(self.record.exists())
-        self.present("archify")
+        self.present("answer-me-with-html")
         result = self.apply(preview)
         self.assertEqual(self.calls, [("codex", "smell-check")])
         self.assertEqual(read_json(self.record)["extensions"], [])
@@ -98,7 +98,7 @@ class GlobalDependencyTests(unittest.TestCase):
             self.apply(self.preview())
 
     def test_dependencies_follow_the_confirmed_agent_and_global_scope(self):
-        self.present("archify", "claude-code")
+        self.present("answer-me-with-html", "claude-code")
         self.present("smell-check", "codex")
         write_skill(self.project / ".claude/skills/smell-check", "smell-check")
         self.apply(self.preview(agent="claude-code"))
@@ -106,18 +106,18 @@ class GlobalDependencyTests(unittest.TestCase):
         self.assertEqual(read_json(self.record)["agent"], "claude-code")
 
     def test_failed_install_preserves_project_and_partial_success_is_reused(self):
-        self.present("archify")
+        self.present("answer-me-with-html")
         self.present("smell-check")
         self.apply(self.preview(platforms=["codex"]))
         adapter = self.project / ".codex/agents/task_developer.toml"
         before = {path: path.read_bytes() for path in (self.record, self.receipt, adapter)}
-        for name in ("archify", "smell-check"):
+        for name in ("answer-me-with-html", "smell-check"):
             (self.directory(name) / "SKILL.md").unlink()
         self.failed_skill = "smell-check"
         preview = self.preview(platforms=["codex", "claude"])
         error = self.assert_failure("dependency_failed", preview)
         self.assertIn("smell-check for codex: fixture install failed", str(error))
-        self.assertEqual(self.calls, [("codex", "archify"), ("codex", "smell-check")])
+        self.assertEqual(self.calls, [("codex", "answer-me-with-html"), ("codex", "smell-check")])
         self.assertEqual({path: path.read_bytes() for path in before}, before)
         self.assertFalse((self.project / ".claude/agents").exists())
         self.failed_skill = None
@@ -145,16 +145,16 @@ class GlobalDependencyTests(unittest.TestCase):
         preview = self.preview()
         with patch("trigrams_toolkit.installation.global_skills.shutil.which", return_value=None):
             error = self.assert_failure("missing_capability", preview)
-            self.assertIn("archify for codex: npx is unavailable", str(error))
+            self.assertIn("answer-me-with-html for codex: npx is unavailable", str(error))
         self.no_op = True
         error = self.assert_failure("dependency_failed", preview)
-        self.assertIn("archify for codex: Installation did not create", str(error))
+        self.assertIn("answer-me-with-html for codex: Installation did not create", str(error))
         self.assertFalse(self.record.exists())
         self.assertFalse(self.receipt.exists())
 
     def test_pure_uninstall_remains_offline(self):
         self.apply(self.preview(platforms=["codex"]))
-        for name in ("archify", "smell-check"):
+        for name in ("answer-me-with-html", "smell-check"):
             (self.directory(name) / "SKILL.md").unlink()
         self.calls.clear()
         with patch("trigrams_toolkit.installation.global_skills.skill_directory",

@@ -7,9 +7,9 @@
 | 内容 | 来源 | 保留的许可 |
 | --- | --- | --- |
 | smell-check（必需外部依赖，不随包内嵌） | [Zhen-Bo/smell-check](https://github.com/Zhen-Bo/smell-check) | 使用上游安装包携带的许可 |
-| archify（必需外部依赖，不随包内嵌） | [Archify](https://archify.si) | 使用上游安装包携带的许可 |
+| answer-me-with-html（必需外部依赖，不随包内嵌） | [QingYunA/answer-me-with-html](https://github.com/QingYunA/answer-me-with-html) | 使用上游安装包携带的许可 |
 
-上述 Skill 通过各自来源安装。`harness-install install apply` 检查并补齐目标 `agent` 缺失的 `archify` 与 `smell-check`。安装来源见[全局依赖声明](src/trigrams_toolkit/resources/installation/global-skills.json)。上游参考材料按其来源标注。
+上述 Skill 通过各自来源安装。`harness-install install apply` 检查并补齐目标 `agent` 缺失的 `answer-me-with-html` 与 `smell-check`。安装来源见[全局依赖声明](src/trigrams_toolkit/resources/installation/global-skills.json)。上游参考材料按其来源标注。
 
 ## Python CLI 运行依赖
 

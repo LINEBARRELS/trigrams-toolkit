@@ -1,6 +1,6 @@
 {
   "dependencies": [
-    {"name": "archify", "source": "https://archify.si", "package": "skills@latest"},
+    {"name": "answer-me-with-html", "source": "QingYunA/answer-me-with-html", "package": "skills"},
     {"name": "smell-check", "source": "Zhen-Bo/smell-check", "package": "skills"}
   ]
 }

@@ -14,7 +14,7 @@
 | `doc-polish` | 中文技术文档标准语言规范与润色检查 |
 | `how` / `why` / `effect` | 调查当前实现机制、历史设计决策理由与变更影响范围 |
 | `principle-maintenance` / `decision-maintenance` | 提炼与入库项目 principle 草稿；在用户显式触发时提炼、修订与演进项目决策记录 |
-| `archify` / `smell-check` | 外部必需全局依赖，分别负责可视化架构报告与代码坏味道审计。应用项目装配时补齐缺项 |
+| `answer-me-with-html` / `smell-check` | 外部必需全局依赖，分别负责可视化架构报告与代码坏味道审计。应用项目装配时补齐缺项 |
 
 ## 公共工具
 

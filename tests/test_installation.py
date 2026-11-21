@@ -34,7 +34,7 @@ class InstallationTests(unittest.TestCase):
         self.root = Path(temporary.name).resolve()
         self.project = self.root / "project"
         self.profile = self.root / "profile"
-        for name in ("archify", "smell-check"):
+        for name in ("answer-me-with-html", "smell-check"):
             write_skill(self.profile / ".agents/skills" / name, name)
         setup = self.project / ".agents/skills/extension-setup-extra"
         write_skill(setup, setup.name)

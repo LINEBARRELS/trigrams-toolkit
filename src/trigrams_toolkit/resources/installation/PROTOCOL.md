@@ -22,7 +22,7 @@ Vercel skills 安装全局 core Skill 和项目扩展 Skill。全局 `principles
 
 `install apply` 使用[应用输入](examples/install-apply-input.json)中的完整预览与 `confirmedBy`，并要求 `--request-id req_ID` 和 `--expected-revision N`。命令先核对当前项目根与预览的 `projectRoot`，再持有项目安装锁核对修订号、重建预览并复查来源和目标。来源或目标有变化时刷新预览。最近一次成功的原样请求直接返回已提交回执，同 ID 异参数报 `request_conflict`。
 
-首次装配、增补和同步在项目写入前检查目标 agent 的全局 Skill 目录。缺少 `archify` 或 `smell-check` 时，使用 `npx` 执行官方安装命令，可能访问网络并写入该目录。补齐失败时保留受管文件和项目记录，修复后可重试。纯卸载和已提交请求的回执重放可离线运行。
+首次装配、增补和同步在项目写入前检查目标 agent 的全局 Skill 目录。缺少 `answer-me-with-html` 或 `smell-check` 时，使用 `npx` 执行官方安装命令，可能访问网络并写入该目录。补齐失败时保留受管文件和项目记录，修复后可重试。纯卸载和已提交请求的回执重放可离线运行。
 
 最近一次操作保存在 `.harness/previous/`。复制文件原件在 `backup/`，处置与目标登记在 `receipt.json`。写入失败时回退已尝试的文件并记录 `rolled_back`，随后可以重试。安装记录最后写入。遇到强制终止或断电留下的 `applying` 回执时，依据回执和原件恢复后再生成预览。升级装配协议前完成或恢复旧操作，升级后沿用版本 2 项目记录，重新生成预览并使用新的请求 ID。
 

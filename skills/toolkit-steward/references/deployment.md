@@ -6,7 +6,7 @@ Trigrams toolkit 的全局工具与核心 Skill 通过标准包管理器安装�
 | --- | --- | --- |
 | 四个公共 CLI | `uv tool install -U trigrams-toolkit` | 安装或更新 `project-state`、`plan-toolkit`、`handbook`、`harness-install`，schema、核心类型与宿主 adapter 随包交付 |
 | core Skill 与核心资料 | `npx skills add LINEBARRELS/trigrams-toolkit/skills --skill '*' -g` | 将通用 Skill 及 `principles`、`workbook` 携带的核心资料全局安装至 `~/.agents/skills/`（Claude Code 如需链接至 `~/.claude/skills/`，可附加 `-a claude-code`） |
-| 外部必需全局依赖 | `harness-install install apply` | 在目标项目根应用首次装配、增补或同步时，检查目标 `agent` 的全局 `archify` 与 `smell-check`，用 Vercel skills 补齐缺项 |
+| 外部必需全局依赖 | `harness-install install apply` | 在目标项目根应用首次装配、增补或同步时，检查目标 `agent` 的全局 `answer-me-with-html` 与 `smell-check`，用 Vercel skills 补齐缺项 |
 
 公共 CLI 通过 PyPI 包 `trigrams-toolkit` 分发，Skill 与扩展源维护在 `https://github.com/LINEBARRELS/trigrams-toolkit`；工具包源仓库本地开发采用 `python -m pip install -e '.[dev]'` 安装可编辑入口。`handbook` 从目标 agent 的全局 `principles`、`workbook` 读取核心资料，目标 agent 由 `--agent`、项目 `.agents/harness.json` 记录或默认值 `codex` 确定。
 
