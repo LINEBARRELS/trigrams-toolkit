@@ -2,6 +2,13 @@
 
 版本号以 `toolkit.json` 与 `pyproject.toml` 为准，四个公共 CLI 的 `--version` 统一来自 Python 包元数据。
 
+## 0.3.0
+
+- 将架构可视化报告的全局外部依赖从 `archify` 替换为 `answer-me-with-html`（`QingYunA/answer-me-with-html`），同步更新 `harness-install` 的全局依赖声明、装配协议、第三方声明及项目接入文档。
+- 重构 `architect` 的可视化汇报流程与 [ARD 报告指引](skills/architect/references/ard-report.md)、[Spec 报告指引](skills/architect/references/implementation-spec-report.md)：采用 `tree`、`flow`、`sequence`、`class`、`state`、`api`、`er` 等原生组件展示架构与执行流程，支持 `+`/`-`/`~` 变更对比与 `ask` 审阅决策卡片，并禁止借用源码实现补充设计事实。
+- 新增显式触发的工作流 Skill `program-guard-setup`，为 TypeScript/JavaScript、C#/.NET 与 Python 提供按原则映射编译器、Linter 与架构检查的工具链指引，并在 `verify_toolkit.py` 中校验其原则引用。
+- 更新 `keep-code-within-scale-limits` 规模检查表述及首页 `README.md` 引导说明。
+
 ## 0.2.0
 
 - `handbook`、`plan-toolkit` 与 `project-state` 从当前目录向上查找最近的 `.agents/harness.json`，在项目子目录中也能定位项目资源、Plan 与登记状态。查找范围受 `.git` 和 `.tmp` 边界限制。扩展装配命令 `harness-install` 以当前目录为准。
