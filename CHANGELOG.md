@@ -2,6 +2,12 @@
 
 版本号以 `toolkit.json` 与 `pyproject.toml` 为准，四个公共 CLI 的 `--version` 统一来自 Python 包元数据。
 
+## 0.3.1
+
+- 从 [skills/architect/SKILL.md](skills/architect/SKILL.md) 抽离架构可视化报告公共约束至 [report-guide.md](skills/architect/references/report-guide.md)，并由 [ARD 报告指引](skills/architect/references/ard-report.md) 与 [Spec 报告指引](skills/architect/references/implementation-spec-report.md) 统一引用。
+- 修正 [architect](skills/architect/SKILL.md)、[exploration-experiments.md](skills/architect/references/exploration-experiments.md)、[report-guide.md](skills/architect/references/report-guide.md) 与 [programming-development](skills/workbook/workbooks/programming-development/WORKBOOK.md) 中把 principle `scope` 误作单条原则或残留旧聚合表述的写法，明确按 `scope` 筛选与加载原则。
+- 明确 [extension-setup-toolkit-maintenance](extensions/toolkit-maintenance/skills/extension-setup-toolkit-maintenance/SKILL.md) 中按工作对象加载的是维护 `workbook`，并将 [Handbook 协议](src/trigrams_toolkit/resources/handbook/PROTOCOL.md) 中的 `programming-design` 示例同步为 `programming-design-architecture`。
+
 ## 0.3.0
 
 - 将架构可视化报告的全局外部依赖从 `archify` 替换为 `answer-me-with-html`（`QingYunA/answer-me-with-html`），同步更新 `harness-install` 的全局依赖声明、装配协议、第三方声明及项目接入文档。
