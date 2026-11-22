@@ -21,6 +21,7 @@ jobs:
     outputs:
       should_run: ${{ steps.changes.outputs.should_run }}
       run_package_acceptance: ${{ steps.changes.outputs.run_package_acceptance }}
+      target_ref: ${{ steps.changes.outputs.target_ref }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -31,15 +32,24 @@ jobs:
         run: |
           $event = $env:GITHUB_EVENT_NAME
           $shouldRun = $event -ne 'schedule'
+          $targetRef = ''
           if ($event -eq 'schedule') {
+            $inspectRef = 'HEAD'
+            git show-ref --verify --quiet refs/remotes/origin/dev
+            if ($LASTEXITCODE -eq 0) {
+              $inspectRef = 'origin/dev'
+              $targetRef = 'dev'
+            }
             $since = [DateTimeOffset]::UtcNow.AddHours(-24).ToUnixTimeSeconds()
-            $recentCommit = git log --since-as-filter="@$since" -1 --format=%H
+            $recentCommit = git log $inspectRef --since-as-filter="@$since" -1 --format=%H
             if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect commit history' }
             $shouldRun = -not [string]::IsNullOrWhiteSpace($recentCommit)
           }
-          $runPackage = $event -ne 'pull_request'
+          $isReleasePr = ($event -eq 'pull_request') -and ($env:GITHUB_BASE_REF -eq 'main')
+          $runPackage = ($event -ne 'pull_request') -or $isReleasePr
           "should_run=$($shouldRun.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
           "run_package_acceptance=$($runPackage.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+          "target_ref=$targetRef" >> $env:GITHUB_OUTPUT
 
   platform-checks:
     needs: check-changes
@@ -56,6 +66,8 @@ jobs:
         shell: pwsh
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.check-changes.outputs.target_ref }}
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python }}

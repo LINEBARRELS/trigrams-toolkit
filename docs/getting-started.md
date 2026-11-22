@@ -19,7 +19,9 @@ python -m pip install -e '.[dev]'
 仓库根目录的 [tasks.py](../tasks.py) 封装了跨平台开发、构建、验收与发布入口（零额外依赖，`python tasks.py --help` 查看全部子命令）：
 
 ```sh
+python tasks.py setup-hooks            # 启用本地 .githooks/ 分支与标签保护钩子
 python tasks.py check                  # 资源校验、协议校验与 mypy
+python tasks.py bump X.Y.Z             # 统一更新 pyproject.toml 与各清单版本号
 python tasks.py check-release --tag vX.Y.Z  # 核对版本清单、CHANGELOG 与标签一致
 python tasks.py test                   # 运行 tests/ 与 tests/runtime/ 全部测试
 python tasks.py build                  # 清理并构建标准 sdist 与 wheel 至 dist/
@@ -29,7 +31,7 @@ python tasks.py publish --test         # 可选：本地试发 TestPyPI 或应�
 
 按改动范围也可单独运行 `tests/` 或 `tests/runtime/` 中的测试（例如 `test_project_state.py`、`test_project_paths.py`）。`build` 默认先生成 sdist 再由 sdist 构建 wheel 输出到 `dist/`，并同步在 `.tmp/direct-wheel/` 生成直接 wheel 供一致性校验；隔离验收回执保留在 `.tmp/package-check/`。命令手册与协议位于 `src/trigrams_toolkit/resources/<component>/`。
 
-CI 在 Ubuntu 与 Windows 的 Python 3.11／3.13 上运行检查：PR 运行类型、源码校验与测试；定时任务与手动触发额外运行构建与隔离安装验收；推送 `v*` 标签由 `.github/workflows/release.yml` 完成单次构建、跨平台验收并通过 PyPI Trusted Publishing（OIDC）自动发布。具体配置见[维护说明](maintenance.md)。
+CI 在 Ubuntu 与 Windows 的 Python 3.11／3.13 上运行检查：面向 `dev` 的 PR 运行类型、源码校验与测试；面向 `main` 的发版 PR、每日 `dev` 定时巡检与手动触发额外运行构建与隔离安装验收；向 `main` 推送 `v*` 标签由 `.github/workflows/release.yml` 完成单次构建、跨平台验收并通过 PyPI Trusted Publishing（OIDC）自动发布。具体配置见[维护说明](maintenance.md)。
 
 ## 目标安装与项目接入
 

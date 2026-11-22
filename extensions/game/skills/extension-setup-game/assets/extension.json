@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "extension": "game",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "resourceRoots": [
     "principles",
     "workbooks"
@@ -12,8 +12,12 @@
   "relationTypes": [
     {
       "kind": "game:composes",
-      "fromKinds": ["game:gameplay-spec"],
-      "toKinds": ["game:gameplay-spec"],
+      "fromKinds": [
+        "game:gameplay-spec"
+      ],
+      "toKinds": [
+        "game:gameplay-spec"
+      ],
       "maxOutgoing": null,
       "maxIncoming": null,
       "acyclic": true
