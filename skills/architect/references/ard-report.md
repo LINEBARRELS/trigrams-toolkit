@@ -1,6 +1,6 @@
 # ARD 单页报告
 
-阅读维护后的 ARD 与项目 DEVTECH，沿用项目约定的文档路径。使用 `answer-me-with-html` Skill 生成单页报告，整合 `tree` 与 `flow` 图。页首概括架构设计结论，修订时说明本次变化。
+遵循[报告通用指引](report-guide.md)，阅读维护后的 ARD 与项目 DEVTECH，沿用项目约定的文档路径，整合 `tree` 与 `flow` 图生成单页报告。页首概括架构设计结论，修订时说明本次变化。
 
 ## 架构树
 

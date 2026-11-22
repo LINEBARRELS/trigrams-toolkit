@@ -53,15 +53,10 @@ ARD 节点格式如下；按实际结构重复 Module 与 Feature。已登记节
 
 新建或修订 ARD 或 Implementation Spec 后，派发不继承当前会话上下文的独立 subagent 生成供用户审阅的可视化报告。ARD 单独成页，Implementation Spec 按 Module 单独成页。
 
-1. **派发**：
-  - 主 Agent 提供项目目录、维护后的文档、必要引用和对应指引。可提供相关文档差异，供报告标注变更。
-2. **绘图**：
-  - subagent 调用 `principles`，读取 `programming-review` 分类下的全部原则，制作 ARD 报告时可读取 DEVTECH。
-  - ARD 报告使用 [ARD 报告指引](references/ard-report.md)，Implementation Spec 报告使用 [Spec 报告指引](references/implementation-spec-report.md)。
-  - 使用 `answer-me-with-html` Skill 生成可视化报告。仅依据维护后的文档和必要引用文档绘图，检查设计中的结构、关系与行为是否清楚、自洽；subagent 禁止读取 `answer-me-with-html` 的 `references/codebase.md`，也不应读取或借用工程代码补充、调整设计事实。
-  - 在报告中标明缺失或矛盾之处、对应章节与待确认问题，待用户裁决的问题可使用 `ask` 组件供页面内勾选回复。
-  - 渲染时附加 cli 参数 `--no-open`，并通过 `-o` 将成品写入 `.tmp/answer-me/` 下各自的报告路径。
-3. **交付**：subagent 返回 HTML 路径及必要核对摘要。主 Agent 在回复中直接附上链接，交由用户审阅。
+1. **派发**：向 subagent 提供项目目录、维护后的文档、必要引用与指引路径（修订时可附文档差异，供标注变更）：
+   - 通用规则：[报告通用指引](references/report-guide.md)
+   - 专项规则：ARD 使用[ARD 报告指引](references/ard-report.md)，Implementation Spec 使用[Spec 报告指引](references/implementation-spec-report.md)
+2. **交付**：subagent 按指引生成单页 HTML，返回成品路径与核对摘要。主 Agent 在回复中直接附上链接，交由用户审阅。
 
 ## 工作边界
 

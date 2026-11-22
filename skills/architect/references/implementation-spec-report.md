@@ -1,6 +1,6 @@
 # Implementation Spec 单页报告
 
-使用 `answer-me-with-html` Skill 生成单页报告，按行为形状选用 `sequence` 与 `flow` 展示 Module 的功能与运行流程；涉及状态流转、接口契约、数据模型或复杂类型契约时，按需补充 `state`、`api`、`er` 或 `class` 图。页首概括 Module 的核心设计结论，修订时说明本次变化。
+遵循[报告通用指引](report-guide.md)，按行为形状选用 `sequence` 与 `flow` 展示 Module 的功能与运行流程；涉及状态流转、接口契约、数据模型或复杂类型契约时，按需补充 `state`、`api`、`er` 或 `class` 图。页首概括 Module 的核心设计结论，修订时说明本次变化。
 
 ## 模块功能与流程
 
