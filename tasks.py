@@ -15,6 +15,10 @@ ROOT = Path(__file__).resolve().parent
 DIST_DIR = ROOT / "dist"
 DIRECT_WHEEL_DIR = ROOT / ".tmp/direct-wheel"
 TEST_PYPI_URL = "https://test.pypi.org/legacy/"
+VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:(?:a|b|rc)\d+)?$")
+PROJECT_SECTION_RE = re.compile(r"^\[project\]\s*$", re.MULTILINE)
+SECTION_HEADER_RE = re.compile(r"^\[[^\]]+\]\s*$", re.MULTILINE)
+VERSION_LINE_RE = re.compile(r'^(version\s*=\s*)(["\'])[^"\']*\2', re.MULTILINE)
 
 
 def _project_metadata() -> tuple[str, str]:
@@ -45,6 +49,82 @@ def _cmd_check(_args: argparse.Namespace) -> None:
     _run([sys.executable, "-m", "mypy"])
 
 
+def _declared_manifests(toolkit: dict) -> list[str]:
+    manifests: list[str] = []
+    core_manifest = toolkit.get("core", {}).get("manifest")
+    if isinstance(core_manifest, str):
+        manifests.append(core_manifest)
+    for ext_data in toolkit.get("extensions", {}).values():
+        ext_manifest = ext_data.get("manifest") if isinstance(ext_data, dict) else None
+        if isinstance(ext_manifest, str):
+            manifests.append(ext_manifest)
+    return manifests
+
+
+def _has_changelog_section(root: Path, version: str) -> bool:
+    changelog_path = root / "CHANGELOG.md"
+    if not changelog_path.is_file():
+        return False
+    text = changelog_path.read_text(encoding="utf-8")
+    return bool(re.search(rf"^##\s+{re.escape(version)}(?:\s|$)", text, re.MULTILINE))
+
+
+def _update_pyproject_version(text: str, version: str) -> str:
+    header = PROJECT_SECTION_RE.search(text)
+    if header is None:
+        raise ValueError("pyproject.toml is missing a [project] section.")
+    next_header = SECTION_HEADER_RE.search(text, header.end())
+    end = next_header.start() if next_header else len(text)
+    section = text[header.end():end]
+    updated_section, count = VERSION_LINE_RE.subn(rf'\g<1>"{version}"', section, count=1)
+    if count != 1:
+        raise ValueError("pyproject.toml [project] section must declare a single version field.")
+    updated = text[:header.end()] + updated_section + text[end:]
+    if str(tomllib.loads(updated)["project"]["version"]) != version:
+        raise ValueError("Updated pyproject.toml version check failed.")
+    return updated
+
+
+def bump_version(root: Path, version: str, *, dry_run: bool = False) -> dict:
+    """Align pyproject.toml, toolkit.json and declared resource manifests to one version."""
+    if not VERSION_RE.match(version):
+        raise ValueError(f"Invalid version {version!r}; expected X.Y.Z without a 'v' prefix.")
+
+    pyproject_path = root / "pyproject.toml"
+    old_pyproject = pyproject_path.read_text(encoding="utf-8")
+    new_pyproject = _update_pyproject_version(old_pyproject, version)
+    staged: list[tuple[str, Path, str, bool]] = [
+        ("pyproject.toml", pyproject_path, new_pyproject, new_pyproject != old_pyproject),
+    ]
+
+    toolkit_path = root / "toolkit.json"
+    toolkit = json.loads(toolkit_path.read_text(encoding="utf-8"))
+    for rel in ("toolkit.json", *_declared_manifests(toolkit)):
+        path = root / rel
+        if not path.is_file():
+            raise FileNotFoundError(f"Missing manifest: {rel}")
+        old_text = path.read_text(encoding="utf-8")
+        data = json.loads(old_text)
+        changed = data.get("version") != version
+        data["version"] = version
+        new_text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+        staged.append((rel, path, new_text if changed else old_text, changed))
+
+    if not dry_run:
+        for _, path, content, changed in staged:
+            if changed:
+                path.write_text(content, encoding="utf-8")
+
+    return {
+        "ok": True,
+        "version": version,
+        "dryRun": dry_run,
+        "updated": [rel for rel, _, _, changed in staged if changed],
+        "unchanged": [rel for rel, _, _, changed in staged if not changed],
+        "changelogReady": _has_changelog_section(root, version),
+    }
+
+
 def check_release_metadata(root: Path = ROOT, *, tag: str | None = None, check_changelog: bool = True) -> dict:
     pyproject = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     project = pyproject["project"]
@@ -62,16 +142,7 @@ def check_release_metadata(root: Path = ROOT, *, tag: str | None = None, check_c
     if toolkit.get("version") != version:
         issues.append(f"toolkit.json version {toolkit.get('version')!r} != {version!r}.")
 
-    manifests: list[str] = []
-    core_manifest = toolkit.get("core", {}).get("manifest")
-    if isinstance(core_manifest, str):
-        manifests.append(core_manifest)
-    for ext_data in toolkit.get("extensions", {}).values():
-        ext_manifest = ext_data.get("manifest") if isinstance(ext_data, dict) else None
-        if isinstance(ext_manifest, str):
-            manifests.append(ext_manifest)
-
-    for rel in manifests:
+    for rel in _declared_manifests(toolkit):
         path = root / rel
         checked.append(rel)
         if not path.is_file():
@@ -86,10 +157,8 @@ def check_release_metadata(root: Path = ROOT, *, tag: str | None = None, check_c
         checked.append("CHANGELOG.md")
         if not changelog_path.is_file():
             issues.append("Missing CHANGELOG.md.")
-        else:
-            text = changelog_path.read_text(encoding="utf-8")
-            if not re.search(rf"^##\s+{re.escape(version)}(?:\s|$)", text, re.MULTILINE):
-                issues.append(f"CHANGELOG.md does not contain a '## {version}' section.")
+        elif not _has_changelog_section(root, version):
+            issues.append(f"CHANGELOG.md does not contain a '## {version}' section.")
 
     return {
         "ok": not issues,
@@ -99,6 +168,23 @@ def check_release_metadata(root: Path = ROOT, *, tag: str | None = None, check_c
         "checked": checked,
         "issues": issues,
     }
+
+
+def _cmd_bump(args: argparse.Namespace) -> None:
+    try:
+        report = bump_version(ROOT, args.version, dry_run=args.dry_run)
+    except (OSError, ValueError, KeyError, tomllib.TOMLDecodeError) as error:
+        print(json.dumps({"ok": False, "version": args.version, "error": str(error)}, ensure_ascii=False, indent=2))
+        raise SystemExit(1) from error
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+
+
+def _cmd_setup_hooks(_args: argparse.Namespace) -> None:
+    hooks_dir = ROOT / ".githooks"
+    if not hooks_dir.is_dir():
+        raise SystemExit("Missing .githooks directory in repository root.")
+    _run(["git", "config", "core.hooksPath", ".githooks"])
+    print("Configured git core.hooksPath = .githooks")
 
 
 def _cmd_check_release(args: argparse.Namespace) -> None:
@@ -198,6 +284,13 @@ def _parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="task", required=True)
     sub.add_parser("check", help="Run verify_toolkit, check_protocols and mypy.")
+    bump = sub.add_parser(
+        "bump",
+        help="Align pyproject.toml, toolkit.json and resource manifests to a release version.",
+    )
+    bump.add_argument("version", help="Release version without leading 'v' (e.g. 0.3.3).")
+    bump.add_argument("--dry-run", action="store_true", help="Report planned version updates without writing files.")
+    sub.add_parser("setup-hooks", help="Configure git core.hooksPath to .githooks.")
     check_release = sub.add_parser(
         "check-release",
         help="Verify version alignment across pyproject.toml, manifests, CHANGELOG.md and an optional Git tag.",
@@ -225,6 +318,8 @@ def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     handlers = {
         "check": _cmd_check,
+        "bump": _cmd_bump,
+        "setup-hooks": _cmd_setup_hooks,
         "check-release": _cmd_check_release,
         "test": _cmd_test,
         "build": _cmd_build,

@@ -19,7 +19,7 @@
 | `docs/plans/` | Plan；规划与整体协调读取 summary，执行或审核 Task 读取正文及选中片段 |
 | `docs/knowledge/decisions/` | 项目宏观决策记录与索引；追溯设计选择、约束与取舍理由时读取 |
 | `docs/knowledge/retrospectives/` | 项目复盘与关键变更记录；查证历史故障与演化背景时读取 |
-| `docs/research/` | 研究草稿；探索对应问题时读取 |
+| `docs/research/` | 研究草稿；仅在探索特定问题或设计方案定稿时读取 |
 | `docs/references/` | 外部参考资料；查证对应设计或技术依据时读取 |
 | `docs/archives/` | 退役资料归档 |
 

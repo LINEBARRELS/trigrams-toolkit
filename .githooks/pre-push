@@ -1,0 +1,23 @@
+#!/bin/sh
+set -e
+
+zero_oid="0000000000000000000000000000000000000000"
+while read -r local_ref local_oid remote_ref remote_oid; do
+  case "$remote_ref" in
+    refs/tags/v*)
+      if [ "$local_oid" != "$zero_oid" ]; then
+        target=""
+        if git show-ref --verify --quiet refs/remotes/origin/main; then
+          target="refs/remotes/origin/main"
+        elif git show-ref --verify --quiet refs/heads/main; then
+          target="refs/heads/main"
+        fi
+        if [ -n "$target" ] && ! git merge-base --is-ancestor "$local_oid" "$target"; then
+          echo "ERROR: Release tag '$remote_ref' ($local_oid) is not an ancestor of '$target'." >&2
+          echo "Merge 'dev' into 'main' first, then tag on 'main'." >&2
+          exit 1
+        fi
+      fi
+      ;;
+  esac
+done

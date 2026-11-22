@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+branch="$(git symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
+if [ "$branch" = "main" ] && [ "${TRIGRAMS_ALLOW_MAIN_COMMIT:-0}" != "1" ]; then
+  echo "ERROR: Direct commits to 'main' are blocked by .githooks/pre-commit." >&2
+  echo "Switch to 'dev' (or a topic branch) and merge into 'main' via Release PR." >&2
+  echo "Emergency override: TRIGRAMS_ALLOW_MAIN_COMMIT=1 git commit ..." >&2
+  exit 1
+fi

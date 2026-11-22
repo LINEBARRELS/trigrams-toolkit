@@ -164,6 +164,38 @@ class SourceValidationTests(unittest.TestCase):
             self.assertFalse(failed["ok"])
             self.assertEqual(len(failed["issues"]), 3, failed)
 
+    def test_bump_version_updates_all_manifests_atomically(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "pyproject.toml").write_text(
+                '[project]\nname = "demo"\nversion = "1.0.0"\n\n[tool.demo]\nversion = "keep"\n',
+                encoding="utf-8",
+            )
+            (root / "toolkit.json").write_text(json.dumps({
+                "version": "1.0.0",
+                "core": {"manifest": "skills/resources.json"},
+                "extensions": {"ext": {"manifest": "extensions/ext/extension.json"}},
+            }), encoding="utf-8")
+            (root / "skills").mkdir()
+            (root / "skills/resources.json").write_text('{"version": "1.0.0"}\n', encoding="utf-8")
+            (root / "extensions/ext").mkdir(parents=True)
+            (root / "extensions/ext/extension.json").write_text('{"version": "0.9.0"}\n', encoding="utf-8")
+
+            with self.assertRaises(ValueError):
+                tasks.bump_version(root, "v2.0.0")
+
+            preview = tasks.bump_version(root, "2.0.0", dry_run=True)
+            self.assertTrue(preview["dryRun"])
+            self.assertEqual(len(preview["updated"]), 4)
+            self.assertIn('version = "1.0.0"', (root / "pyproject.toml").read_text(encoding="utf-8"))
+
+            applied = tasks.bump_version(root, "2.0.0")
+            self.assertFalse(applied["dryRun"])
+            self.assertFalse(applied["changelogReady"])
+            self.assertIn('version = "keep"', (root / "pyproject.toml").read_text(encoding="utf-8"))
+            checked = tasks.check_release_metadata(root, tag="v2.0.0", check_changelog=False)
+            self.assertTrue(checked["ok"], checked)
+
     def test_github_workflows_pin_actions_and_scope_oidc_permissions(self) -> None:
         pinned_re = re.compile(r"^[^@]+@[0-9a-f]{40}$")
         workflows = {}
@@ -178,9 +210,14 @@ class SourceValidationTests(unittest.TestCase):
                         self.assertRegex(uses, pinned_re, f"{name}:{job_name} action must pin 40-char SHA: {uses}")
         ci_triggers = workflows["ci.yml"].get("on", workflows["ci.yml"].get(True))
         self.assertNotIn("push", ci_triggers)
+        ci_changes = workflows["ci.yml"]["jobs"]["check-changes"]["steps"][1]["run"]
+        self.assertIn("GITHUB_BASE_REF -eq 'main'", ci_changes)
+        self.assertIn("refs/remotes/origin/dev", ci_changes)
         release = workflows["release.yml"]
         release_triggers = release.get("on", release.get(True))
         self.assertEqual(release_triggers["push"]["tags"], ["v*"])
+        build_steps = "\n".join(step.get("run", "") for step in release["jobs"]["build"]["steps"])
+        self.assertIn("git merge-base --is-ancestor HEAD refs/remotes/origin/main", build_steps)
         for job_name, job in release["jobs"].items():
             if job_name == "publish-pypi":
                 self.assertEqual(job["permissions"], {"id-token": "write"})
@@ -188,6 +225,8 @@ class SourceValidationTests(unittest.TestCase):
                 self.assertEqual(job["needs"], ["build", "verify"])
             else:
                 self.assertNotIn("permissions", job)
+        self.assertIn('branch" = "main"', (ROOT / ".githooks/pre-commit").read_text(encoding="utf-8"))
+        self.assertIn("git merge-base --is-ancestor", (ROOT / ".githooks/pre-push").read_text(encoding="utf-8"))
 
     def test_extension_setup_skills_disable_model_invocation(self) -> None:
         required_sections = (
