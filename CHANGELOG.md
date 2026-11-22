@@ -2,10 +2,17 @@
 
 版本号以 `toolkit.json` 与 `pyproject.toml` 为准，四个公共 CLI 的 `--version` 统一来自 Python 包元数据。
 
+## 0.3.2
+
+- 精简 [how](skills/how/SKILL.md)、[why](skills/why/SKILL.md) 与 [effect](skills/effect/SKILL.md) 为聚焦取证入口、关键约束、子代理探索与输出要求的紧凑说明，去除通用常识与 Git 检索引导。
+- 将 [effect](skills/effect/SKILL.md) 设为仅用户显式调用（`disable-model-invocation: true` 与 `skills/effect/agents/openai.yaml`），移除 [decision-maintenance](skills/decision-maintenance/SKILL.md) 与 [principle-maintenance](skills/principle-maintenance/SKILL.md) 对 `effect` 的自动引用，并同步更新 [capabilities.md](skills/toolkit-steward/references/capabilities.md) 说明。
+- 简化 [architect](skills/architect/SKILL.md) 的探索引导表述，移除已不再单独维护的 `exploration-experiments.md` 指引，并同步修正 `0.3.1` 记录中的失效路径链接。
+- 移除 `.rgignore` 与 `skills/workbook/workbooks/project-setup/assets/templates/.rgignore` 中的注释行。
+
 ## 0.3.1
 
 - 从 [skills/architect/SKILL.md](skills/architect/SKILL.md) 抽离架构可视化报告公共约束至 [report-guide.md](skills/architect/references/report-guide.md)，并由 [ARD 报告指引](skills/architect/references/ard-report.md) 与 [Spec 报告指引](skills/architect/references/implementation-spec-report.md) 统一引用。
-- 修正 [architect](skills/architect/SKILL.md)、[exploration-experiments.md](skills/architect/references/exploration-experiments.md)、[report-guide.md](skills/architect/references/report-guide.md) 与 [programming-development](skills/workbook/workbooks/programming-development/WORKBOOK.md) 中把 principle `scope` 误作单条原则或残留旧聚合表述的写法，明确按 `scope` 筛选与加载原则。
+- 修正 [architect](skills/architect/SKILL.md)、`skills/architect/references/exploration-experiments.md`、[report-guide.md](skills/architect/references/report-guide.md) 与 [programming-development](skills/workbook/workbooks/programming-development/WORKBOOK.md) 中把 principle `scope` 误作单条原则或残留旧聚合表述的写法，明确按 `scope` 筛选与加载原则。
 - 明确 [extension-setup-toolkit-maintenance](extensions/toolkit-maintenance/skills/extension-setup-toolkit-maintenance/SKILL.md) 中按工作对象加载的是维护 `workbook`，并将 [Handbook 协议](src/trigrams_toolkit/resources/handbook/PROTOCOL.md) 中的 `programming-design` 示例同步为 `programming-design-architecture`。
 
 ## 0.3.0
