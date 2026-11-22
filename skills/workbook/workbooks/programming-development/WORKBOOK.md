@@ -31,7 +31,7 @@ includes:
 
 ## Task 切分与交接
 
-每项开发交付均安排 arch 与 coding 两类 Task，并声明 Stub。arch 负责 `installs`，coding 负责 Stub 的 `fills`。arch Task 应配备 `programming-design-architecture` 必读原则、`programming-design-abstraction` 关键选读原则与 `programming-review` 架构验收必读原则，并在验收标准中写明审核者须加载 `programming-review` 原则执行架构审查；涉及其他设计子域或特定语言时，为对应 Task 声明条件原则读取要求。
+每项开发交付均安排 arch 与 coding 两类 Task，并声明 Stub。arch 负责 `installs`，coding 负责 Stub 的 `fills`。arch Task 应配备 `programming-design-architecture` scope 下的全部必读原则与 `programming-design-abstraction` scope 下的适用关键原则，并在验收标准中写明审核者应加载 `programming-review` scope 下的全部原则执行架构审查；涉及其他设计子域或特定语言时，为对应 Task 声明条件原则读取要求。
 
 按可独立验证的行为组织交付，可安排多组 arch 与 coding Task。arch 交付源码框架、契约和安装证据；coding 消费已安装框架并交付完整行为。已有框架由 arch 核对、复用并补齐本次所需定义。依赖完整行为的后续 Task 通过 `dependsOn` 等待 coding 交付。
 

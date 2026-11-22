@@ -2,7 +2,7 @@
 
 ## 前置准备
 
-- 调用 `principles`，读取 `programming-review` 分类下的全部原则。
+- 使用 `principles` skill，读取 `programming-review` scope 下的全部原则。
 - 读取派发提供的维护后文档与必要引用；制作 ARD 报告时可读取项目 DEVTECH。
 
 ## 事实边界与审查要求

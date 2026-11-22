@@ -12,7 +12,7 @@
 | `validate` | 校验 principle 两级布局、入口头信息、身份和 includes 引用，返回 checkedSources 与 resourceIds。 |
 | `import-principle FILE --scope SCOPE --name NAME [--replace]` | 将已审定草稿入库。返回 `resourceId`、绝对 `entryPath` 和 `operation`（`created` 或 `updated`）。 |
 
-scopes、list、load 和 validate 从目标项目根运行，读取该根的项目资料和全局 core Skill 的资料目录。principle 的 scope 取 principles 下一级目录的完整名称，`programming` 与 `programming-design` 平级且精确匹配。workbook 的 scope 取入口父目录名中第一个连字符前的部分，无连字符时取完整目录名。workbook 的 includes 可跨分类加载。
+scopes、list、load 和 validate 从目标项目根运行，读取该根的项目资料和全局 core Skill 的资料目录。principle 的 scope 取 principles 下一级目录的完整名称，`programming` 与 `programming-design-architecture` 平级且精确匹配。workbook 的 scope 取入口父目录名中第一个连字符前的部分，无连字符时取完整目录名。workbook 的 includes 可跨分类加载。
 
 可在任意目录用 `-h` 或 `--help` 查询参数，用 `-v` 或 `--version` 查看版本。帮助为纯文本，业务结果为精简 JSON。
 
