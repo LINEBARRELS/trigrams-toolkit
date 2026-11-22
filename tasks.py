@@ -113,7 +113,7 @@ def bump_version(root: Path, version: str, *, dry_run: bool = False) -> dict:
     if not dry_run:
         for _, path, content, changed in staged:
             if changed:
-                path.write_text(content, encoding="utf-8")
+                path.write_text(content, encoding="utf-8", newline="\n")
 
     return {
         "ok": True,
