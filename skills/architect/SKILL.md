@@ -7,13 +7,13 @@ metadata:
 
 # architect
 
-使用 `principles` skill，加载 `programming-design-architecture` scope 下的全部原则，并按本次设计目标从 `programming-design-abstraction`、`programming-design-module`、`programming-design-repo`、`programming-pragmatic` scope 中选取适用原则。涉及类型、属性、常量或公共签名声明时，从对应语言 scope 中选取声明期原则。沿用项目 `AGENTS.md` 或已有路径、绑定与标识；新项目无约定时，默认使用 `DEVTECH.md`、`docs/ARD.md`、`docs/implementation-specs/` 和 `docs/research/`。
+使用 `principles` skill，加载 `programming-design-architecture` scope 下的全部原则，并按本次设计目标从 `programming-design-abstraction`、`programming-design-module`、`programming-design-repo`、`programming-pragmatic` scope 中选取适用原则。涉及类型、属性、常量或公共签名声明时，从对应编程语言的 scope 中选取适用 principle。沿用项目 `AGENTS.md` 或已有路径、绑定与标识；新项目无约定时，默认使用 `DEVTECH.md`、`docs/ARD.md`、`docs/implementation-specs/` 和 `docs/research/`。
 
 ## 设计与文档
 
-正式文档记录已确定的架构设计；未定方案与对比分析归入研究目录。动笔编辑文档前使用 `doc-polish`。
+正式文档记录已确定的架构设计；未定方案与设计研讨归入研究目录。动笔编辑文档前使用 `doc-polish`。
 
-- **探索**：读取[探索中的证据与实验方法](references/exploration-experiments.md)，结合验证条件比较候选方案及代价，记录确定结论、待裁决问题与对现有设计的影响，保存至 `docs/research/`，基于探索主题创建对应的、可复用专题子文件夹。
+- **非正式的设计探索**：当用户的工作目标不涉及维护下面的三种正式文档、仅希望做前期调研时，基于项目现状和设计目标，比较设计候选方案，记录设计研究方案、待裁决问题，保存至 `docs/research/`，基于探索主题创建对应的、可复用专题子文件夹。
 - **DEVTECH**：维护技术栈、工程组织、架构层（`Architecture Layer`）清单、宏观职责、依赖方向、所有权与跨模块通用术语。结合应用运行形态，沿外部交互与表现、应用编排、核心业务决策及底层支撑的职责与稳定性差异，垂直切分项目实际所需的架构层。在“应用架构”中列明当前项目的 `Architecture Layer` 清单，界定各层职责边界、单向依赖方向、调用方式及运行环境约束。
 - **ARD**：沿用 `DEVTECH` 已确立的 `Architecture Layer` 清单与顺序展示 `Module → Feature` 结构，使用下方格式。`DEVTECH` 未列明当前项目的 `Architecture Layer` 清单或现有层级无法覆盖本次变更时，因缺少稳定的层级划分基准，无法维护 `ARD` 架构树；应先停工、通知用户在 `DEVTECH` 中确立或修订架构层划分。Module、Feature 名称使用 `kebab-case` 格式，职责简述使用用户语言。Feature 按正交行为职责划分。ARD 不列举对应的 Spec；运行 `project-state related <Module ID>`，检查退出码为 0 和 `ok: true` 后，读取 `data.items` 中 Artifact 的 `path`。从 Feature 导航共享资料时，先取 `locate <Feature ID>` 的 `data.moduleId` 或 `related <Feature ID>` 返回的 Module，再查询该 Module。
 - **Implementation Spec**：每个 Module 的实现设计集中在一份 Spec，按[模板](references/templates/implementation-spec.temp.md)选用适用章节编写，定义所属 Feature 行为、能力、输入输出、所有权、依赖、公开契约、状态、失败语义与运行约束。
