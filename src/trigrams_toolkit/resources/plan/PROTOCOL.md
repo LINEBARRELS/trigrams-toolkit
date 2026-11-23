@@ -15,7 +15,7 @@ PLAN 为目录，TASK 为 tasks/<TASK>/task.md 的目录编号。省略 TASK 的
 
 ## 文稿定义
 
-`plan-toolkit` 专用于 `flow` 模式 Plan。`summary.md` 保存总体要求与 Stub 详情，可选包含 `plan-type: flow` YAML 头（未声明时按 `flow` 兼容）；若 `summary.md` 声明 `plan-type: agile`，工具返回 `unsupported_plan`，声明未知 `plan-type` 返回 `invalid_plan`。Task YAML 保存 dependsOn、specs、workspace、installs、fills、uses，工作要求写正文。Task ID 为 T 加数字。依赖和 Spec 列表缺省为空，workspace 可省略。未知头字段、重复键及重复引用会报错。
+`plan-toolkit` 专用于 `flow` 模式 Plan。若 `plan-type` 为 `agile` ，工具返回 `unsupported_plan`，声明未知 `plan-type` 返回 `invalid_plan`。Task YAML 保存 dependsOn、specs、workspace、installs、fills、uses，工作要求写正文。Task ID 为 T 加数字。依赖和 Spec 列表缺省为空，workspace 可省略。未知头字段、重复键及重复引用会报错。
 
 installs、fills、uses 为数组，每项只含 id 和 name，名称与 summary 中相同 ID 的标题一致。新计划的每个 Task 显式写这 3 项，未使用时为空数组。无 Stub 的既有精简文稿可省略，读取时按空数组处理；含 Stub 的 Plan 中不允许省略。
 

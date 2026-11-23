@@ -1,6 +1,6 @@
 # Plan Toolkit
 
-`plan-toolkit` 专用于 `flow` 模式 Plan：读取 Plan 文稿，编译调度快照，维护 Plan、Task 与 Stub 的当前状态。`agile` 模式 Plan（`summary.md` 声明 `plan-type: agile`）不经由本工具调度，调用时返回 `unsupported_plan`。
+`plan-toolkit` 专用于 `flow` 模式 Plan：读取 Plan 文稿，编译调度快照，维护 Plan、Task 与 Stub 的当前状态。`agile` 模式 Plan 不经由本工具调度，调用时返回 `unsupported_plan`。
 
 ## 编写与检查
 

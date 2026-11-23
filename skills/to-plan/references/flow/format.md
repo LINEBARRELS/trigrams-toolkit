@@ -74,7 +74,7 @@ Task 编号来自目录，格式为 T 加数字。每个 Task 声明 installs、
 
 ## Stub 的完整要求
 
-围绕 Plan 的核心工作考虑划定 Stub，按所选 workbook 的要求确定范围；没有明确要求时，结合工作目标、成果结构和现状判断。在 Flow 模式中，需通过 `plan-toolkit` 跟踪两阶段状态的 Stub 恰有 1 个安装 Task、1 个不同的装填 Task。一个 Task 可以承担多个 Stub 的工作，但不同时安装和装填同一 Stub。
+围绕 Plan 的核心工作划定 Stub，按所选 workbook 的要求确定范围；没有明确要求时，结合工作目标、成果结构和现状判断。在 Flow 模式中，需通过 `plan-toolkit` 跟踪两阶段状态的 Stub 恰有 1 个安装 Task、1 个不同的装填 Task。一个 Task 可以承担多个 Stub 的工作，但不同时安装和装填同一 Stub。
 
 ```markdown
 <!-- harness:stub S01 -->

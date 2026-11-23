@@ -7,9 +7,9 @@
 | `toolkit-steward` | 解答工具包架构、契约与选用依据，诊断环境与项目状态，引导项目接入与扩展管理 |
 | `workbook` / `principles` | 按任务目标和范围检索并加载适用的 workbook 或 principle |
 | `to-plan` | 将已确定目标编写为可执行 Plan（默认 `agile` 单文档模式，复杂多阶段编排可选 `flow` 多 Task 模式） |
-| `execute-plan` | 按 `summary.md` 的 `plan-type` 分流组织开发与独立审核交接、成果整合、状态推进与正式登记 |
-| `execute-task` | 在 `flow` 模式下按明确要求完成单个 Task 实现与必要验证 |
-| `delivery-review` | 在 `flow` 模式下核对实际交付物与验收标准，形成审核结论与问题清单 |
+| `execute-plan` | 按 `plan-type` 分流，组织开发与独立审核交接、成果整合 |
+| `execute-task` | 在 `flow` 模式下完成单个 Task 实现与必要验证 |
+| `delivery-review` | 在 `flow` 模式下核对实际交付物与验收标准，形成审核结论 |
 | `architect` | 维护宏观架构（ARD）、Module / Feature 边界与 Implementation Spec |
 | `doc-polish` | 中文技术文档标准语言规范与润色检查 |
 | `how` / `why` / `effect` | 调查当前实现机制与历史设计决策理由；在用户显式触发时评估变更影响范围 |
@@ -22,7 +22,7 @@
 
 | 公共工具 | 职责 |
 | --- | --- |
-| `plan-toolkit` | 面向 `flow` 模式编译计划快照、检查任务依赖、查询可执行任务并维护 Plan 与 Task 状态 |
+| `plan-toolkit` | 面向 `flow` 模式编译 Plan 快照、检查任务依赖、查询可执行任务并维护 Plan 与 Task 状态 |
 | `project-state` | 登记和查询项目内 Module、Feature、Artifact 的身份与关系 |
 | `handbook` | 发现、加载和校验核心、扩展与项目自建的 workbook 及 principle，并将已审定原则草稿入库 |
 | `harness-install` | 预览并装配项目扩展资源与宿主 adapter，补齐全局 Skill，保护受管文件并归档指定项目内路径 |

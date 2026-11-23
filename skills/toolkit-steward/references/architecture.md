@@ -4,12 +4,12 @@
 
 ## 1. 体系目标与职责关系
 
-工具包采用统一的项目工作协议：Skill 负责行为，workbook 定义模式中立的工作方法，principle 指导判断，正式成果（Artifact）保存项目依据与交付物，Plan 按 `agile`（默认轻量单文档）或 `flow`（多 Task 拓扑）模式组织目标、Stub 与交接。
+工具包采用统一的项目工作协议：Skill 负责行为，workbook 定义模式中立的工作方法，principle 指导判断，正式成果（Artifact）保存项目依据与交付物，Plan 按 `agile`（默认敏捷开发）或 `flow`（多 Task 拆分调度）模式组织目标、Stub 与交接。
 
 | 组成 | 职责 |
 | --- | --- |
 | **Skill** | 调查、规划、执行、审核、解释和维护；读取依据并调用工具 |
-| **workbook** | 以 Plan 模式中立方式定义适用条件、输入、工作流程、工序切分、Stub 交接与验收 |
+| **workbook** | 针对特定工作领域定义适用条件、输入、工作流程、工序切分、Stub 交接与验收|
 | **principle** | 提供特定工作范围内普适的判断标准 |
 | **Artifact** | 保存正式设计与交付物；正文单点维护，身份与关系进入登记库 |
 | **Plan / Stub / Task** | Plan 统筹目标与 Stub 范围边界；`agile` 模式以单份 `summary.md` 与平铺结果文件推进，`flow` 模式额外拆分为 `tasks/Txx/` 并由 `plan-toolkit` 校验拓扑 |
@@ -17,13 +17,10 @@
 | **公共工具** | 维护身份、定位、Flow Plan 状态、资料检索与安装归属 |
 | **extensions / adapters** | 扩展补充领域能力，平台适配器随 CLI 包提供 Flow 模式的宿主角色入口 |
 
-简单问答和单步工作直接使用对应能力。多阶段工作、跨角色交接或持续追踪通过 Plan 组织：日常与中小型开发默认采用 `agile` 模式，复杂多模块依赖与强拓扑校验按需采用 `flow` 模式。跨 Plan 生效的判断标准归 principle，单次工作要求归 Plan。
+简单问答和单步工作不必强行创建 plan。多阶段工作、跨角色交接或持续追踪通过 Plan 组织：日常开发工作默认采用 `agile` 模式，复杂多模块开发按需采用 `flow` 模式。
 
 ## 2. Skill 封装与跨组件协作
 
-每个 Skill 封装自身正文、私有资料（`references/`）和私有脚本（`scripts/`）。
-
-- **跨 Skill 协作**：使用宿主标准入口，明确说明使用条件、输入与所需结果；调用方严禁直接读取另一 Skill 的私有文件。
 - **渐进式加载（Progressive Disclosure）**：principle 和 workbook 通过对应 Skill 按范围或稳定 ID 按需加载，资源内部可使用相对路径；指定资源或能力缺失时，返回缺项与影响范围。
 - **上下文隔离模式**：复杂知识查询与多维建议按对应 Skill 的隔离要求执行。`how`、`why`、`effect` 推荐使用子代理，也可在主线程完成；`toolkit-steward` 的咨询分流与主线程执行边界由其 [Skill 入口](../SKILL.md)规定，主线程只加载当前问题所需资料。
 

@@ -1,6 +1,6 @@
 ---
 name: how
-description: 调查当前设计结构、工作过程、职责分工和在途 Plan 状态。
+description: 调查当前设计结构、工作过程、职责分工
 metadata:
   harness-toolkit-type: workflow
 ---

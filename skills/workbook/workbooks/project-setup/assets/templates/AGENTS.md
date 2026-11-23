@@ -56,5 +56,5 @@
 | --- | --- |
 | `handbook` | workbook 与 principle 的发现和加载 |
 | `project-state` | 项目内架构实体、成果与关系的登记和查询 |
-| `plan-toolkit` | Flow 模式的 plan 的读取、依赖检查与当前状态 |
+| `plan-toolkit` | plan（仅Flow 模式）的读取、依赖检查与当前状态 |
 | `harness-install` | 项目工具包资源装配 |
