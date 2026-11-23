@@ -293,3 +293,20 @@ class StubSchedulingTests(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertEqual(result["error"]["code"], "dependency_cycle")
         self.assertTrue(result["error"]["issues"][0]["chain"])
+
+    def test_summary_plan_type_accepts_flow_and_rejects_agile_or_unknown(self) -> None:
+        original = (self.plan / "summary.md").read_text(encoding="utf-8")
+        (self.plan / "summary.md").write_text("---\nplan-type: flow\n---\n" + original, encoding="utf-8")
+        self.assertTrue(self.service.validate(sync=True)["valid"])
+        self.assertEqual(self.ready(), ["T01"])
+
+        agile_plan = self.root / "P_AGILE"
+        agile_plan.mkdir()
+        (agile_plan / "summary.md").write_text("---\nplan-type: agile\nstatus: pending\n---\n# Agile Plan\n", encoding="utf-8")
+        agile_service = PlanService(agile_plan)
+        self.failure("unsupported_plan", lambda: agile_service.validate(sync=True))
+        self.assertFalse((agile_plan / "plan.json").exists())
+        self.assertFalse((agile_plan / ".plan.lock").exists())
+
+        (agile_plan / "summary.md").write_text("---\nplan-type: custom\n---\n# Unknown Plan\n", encoding="utf-8")
+        self.failure("invalid_plan", lambda: agile_service.validate(sync=True))

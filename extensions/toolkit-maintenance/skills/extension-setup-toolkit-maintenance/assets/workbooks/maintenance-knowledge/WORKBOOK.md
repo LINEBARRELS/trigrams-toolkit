@@ -25,9 +25,9 @@ includes:
 3. 核查 principle 入口目录名、scope、名称、description 与正文内容的一致性；头信息只接受 description，组合加载由 workbook 的 includes 声明。用 `handbook scopes` 和 `handbook list` 核对领域分类；涉及目录改名时，用派生的新 ID 执行 `handbook load`，核对当前引用迁移、路径引用和安装入口，再运行 `handbook validate`。
 4. 针对问题提出保留、合并、移动、退役或修订候选，说明对引用方与在途工作的影响。
 
-## Task 切分与交接
+## 工序切分与交接
 
-审核由 general Task 交付。需要持续整改时，按问题共因切分审核、整改与复验 Task，通过显式 `dependsOn` 传递完整成果：整改消费已确认问题和修改授权并更新唯一维护源，复验以整改后的实际材料重验原问题与受影响引用。principle 候选经 `principle-maintenance` 提交用户审定后生效。
+只读审核作为独立 Stub 交付。需要持续整改时，按问题共因划分“审核 → 获授权整改 → 复验”前后工序并明确完整成果消费依赖：整改消费已确认问题和修改授权并更新唯一维护源，复验以整改后的实际材料重验原问题与受影响引用。principle 候选经 `principle-maintenance` 提交用户审定后生效。
 
 ## 产出与验收
 

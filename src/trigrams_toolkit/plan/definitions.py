@@ -13,20 +13,26 @@ from .model import PlanDefinition, REBUILD_INSTRUCTION, STUB_FIELDS, StubDefinit
 
 
 class _HeaderLoader(yaml.SafeLoader):
-    pass
+    error_code = "invalid_task"
+    header_label = "Task"
 
 
 def _mapping(loader: _HeaderLoader, node: yaml.MappingNode) -> dict:
     result = {}
     for key_node, value_node in node.value:
         key = loader.construct_object(key_node)
-        require(isinstance(key, str), "invalid_task", "Task header keys must be strings.")
-        require(key not in result, "invalid_task", f"Duplicate Task header: {key}")
+        require(isinstance(key, str), loader.error_code, f"{loader.header_label} header keys must be strings.")
+        require(key not in result, loader.error_code, f"Duplicate {loader.header_label} header: {key}")
         result[key] = loader.construct_object(value_node)
     return result
 
 
 _HeaderLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _mapping)
+
+
+class _SummaryHeaderLoader(_HeaderLoader):
+    error_code = "invalid_plan"
+    header_label = "Summary"
 
 
 def read_text(path: Path) -> str:
@@ -36,20 +42,28 @@ def read_text(path: Path) -> str:
         raise ProtocolError("plan_unreadable", f"Cannot read {path}: {error}") from error
 
 
-def _header(body: str, path: Path) -> dict[str, Any]:
+def _parse_yaml_header(body: str, path: Path, *, loader: type[_HeaderLoader]) -> dict[str, Any]:
     lines = body.splitlines()
     if not lines or lines[0] != "---":
         return {}
-    require("---" in lines[1:], "invalid_task", f"Close the YAML header in {path}.")
+    require("---" in lines[1:], loader.error_code, f"Close the YAML header in {path}.")
     try:
-        value = yaml.load("\n".join(lines[1:lines.index("---", 1)]), Loader=_HeaderLoader)
+        value = yaml.load("\n".join(lines[1:lines.index("---", 1)]), Loader=loader)
     except yaml.YAMLError as error:
-        raise ProtocolError("invalid_task", f"Invalid YAML in {path}: {error}") from error
-    require(value is None or isinstance(value, dict), "invalid_task", f"Task header must be a mapping: {path}")
-    value = value or {}
+        raise ProtocolError(loader.error_code, f"Invalid YAML in {path}: {error}") from error
+    require(value is None or isinstance(value, dict), loader.error_code, f"{loader.header_label} header must be a mapping: {path}")
+    return value or {}
+
+
+def _header(body: str, path: Path) -> dict[str, Any]:
+    value = _parse_yaml_header(body, path, loader=_HeaderLoader)
     allowed = {"dependsOn", "specs", "workspace", *STUB_FIELDS}
     require(not set(value) - allowed, "invalid_task", f"Unknown Task header fields in {path}: {sorted(set(value) - allowed)}")
     return value
+
+
+def _summary_header(summary: str, path: Path) -> dict[str, Any]:
+    return _parse_yaml_header(summary, path, loader=_SummaryHeaderLoader)
 
 
 def _identities(value: Any, label: str) -> tuple[str, ...]:
@@ -123,6 +137,14 @@ def read_definition(root: Path) -> PlanDefinition:
     summary_path = root / "summary.md"
     require(summary_path.resolve().is_relative_to(root), "plan_unreadable", "summary.md escapes the Plan.")
     summary = read_text(summary_path)
+    header = _summary_header(summary, summary_path)
+    plan_type = header.get("plan-type")
+    if plan_type == "agile":
+        raise ProtocolError(
+            "unsupported_plan",
+            "Agile Plan (plan-type: agile) is orchestrated directly without plan-toolkit.",
+        )
+    require(plan_type in (None, "flow"), "invalid_plan", f"Unsupported plan-type in {summary_path}: {plan_type}")
     require("<!-- to-plan:data -->" not in summary and not any((root / "tasks").glob("T[0-9]*.md")),
             "unsupported_plan", f"Unsupported Plan layout. {REBUILD_INSTRUCTION}")
     stubs = _stubs(summary)

@@ -25,14 +25,14 @@ includes:
 | 附加材料、公共工具与 adapter | 确需装配到项目的材料在 `extension.json` 的 `install` 中声明；公共 CLI 与宿主 adapter 由统一工具包维护，安装与装配方式向 `toolkit-steward` 查询 |
 
 1. 沿代表性工作核对职责与材料分工。复用 core 和已有扩展能力，确定本次新增、修改或退役的内容。
-2. 从改动点追踪引用、调用和安装关系。核对使用方与未完成 Task；资源身份或工作依据变化影响在途工作时，调用 `effect` 取得承接范围。
+2. 从改动点追踪引用、调用和安装关系。核对使用方与在途 Plan 中的未完成工作；资源身份或工作依据变化影响在途工作时，调用 `effect` 取得承接范围。
 3. 按本次涉及的材料类型，运行 `handbook list --kind principle --scope <对应scope>` 查看可用原则，按 `description` 选择并 `handbook load` 所需判断（如调整资源身份时加载 `maintenance-knowledge/sync-active-references-on-identity-change`，编写或精简文稿时从 `maintenance-document` 选择对应防腐原则）。修改唯一维护源，同步受影响的包声明、入口、引用、契约与说明。
 4. 按材料选择本扩展对应的 Skill、workbook、知识或工具审核 workbook 完成核查。
 5. 按改动范围验证。资源变化检查发现与加载，方法变化演练代表性任务。扩展 Skill、声明或材料变化后，通过 Vercel skills 更新。在项目根用 `harness-install` 预览并应用装配，刷新项目快照。公共工具或包内 adapter 变化时更新安装包并验证调用。工具包源仓库的静态校验与打包验证按仓库维护文档执行。
 
-## Task 切分与交接
+## 工序切分与交接
 
-按独立交付结果切分 Task。职责或公共契约待确定时，先交付设计依据，后续实现通过 `dependsOn` 等待完整成果。围绕扩展的核心成果，结合工作目标、成果结构和现状划定 Stub。
+按独立交付结果与公共契约边界划定 Stub 与工序。职责或公共契约待确定时，先交付设计依据，后续实现按序等待完整成果。围绕扩展的核心成果，结合工作目标、成果结构和现状确定各 Stub 的交接位置。
 
 涉及使用方迁移时，交接新旧资源身份、安装选择、目标环境及待修订工作。项目快照与平台 adapter 由 `harness-install` 维护安装记录（`.agents/harness.json`），Skill 目录由 Vercel skills 管理。
 

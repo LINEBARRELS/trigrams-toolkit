@@ -14,7 +14,7 @@
 
 | 路径 | 用途与读取时机 |
 | --- | --- |
-| `docs/plans/` | Plan；规划与整体协调读取 summary，执行或审核 Task 读取正文及选中片段 |
+| `docs/plans/` | Plan；按 `summary.md` 的 `plan-type` 区分 `agile`（默认单文档与平铺结果）与 `flow`（多 Task 目录） |
 
 对于项目架构或工作流程理解有疑问可以使用全局安装的 `toolkit-steward` skill 进行咨询。
 
@@ -62,7 +62,7 @@
 
 | 命令 | 用途 |
 | --- | --- |
-| `plan-toolkit` | 计划读取、依赖检查与当前状态 |
+| `plan-toolkit` | Flow 模式计划的读取、依赖检查与当前状态 |
 | `project-state` | 项目内架构实体、成果与关系的登记和查询 |
 | `handbook` | workbook 与 principle 的发现和加载 |
 | `harness-install` | 项目资源装配、全局 Skill 补齐与旧运行状态归档 |

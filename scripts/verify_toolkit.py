@@ -44,10 +44,15 @@ def historical_document(path: Path, root: Path) -> bool:
         return True
     if relative.parts[:2] != ("docs", "plans") or len(relative.parts) < 4:
         return False
-    snapshot = root / "docs/plans" / relative.parts[2] / "plan.json"
-    if not snapshot.is_file():
+    plan_root = root / "docs/plans" / relative.parts[2]
+    snapshot = plan_root / "plan.json"
+    if snapshot.is_file():
+        return json.loads(snapshot.read_text(encoding="utf-8"))["status"] in ("done", "cancelled")
+    summary = plan_root / "summary.md"
+    if not summary.is_file():
         return False
-    return json.loads(snapshot.read_text(encoding="utf-8"))["status"] in ("done", "cancelled")
+    data = frontmatter(summary)
+    return data.get("plan-type") == "agile" and data.get("status") in ("done", "cancelled")
 
 
 def _validate_skills(root: Path, components: list[dict]) -> tuple[list[str], list[str]]:
