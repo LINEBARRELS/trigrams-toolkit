@@ -104,3 +104,20 @@ jobs:
             .tmp/ci/package/package-check.json
             .tmp/ci/package/business.json
             dist/*
+
+  pr-checks:
+    name: PR checks
+    needs: platform-checks
+    if: always() && github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require all platform checks to pass
+        shell: pwsh
+        env:
+          PLATFORM_CHECKS_RESULT: ${{ needs.platform-checks.result }}
+        run: |
+          if ($env:PLATFORM_CHECKS_RESULT -ne 'success') {
+            Write-Output "::error::Platform checks did not pass (result: $env:PLATFORM_CHECKS_RESULT)."
+            exit 1
+          }

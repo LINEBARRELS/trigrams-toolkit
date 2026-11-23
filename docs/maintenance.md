@@ -49,6 +49,8 @@ python tasks.py check
 - **日常 PR 检查（`base != main`）**：运行 `mypy`、`scripts/verify_toolkit.py`、`scripts/check_protocols.py` 及 `tests/`、`tests/runtime/` 测试。
 - **发版候选与定时验收**：目标为 `main` 的发版 PR（`base == main`）、手动触发（`workflow_dispatch`）或每日定时检查（`origin/dev` 过去 24 小时有提交时，检出 `dev`）除运行上述全部静态检查与测试外，还构建直接 wheel、sdist 与由 sdist 生成的 wheel，在合成项目与隔离 Skill 目录中运行 `scripts/check_package.py` 跨平台验收。
 
+`PR checks` 汇总 PR 的四组平台检查。四组均成功时，`PR checks` 才通过。
+
 ### 标签自动发布（`.github/workflows/release.yml`）
 
 推送 `v*` 标签后，`.github/workflows/release.yml` 自动完成构建、验收与 PyPI 发布，本机无需保存 PyPI API Token：
@@ -60,7 +62,7 @@ python tasks.py check
 #### 首次启用仓库保护与 Trusted Publishing
 
 1. 在 GitHub 仓库 `Settings -> Rules -> Rulesets` 中建立两条规则：
-   - **分支规则（`main`）**：禁止直接推送与强制推送，要求通过 PR 合并，并将 `platform-checks` 设为必过状态检查。
+   - **分支规则（`main`）**：禁止直接推送与强制推送，要求通过 PR 合并，并将 GitHub Actions 的 `PR checks` 设为必过状态检查。
    - **标签规则（`v*`）**：仅允许仓库管理员或发布维护者创建与删除，禁止强制更新。
 2. 在 PyPI 项目设置（`https://pypi.org/manage/project/trigrams-toolkit/settings/publishing/`）中登记 GitHub Publisher：
 
