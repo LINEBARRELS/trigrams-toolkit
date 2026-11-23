@@ -55,8 +55,8 @@ python tasks.py check
 
 推送 `v*` 标签后，`.github/workflows/release.yml` 自动完成构建、验收与 PyPI 发布，本机无需保存 PyPI API Token：
 
-1. **`build` 作业**：在 `ubuntu-latest` 上校验当前标签提交位于 `origin/main` 历史中，运行 `python tasks.py check-release --tag <tag>` 核对版本与 `CHANGELOG.md`，运行 `python tasks.py check`，再运行 `python tasks.py build` 单次构建 sdist、wheel 与校验用直接 wheel。
-2. **`verify` 作业**：在 Ubuntu 与 Windows 的 Python 3.11／3.13 矩阵上下载 `build` 产出的同一批包，运行 `tasks.py check`、`tasks.py test` 与 `tasks.py verify-package`。
+1. **`build` 作业**在 `ubuntu-latest` 上校验当前标签提交位于 `origin/main` 历史中，再执行 `python tasks.py check-release --tag <tag>` 核对版本与 `CHANGELOG.md`。`python tasks.py build` 单次构建 sdist、wheel 与校验用直接 wheel。
+2. **`verify` 作业**在 Ubuntu 与 Windows 的 Python 3.11／3.13 矩阵上下载 `build` 产出的同一批包，并执行 `python tasks.py verify-package`。合并前的四组平台作业负责源码静态检查和源码测试。
 3. **`publish-pypi` 作业**：仅在 `build` 与全部 `verify` 矩阵通过后运行；该作业绑定 GitHub Environment `pypi`，仅申请 `id-token: write` 权限，通过 `pypa/gh-action-pypi-publish` 使用 OIDC Trusted Publishing 上传已验收的 `dist/` 发行包并附带 PEP 740 数字证明。
 
 #### 首次启用仓库保护与 Trusted Publishing
