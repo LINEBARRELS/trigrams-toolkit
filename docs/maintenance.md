@@ -89,7 +89,7 @@ python tasks.py check
 3. 运行本地核对：`python tasks.py check-release --tag v<version>` 与 `python tasks.py check`。
 4. 提交变更并推送到 `dev`，向 `main` 提交 Release PR。
    结果：CI 自动运行全部跨平台测试及打包隔离验收（`build` 与 `verify-package`）。
-5. 全部状态检查通过后，使用 **Merge Commit**（或 Fast-Forward）将 `dev` 合并至 `main`。
+5. 等待必过状态检查 `PR checks` 通过，再使用 **Merge Commit**（或 Fast-Forward）将 `dev` 合并至 `main`。
 6. 切换并拉取最新 `main`，创建并推送附注标签：
    ```sh
    git checkout main
