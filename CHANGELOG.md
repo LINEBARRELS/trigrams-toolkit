@@ -2,6 +2,10 @@
 
 版本号以 `toolkit.json` 与 `pyproject.toml` 为准，四个公共 CLI 的 `--version` 统一来自 Python 包元数据。
 
+## 0.3.4
+
+- 明确 `architect` 编写 DEVTECH、ARD 或 Implementation Spec 时可参阅 `docs/research/` 中的研究内容。正式文档中仍禁止添加指向这些研究文档的链接。[architect](skills/architect/SKILL.md)
+
 ## 0.3.3
 
 - 明确正式设计、计划交付与 `docs/research/` 研究草稿的边界：在 [architect](skills/architect/SKILL.md)、[to-plan](skills/to-plan/SKILL.md)、[execute-task](skills/execute-task/SKILL.md) 与 [project-setup `AGENTS.md` 模板](skills/workbook/workbooks/project-setup/assets/templates/AGENTS.md) 中禁止在正式设计文档、Plan 与 Task 中引用研究草稿，执行阶段统一以正式设计为准。

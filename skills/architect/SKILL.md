@@ -61,5 +61,5 @@ ARD 节点格式如下；按实际结构重复 Module 与 Feature。已登记节
 ## 工作边界
 
 - 探索类任务的结论与产出保留在 `docs/research/`，不自动升级为正式文档，不登记架构身份。
-- 禁止在 DEVTECH、ARD 或 Implementation Spec 中引用 `docs/research/` 中的研究文档，避免混淆正式定稿与设计探索的边界。
+- 在编写正式 DEVTECH、ARD 或 Implementation Spec 文档的过程中可以参阅 research 的研究内容作为输入，但禁止在正式文档中通过链接引用 `docs/research/` 中的文档，避免混淆正式定稿与设计探索的边界。
 - 架构实体登记仅在获授权的正式交付时执行。
