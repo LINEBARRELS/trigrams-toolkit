@@ -13,12 +13,13 @@ Agile 模式直接以 `summary.md` 为唯一工作依据推进交付：不回查
 
 ### 2. 按 Stub 推进开发与审核
 
-依据 `summary.md` 的 `## 附加调度规则` 与 `## Stub 清单`（范围、前置依赖与共享文件竞争约束），按序或分批推进待完成 Stub：
+依据 `summary.md` 的 `## 附加调度规则`（`<schedule-rule>`）与 `## Stub 清单`（范围、前置依赖与共享文件竞争约束），按序或分批推进待完成 Stub：
 
 1. **派发开发（通用独立 subagent）**：
    - 派发通用独立 subagent（不指示其调用 `execute-task` Skill），在派发指令中清晰交付：
-     - 目标项目根、Plan 目录与当前负责的 Stub 定义（如 `S01`）及本轮阶段范围（若 `## 附加调度规则` 对该 Stub 声明了多阶段推进，明确当前推进到哪一阶段）；
-     - `summary.md` 中相关的需求目标、正式依据、验收标准与用户补充约束；
+     - 目标项目根、Plan 目录与当前负责的 Stub 定义（如 `S01`）及本轮阶段范围（若 `<schedule-rule>` 对该 Stub 声明了多阶段推进，明确当前推进到哪一阶段；并参考 `<schedule-rule>` 中的方向指导组织派发提示词）；
+     - `summary.md` 中相关的需求目标、正式依据、验收标准与补充约束（如有）；
+     - `summary.md` 中适用于本 Stub 的 `<exec-rule>` 原文（如有）；
      - 本轮必读的基线 `principle` ID 列表（来自 `summary.md` 的 `## 正式依据` 及对应 Stub 的补充 principle）；
      - 本 Stub 的平铺交付结果路径（`<Plan目录>/<StubID>-result.md`）；
      - 明确要求先阅读并遵守[开发约束文档](dev-constraints.md)。
@@ -27,15 +28,16 @@ Agile 模式直接以 `summary.md` 为唯一工作依据推进交付：不回查
 
 2. **派发独立审核（通用独立 subagent）**：
    - **默认节奏**：单个 Stub 开发完成后派发一次独立审核。
-   - **多阶段节奏**：若 `summary.md` 的 `## 附加调度规则` 对该 Stub 声明了多阶段推进与审核（例如先架构安装审核、再逻辑装填审核），则在每个声明的阶段完成后分别派发独立审核；前阶段审核 `pass` 后再派发下一阶段开发。
+   - **多阶段节奏**：若 `<schedule-rule>` 对该 Stub 声明了多阶段推进与审核（例如先架构安装审核、再逻辑装填审核），则在每个声明的阶段完成后分别派发独立审核；前阶段审核 `pass` 后再派发下一阶段开发。
    - 派发独立的通用审核 subagent（不指示其调用 `delivery-review` Skill），在派发指令中清晰交付：
      - 目标项目根、当前 Stub 要求、当前审核阶段与对应验收标准；
      - 实际产物路径与对应 `<Plan目录>/<StubID>-result.md`；
+     - `summary.md` 中适用于本 Stub 与当前阶段的 `<review-rule>` 原文（如有）；
      - 该阶段必读的审核与领域 `principle` ID（来自 `summary.md` 的 `## 验收标准`、`## 附加调度规则` 及对应 Stub）；
      - 明确要求先阅读并遵守[审核约束文档](review-constraints.md)。
 
 3. **处理审核结论与正式登记**：
-   - **`pass`**：确认产物就绪。若 `summary.md` 的 `## 附加调度规则` 在该 Stub 或当前阶段 `pass` 后声明了 `project-state` 等正式成果或关系登记，由主 Agent 按要求执行登记命令并核对退出码（登记失败时暂不视为完成）；随后推进下一阶段或下一 Stub。
+   - **`pass`**：确认产物就绪。若 `<schedule-rule>` 在该 Stub 或当前阶段 `pass` 后声明了 `project-state` 等正式成果或关系登记，由主 Agent 按要求执行登记命令并核对退出码（登记失败时暂不视为完成）；随后推进下一阶段或下一 Stub。
    - **`rework`**：依据审核记录中未解决的问题清单，重新派发开发 subagent 返工，完成后再派发独立审核复验。
    - **`inconclusive`**：若缺项证据可由开发补充，按 `rework` 重新派发开发补证；若外部依据或验证环境缺失无法裁决，将 `summary.md` 头 `status` 更新为 `blocked` 并向用户说明待裁决项。
 
