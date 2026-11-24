@@ -14,7 +14,7 @@ metadata:
 
 - 确认项目根已由 `harness-install` 装配 `.agents/extensions/toolkit-maintenance/` 快照。
 - 本扩展无额外必需领域 Skill，不改变核心成果类型，也不部署项目工具。
-- 运行 `handbook validate` 确认扩展快照通过校验，按工作对象可加载对应的维护 workbook（`maintenance-extension`、`maintenance-knowledge`、`maintenance-workbook`、`maintenance-tooling` 或 `maintenance-skill`）。
+- 运行 `handbook validate` 确认扩展快照通过校验；扩展开发与结构合规核验加载 `toolkit-maintenance:workbook:maintenance-extension`，日常维护按材料类型从 `maintenance`、`maintenance-extension`、`maintenance-knowledge`、`maintenance-workbook`、`maintenance-skill`、`maintenance-tooling` 六个 scope 按需加载原则。
 
 ## 2. 特定目录路径
 

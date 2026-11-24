@@ -14,6 +14,9 @@
 
 ## 核心契约规则
 
-- **架构与计划状态**：Registry 保存 Module、Feature 和 Spec 的架构关系。`agile` 模式以自包含的 `summary.md` 统筹目标、原则、约束与泛化 Stub，调度者直接更新 `status` 并按 Stub 推进开发与独立审核。`flow` 模式使用 `plan-toolkit` 管理 Task 的 `specs` 引用、`validate --sync` 结构快照及文件锁原子状态写入，其中两阶段 Stub 先 `installed` 后 `filled`，`uses` 等待 `installed`，完整行为依赖通过 `dependsOn` 表达。
-- **项目根**。四个公共 CLI 从进程当前目录读取项目。命令参数中的项目内相对路径以项目根为基准。每个 Git 工作树使用自己的 Registry、Plan 和装配快照。
+- **架构与计划状态**：
+  - Registry 保存 Module、Feature 和 Spec 的架构关系。
+  - `agile` 模式的 Plan 直接以 `summary.md` 统筹工作目标、验收标准、规则约束并定义 Stub，调度者直接更新 `status` 并按以 Stub 为基本单元推进开发与独立审核。
+  - `flow` 模式的 Plan 使用 `plan-toolkit` 管理下属 Task，执行调度和状态切换。
+- **公共 CLI 工具路径参数**：公共 CLI 工具参数中的项目内相对路径以项目根目录为基准。在 Git 工作树中则使用工作树的目录。
 - **安装与基线保护**：扩展快照与平台 adapter 装配遵循“先预览、后应用”，通过文件基线保护受管文件与用户本地修改；相同安装请求支持幂等重放。各工具的详细子命令与参数约束通过 `<工具> --help` 查询。

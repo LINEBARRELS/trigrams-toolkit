@@ -52,7 +52,7 @@ Agent 按任务相关性从索引中选择原则；固定流程的必读原则�
 | 层次 | 职责与分发方式 |
 | --- | --- |
 | **core Skill** | 通用行为 Skill 及随 `principles`、`workbook` 携带的核心资料；通过 Vercel skills 全局安装到目标 agent |
-| **公共工具** | 四个统一 Python CLI（`plan-toolkit`、`project-state`、`handbook`、`harness-install`）；通过包管理器安装，契约、核心类型与 adapter 模板随包交付 |
+| **公共 CLI 工具** | 四个统一 Python CLI（`plan-toolkit`、`project-state`、`handbook`、`harness-install`）；通过包管理器安装，契约、核心类型与 adapter 模板随包交付 |
 | **外部必需 Skill** | `answer-me-with-html` 与 `smell-check`。`harness-install install apply` 在首次装配、增补或同步时通过 Vercel skills 补齐目标 `agent` 的全局安装 |
 | **项目扩展与快照** | 扩展 Skill（含 `extension-setup-<extension>`）通过 Vercel skills 安装到项目；`harness-install` 将 `assets/` 装配为 `.agents/extensions/<extension>/` 快照并复制宿主 adapter，`.agents/harness.json` 记录版本与文件基线 |
 | **项目自有内容** | 正式成果、Plan、知识、自建资料（`docs/resources.json`）与本地配置 |

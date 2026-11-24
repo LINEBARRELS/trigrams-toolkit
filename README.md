@@ -83,7 +83,7 @@ Skill 定义 Agent 的行为。公共 CLI 提供资料检索、计划查询、�
 ## 官方扩展
 
 - **[game](extensions/game/README.md)** 为游戏项目提供玩法设计、美术与 UI 规范，以及配套的 workbook 和 principle。
-- **[toolkit-maintenance](extensions/toolkit-maintenance/README.md)** 为开发和维护工具包提供扩展开发、知识库、工作方法维护、工具部署与 Skill 审核规程。
+- **[toolkit-maintenance](extensions/toolkit-maintenance/README.md)** 为开发和维护工具包提供扩展开发与结构合规工作方法（`maintenance-extension`），以及覆盖维护治理、扩展边界、知识、workbook、Skill 与工具链的原则体系。
 
 官方扩展按项目启用。项目快照固定所用的扩展资料，后续可用 `harness-install` 预览并同步。安装步骤见[目标安装与项目接入](docs/getting-started.md#目标安装与项目接入)。
 

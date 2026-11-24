@@ -1,7 +1,6 @@
-"""The maintenance extension exposes atomic principles and selectable workbooks with local references."""
+"""The maintenance extension exposes maintenance-extension workbook and atomic principles."""
 from pathlib import Path
 import re
-import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,40 +11,45 @@ from trigrams_toolkit.handbook.source_catalog import source_packages
 
 
 class MaintenanceContentTests(unittest.TestCase):
-    def test_workbooks_load_baseline_principles_and_atomic_pilot_budget(self) -> None:
+    def test_extension_workbook_and_atomic_principles_budget(self) -> None:
         catalog = GuideCatalog.discover([p for p in source_packages(ROOT, SchemaCatalog(schema_paths()))
                                          if p.manifest.get("extension") == "toolkit-maintenance"], ROOT,
                                         SchemaCatalog(schema_paths()))
-        expected_includes = {
-            "extension": [
+        workbooks = catalog.list(kind="workbook")["resources"]
+        self.assertEqual(
+            [item["resourceId"] for item in workbooks],
+            ["toolkit-maintenance:workbook:maintenance-extension"],
+        )
+        guide = catalog.resolve("toolkit-maintenance:workbook:maintenance-extension")
+        self.assertEqual(
+            guide.header["includes"],
+            [
                 "toolkit-maintenance:principle:maintenance/keep-one-authoritative-source-per-rule",
                 "toolkit-maintenance:principle:maintenance/keep-reference-chains-reachable-and-complete",
+                "toolkit-maintenance:principle:maintenance-extension/keep-extension-self-contained-in-setup-assets",
             ],
-            "knowledge": [
-                "toolkit-maintenance:principle:maintenance/ground-review-in-verifiable-evidence",
-                "toolkit-maintenance:principle:maintenance-knowledge/separate-normative-rules-from-guidance-and-history",
-            ],
-            "workbook": [
-                "toolkit-maintenance:principle:maintenance/ground-review-in-verifiable-evidence",
-                "toolkit-maintenance:principle:maintenance-workbook/structure-workbooks-for-plan-translation",
-            ],
-            "tooling": [
-                "toolkit-maintenance:principle:maintenance/ground-review-in-verifiable-evidence",
-                "toolkit-maintenance:principle:maintenance-tooling/separate-public-cli-from-private-scripts",
-            ],
-            "skill": [
-                "toolkit-maintenance:principle:maintenance/ground-review-in-verifiable-evidence",
-                "toolkit-maintenance:principle:maintenance-skill/align-skill-type-with-trigger-and-delivery",
-            ],
-        }
-        for topic, includes in expected_includes.items():
-            identity = f"toolkit-maintenance:workbook:maintenance-{topic}"
-            guide = catalog.resolve(identity)
-            self.assertEqual(guide.header["includes"], includes)
-            self.assertTrue(guide.header["description"])
+        )
+        self.assertTrue(guide.header["description"])
+        loaded_workbook = catalog.load(guide.resource_id)["resources"]
+        workbook_text = next(item["content"] for item in loaded_workbook if item["resourceId"] == guide.resource_id)
+        for tag in ("<schedule-rule>", "</schedule-rule>", "<exec-rule>", "</exec-rule>", "<review-rule>", "</review-rule>"):
+            self.assertIn(tag, workbook_text)
+
+        scopes = set(catalog.scopes(kind="principle")["scopes"])
+        self.assertEqual(
+            scopes,
+            {
+                "maintenance",
+                "maintenance-extension",
+                "maintenance-knowledge",
+                "maintenance-workbook",
+                "maintenance-skill",
+                "maintenance-tooling",
+            },
+        )
 
         principles = catalog.list(kind="principle")["resources"]
-        self.assertEqual(len(principles), 19)
+        self.assertEqual(len(principles), 26)
         for item in principles:
             loaded = catalog.load(item["resourceId"])
             self.assertEqual(len(loaded["resources"]), 1, item["resourceId"])

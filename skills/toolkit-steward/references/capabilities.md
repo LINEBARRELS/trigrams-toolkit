@@ -6,8 +6,8 @@
 | --- | --- |
 | `toolkit-steward` | 解答工具包架构、契约与选用依据，诊断环境与项目状态，引导项目接入与扩展管理 |
 | `workbook` / `principles` | 按任务目标和范围检索并加载适用的 workbook 或 principle |
-| `to-plan` | 将已确定目标编写为可执行 Plan（默认 `agile` 单文档模式，复杂多阶段编排可选 `flow` 多 Task 模式） |
-| `execute-plan` | 按 `plan-type` 分流，组织开发与独立审核交接、成果整合 |
+| `to-plan` | 将已确定目标编写为可执行 Plan（默认 `agile` 模式） |
+| `execute-plan` | 组织 Plan 的开发与独立审核交接、成果整合 |
 | `execute-task` | 在 `flow` 模式下完成单个 Task 实现与必要验证 |
 | `delivery-review` | 在 `flow` 模式下核对实际交付物与验收标准，形成审核结论 |
 | `architect` | 维护宏观架构（ARD）、Module / Feature 边界与 Implementation Spec |
