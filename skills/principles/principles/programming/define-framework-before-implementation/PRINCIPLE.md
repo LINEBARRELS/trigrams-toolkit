@@ -1,11 +1,11 @@
 ---
-description: 规划或执行编程工作时必读的原则，规定先确定框架契约再填充具体逻辑，并明确编程 Stub 两阶段交接的可选用法。
+description: 编写、修改或重构代码时必读的原则，要求先确立代码框架与公开契约，再填充具体逻辑实现。
 ---
 # 先确定框架再填充逻辑
 
-规划与实现编程工作时，应先确定本次范围内的框架契约，再编写具体逻辑。
+In software development, you should first establish the code framework and public contracts the relevant modules before implementing the specific logic; this prevents the ad-hoc creation of interfaces while writing business logic and avoids "reinventing the wheel."
 
-代码框架构建与阶段编排应满足以下要求：
-- 优先核对并复用既有代码框架，再补齐本次所需的类、函数签名、常量、枚举及工具函数，明确职责、依赖方向、输入输出和失败语义。
-- 涉及跨模块契约或复杂骨架时，可将编程 Stub 按两阶段交接：先完成整体代码框架和主流程的声明，并通过独立的框架设计验收，再装填具体逻辑与行为验收。
-- 简单改动或单阶段内完成的编程工作，同样应该先完整确立开发设计的模块架构，保证架构优雅、可维护，再填充具体的逻辑实现代码。
+框架确立与逻辑实现应满足以下要求：
+- 优先核对并复用既有代码框架与公共能力，不重复定义同责结构。
+- 编写具体算法或业务逻辑前，先补齐本次所需的模块边界、类、函数签名、数据结构、常量、枚举与核心工具定义，明确职责、依赖方向、输入输出及失败语义。
+- 在结构关系、命名与契约稳定后再填充具体逻辑；若实现中发现框架契约不合理，应先优化框架定义再继续实现。
