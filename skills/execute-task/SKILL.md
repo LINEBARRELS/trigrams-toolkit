@@ -1,6 +1,6 @@
 ---
 name: execute-task
-description: 执行或返工指定 Task，交付实际产物、必要验证与未解决问题。
+description: 执行或返工指定 Task，交付实际产物、必要验证与未解决问题；仅在处理 Flow 模式的 Plan 时使用。
 metadata:
   harness-toolkit-type: workflow
 ---

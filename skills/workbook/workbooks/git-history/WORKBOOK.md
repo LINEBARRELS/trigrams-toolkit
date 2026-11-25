@@ -2,6 +2,8 @@
 name: Git 关键变更整理
 description: 按指定分支和提交区间，从 Git 日志与 diff 增量生成关键变更记录，供后续历史分析使用。适用于手动整理或已配置的定时任务。
 resourceId: core:workbook:git-history
+includes:
+- core:principle:workflow/define-stubs-by-verifiable-delivery-boundaries
 ---
 
 # Git 关键变更整理

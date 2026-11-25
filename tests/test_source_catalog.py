@@ -35,7 +35,7 @@ class SourceCatalogTests(unittest.TestCase):
         path.write_bytes(path.read_bytes() + b"\nFixture source update.\n")
         declaration = self.manifest.read_bytes()
         result = validate_source_catalog(self.root)
-        self.assertEqual(result, {"resources": 111, "sources": ["core", "game", "toolkit-maintenance"]})
+        self.assertEqual(result, {"resources": 112, "sources": ["core", "game", "toolkit-maintenance"]})
         self.assertEqual(self.manifest.read_bytes(), declaration)
 
     def test_types_are_read_from_one_authority_without_sync(self):

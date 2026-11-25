@@ -1,6 +1,6 @@
 # Agile 开发子代理约束
 
-本文件约束 Agile 模式下承担 Stub 开发或返工的独立 subagent。
+本文件约束 Agile 模式下承担指定 Stub（Plan 内按可独立验证的成果范围切分的交付单元）开发或返工的独立 subagent。
 
 ## 工作边界与原则加载
 

@@ -1,8 +1,9 @@
 ---
 name: 编程功能开发与修复
-description: 在已有正式设计下实现功能、修复缺陷或重构程序；遵循先框架后逻辑的纪律，按复杂度划定 Stub 与审核阶段，验证实际行为及消费者。
+description: 在已有正式设计下实现功能、修复缺陷或重构程序；先判定开发工作规模，遵循先框架后逻辑的纪律，按规模划定 Stub 与审核阶段，验证实际行为及消费者。
 resourceId: core:workbook:programming-development
 includes:
+- core:principle:workflow/define-stubs-by-verifiable-delivery-boundaries
 - core:principle:programming/define-framework-before-implementation
 ---
 
@@ -13,6 +14,13 @@ includes:
 明确开发目标、验收标准、执行边界、项目现状及关键依据。关键资料缺失或功能前置依赖未确定时及时反馈设计问题。
 
 ## 必要工作流程
+
+规划阶段先依据代码结构影响判定本次开发工作规模，作为后续工序切分与规则选用的统一依据：
+
+| 工作规模 | 判定标准 | 推进方式 |
+| --- | --- | --- |
+| 局部规模 | 小型缺陷修复、局部重构，或在既有模块框架与契约内完成的常规实现 | Stub 在单轮内完成实现与一次综合审核 |
+| 架构规模 | 涉及新模块或子系统搭建、跨模块公共契约变更、复杂接口、数据转换边界或扩展流程定义 | Stub 按“框架搭建 → 架构审核 → 逻辑装填 → 功能审核”两阶段推进 |
 
 <schedule-rule>
 按本次工作类型确定推进方向与验收重点（向执行者派发工作时可按需随附作为增强指导）：
@@ -30,45 +38,39 @@ includes:
 按当前工作节点加载并遵守对应 principle：
 - **架构与抽象设计：** 必读 `programming-design-architecture` 全部 principle；按决策点从 `programming-design-abstraction` 选读，涉及模块边界、仓库结构或实用取舍时从 `programming-design-module`、`programming-design-repo`、`programming-pragmatic` 按需选读。
 - **源码溯源标识：** 除单文件微小修补外，加载 `core:principle:programming/mark-stubs-and-handoff-notes-in-source` 维护 `@plan-stub` 注释。
-- **特定语言与规模：** 按涉及语言从 `programming-csharp`、`programming-python`、`programming-typescript-javascript` 加载对应 principle ；控制代码复杂度或拆解模块时参考 `core:principle:programming-scale/keep-code-within-scale-limits`。
+- **编程语言规范：** 按涉及编程语言从 `programming-csharp`、`programming-python`、`programming-typescript-javascript` 加载对应 principle；控制代码复杂度或拆解模块时参考 `core:principle:programming-scale/keep-code-within-scale-limits`。
 
 模块内有沉淀价值的局部经验时，可在模块所在目录用 `KNOWLEDGE.md` 记录简短、内聚的非强制建议，禁止与模块外代码产生关联。
 </exec-rule>
 
-<exec-rule if="采用两阶段交接">
-框架安装阶段仅交付源码骨架、公共契约、源码溯源与待实现注释及安装验证，不提前混入业务逻辑实现；待架构审核通过后，再于逻辑装填阶段补全具体实现。
-</exec-rule>
+<exec-rule if="当前工作处于架构规模">
+Stub 开发分为框架搭建与逻辑装填两阶段：框架搭建阶段仅交付代码骨架、类型声明、公共契约与 TODO 注释，不提前混入业务逻辑实现；待架构审核通过后，再于逻辑装填阶段补全具体实现。两阶段边界参考如下：
 
-## 工序切分与交接
-
-按可独立验证的行为范围划定 Stub，并按复杂度选择推进模式：
-- **两阶段交接**：适用于跨模块契约、整体框架搭建或复杂接口定义；
-- **单阶段完成**：适用于小型缺陷修复、局部重构或无跨模块新契约的简单改动，在单轮内完成实现与一次独立审核。
-
-<schedule-rule if="采用两阶段交接">
-按“框架安装 → 架构审核 → 逻辑装填 → 行为审核”两阶段推进：
-1. 安装阶段完成后先进行独立架构审核；
-2. 架构审核通过后，再推进逻辑装填阶段与独立行为审核；
-3. 需要消费完整行为的后续工作须等待上游装填阶段审核通过。
-</schedule-rule>
-
-### 编程 Stub 两阶段交接对象（按需）
-
-采用两阶段交接时，按架构安装与逻辑装填之间的框架契约定义 Stub。一个 Stub 可覆盖共同服务于该契约的类、函数和数据声明。常见交接对象如下，按本次需求选用：
-
-| 交接对象 | 安装阶段确定的内容 | 装填阶段完成的内容 |
+| 交付对象 | 框架搭建阶段确定的内容 | 逻辑装填阶段完成的内容 |
 | --- | --- | --- |
 | 服务或模块接口 | 职责、公开签名、输入输出与失败语义 | 业务逻辑、边界处理与消费者调用行为 |
 | 数据格式与转换边界 | 字段、类型、约束及解析或转换入口 | 解析、校验、转换与真实数据处理 |
 | 扩展点或处理流程 | 扩展接口、生命周期、调用顺序与依赖 | 调度、具体处理与组合行为 |
+</exec-rule>
+
+## 工序切分与交接
+
+按可独立验证的行为与契约范围划定 Stub。处于架构规模时，按框架搭建与逻辑装填之间的公共契约界定 Stub，单个 Stub 可覆盖共同服务于该契约的类、函数与数据声明。
+
+<schedule-rule if="当前工作处于架构规模">
+每个 Stub 均按“框架搭建 → 架构审核 → 逻辑装填 → 功能审核”两阶段推进：
+1. Stub 框架搭建完成后，先派发独立架构审核；
+2. 架构审核通过后，再推进该 Stub 的逻辑装填与独立功能审核；
+3. 需消费完整行为的下游工作应等待上游 Stub 装填阶段审核通过。
+</schedule-rule>
 
 ## 产出与验收
 
-<review-rule if="采用两阶段交接">
-**架构审核（框架安装阶段）：** 加载 `programming-review` 全部 principle 及当前编程语言 principle，审查代码框架质量，并通过编译、导入、类型检查确认框架无报错、实际可用。本阶段通过仅证明结构与契约可用，不替代完整程序验收。
+<review-rule if="当前工作处于架构规模">
+**架构审核（Stub 框架搭建阶段）：** 加载 `programming-review` 全部 principle 及当前编程语言 principle，审查代码框架质量，核对是否提前混入业务逻辑，并通过编译、导入或类型检查确认框架无报错、实际可用。本阶段通过仅证明结构与契约可用，不替代完整功能验收。
 
-**功能审核（逻辑装填阶段）：** 读取当前编程语言的 principle，审查代码质量与完成度；核对设计契约、边界处理与运行证据；核对实际修改、运行结果与证据一致，列明未运行范围与原因。
+**功能审核（Stub 逻辑装填阶段）：** 加载当前编程语言 principle，审查代码质量与完成度；核对设计契约、边界处理与运行证据，确认实际修改、运行结果与证据一致，列明未运行范围与原因。
 </review-rule>
 <review-rule else>
-**综合审核：** 加载 `programming-review` scope 全部 principle 及对应语言原则，审查代码质量与完成度；核对设计契约、边界处理与运行证据，列明未运行范围与原因。
+**综合审核：** 加载 `programming-review` scope 全部 principle 及当前编程语言 principle，审查代码质量与完成度；核对设计契约、边界处理与运行证据，确认实际修改、运行结果与证据一致，列明未运行范围与原因。
 </review-rule>

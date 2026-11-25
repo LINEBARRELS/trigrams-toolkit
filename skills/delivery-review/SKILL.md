@@ -1,6 +1,6 @@
 ---
 name: delivery-review
-description: 针对 plan 或 task 核对交付的真实产物、要求与证据，产出审核结论和问题。
+description: 针对 plan 或 task 核对交付的真实产物、要求与证据，产出审核结论和问题；仅在处理 Flow 模式的 Plan 时使用。
 metadata:
   harness-toolkit-type: quality-review
 ---

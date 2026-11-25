@@ -2,6 +2,8 @@
 name: 项目 workbook 定制
 description: 为确需新方法的工作调查并编写候选 workbook，通过代表性演练与故障注入检验交接与验收。用于现有 workbook 不能覆盖目标或关键交接，且单步能力不足以完成工作时。
 resourceId: core:workbook:meta
+includes:
+- core:principle:workflow/define-stubs-by-verifiable-delivery-boundaries
 ---
 
 # 项目 workbook 定制

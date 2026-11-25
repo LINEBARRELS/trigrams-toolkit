@@ -2,6 +2,8 @@
 name: 技术说明撰写
 description: 撰写或整理非编程技术说明、操作说明和成果文稿，按受众、事实、引用及可执行步骤验收。
 resourceId: core:workbook:document-production
+includes:
+- core:principle:workflow/define-stubs-by-verifiable-delivery-boundaries
 ---
 
 # 技术说明撰写
