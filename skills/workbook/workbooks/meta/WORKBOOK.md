@@ -2,6 +2,8 @@
 name: 项目 workbook 定制
 description: 为确需新方法的工作调查并编写候选 workbook，通过代表性演练与故障注入检验交接与验收。用于现有 workbook 不能覆盖目标或关键交接，且单步能力不足以完成工作时。
 resourceId: core:workbook:meta
+includes:
+- core:principle:workflow/define-stubs-by-verifiable-delivery-boundaries
 ---
 
 # 项目 workbook 定制
@@ -20,11 +22,11 @@ resourceId: core:workbook:meta
 
 修改既有 workbook 时沿用资源 ID。修改既有资源影响在途工作时，调用 `effect` 评估影响与待修订项。
 
-## Task 切分与交接
+## 工序切分与交接
 
-按独立交付结果组织工序。候选编写与演练有独立交付时分 Task；可一次完成时由同一 general Task 交付。存在多工序分流时，明确各 Task 的关注重点与必备交付证据，避免将局部实现命令混入交接约定。其他执行者需提前采用方法框架时，通过 Stub 交接输入约定、动作结构与验收方式。
+按独立交付结果组织工序与 Stub。候选编写与演练有独立交付边界时分设为前后 Stub；可一次完成时合并为同一 Stub 交付。存在多工序分流时，明确各 Stub 的关注重点与必备交付证据，避免将局部实现命令混入交接约定。其他执行者需提前采用方法框架时，先交接输入约定、动作结构与验收方式，再补齐完整演练。
 
-方法尚未确定时，先规划调查或实验的目标、输入与证据要求。后续方法依赖完整调查结果时声明 `dependsOn`。
+方法尚未确定时，先规划调查或实验的目标、输入与证据要求；后续方法编写顺序等待完整调查结果。
 
 ## 产出与验收
 

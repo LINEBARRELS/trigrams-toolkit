@@ -1,4 +1,4 @@
-# Plan 正文与目录
+# Plan 正文与目录（Flow 模式）
 
 沿用项目目录约定；无约定时使用 `docs/plans/<label>/`。
 
@@ -13,9 +13,19 @@ tasks/
 plan.json         # validate --sync 生成结构快照，状态命令维护进展
 ```
 
-summary 写整体目标、范围、正式依据、Task 拓扑与 Stub 详情及总体验收。Task 是独立交接入口，正文写本次实际工作与判断条件。plan.json 保存声明快照与当前状态，不复制工作要求或交付证据。
+`summary.md` 写整体目标、范围、正式依据、Task 拓扑与 Stub 详情及总体验收。Task 是独立交接入口，正文写本次实际工作与判断条件。`plan.json` 保存声明快照与当前状态，不复制工作要求或交付证据。
 
 ## summary 的结构与依据
+
+新建的 Flow 模式 `summary.md` 在顶部声明 YAML 头：
+
+```yaml
+---
+plan-type: flow
+---
+```
+
+未包含 `plan-type` YAML 头的历史 Plan 默认仍按 `flow` 模式兼容。
 
 `summary.md` 统筹跨 Task 的全局信息，按以下板块组织正文：
 
@@ -38,9 +48,9 @@ summary 写整体目标、范围、正式依据、Task 拓扑与 Stub 详情及�
 | 验收标准 | 预期产出、工作结果、边界处理、验证入口和交付证据 |
 | 必要流程（按需） | 有依据的必要动作、判断分支和依赖顺序，区分强制要求与推荐方法 |
 
-将当前 Task 应阅读的 principle ID 以 Markdown 列表固定写入“相关 principle”章节，只列完整 ID，不附加选型理由。`workbook` 按 Task 类型或工作条件指定必读与条件 principle 时，规划者判断当前 Task 是否适用，并将适用的完整 ID 列入该章节。
+将当前 Task 应阅读的 principle ID 以 Markdown 列表固定写入“相关 principle”章节，只列完整 ID，不附加选型理由。`workbook` 按工作阶段或条件指定必读与条件 principle 时，规划者判断当前 Task 是否适用，并将适用的完整 ID 列入该章节。
 
-正文只写当前 Task 特有的工作要求、特定登记或工具调用参数及验收判据，不复述 `execute-task`、`execute-plan` 等 Skill 已定义的通用动作。确有不可偏离的操作流程，或需说明复杂的条件、依赖与状态关系时，使用 Mermaid 图或类 Python 伪代码进行结构化表达，避免使用模糊的语言描述流程。
+正文只写当前 Task 特有的工作要求、特定工具调用参数及验收判据，不复述 `execute-task`、`execute-plan` 等 Skill 已定义的通用动作。确有不可偏离的操作流程，或需说明复杂的条件、依赖与状态关系时，使用 Mermaid 图或类 Python 伪代码进行结构化表达，避免使用模糊的语言描述流程。
 
 ```yaml
 ---
@@ -64,7 +74,7 @@ Task 编号来自目录，格式为 T 加数字。每个 Task 声明 installs、
 
 ## Stub 的完整要求
 
-围绕 Plan 的核心工作考虑划定 Stub，按所选 workbook 的要求确定范围；没有明确要求时，结合工作目标、成果结构和现状判断。同一 Stub 恰有 1 个安装 Task、1 个不同的装填 Task。一个 Task 可以承担多个 Stub 的工作，但不同时安装和装填同一 Stub。
+围绕 Plan 的核心工作划定 Stub，按所选 workbook 的要求确定范围；没有明确要求时，结合工作目标、成果结构和现状判断。在 Flow 模式中，需通过 `plan-toolkit` 跟踪两阶段状态的 Stub 恰有 1 个安装 Task、1 个不同的装填 Task。一个 Task 可以承担多个 Stub 的工作，但不同时安装和装填同一 Stub。
 
 ```markdown
 <!-- harness:stub S01 -->

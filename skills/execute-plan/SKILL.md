@@ -1,54 +1,21 @@
 ---
 name: execute-plan
-description: 调度、完成一个 Plan 的开发流程循环，派发独立执行与审核 subagent，组织交付、整合和状态登记。
+description: 调度、完成一个 Plan 的开发流程循环，派发独立执行与审核 subagent，组织交付、整合与 Plan 状态维护。
 metadata:
   harness-toolkit-type: workflow
 ---
 
 # execute-plan
 
-接收目标项目根、已同步的 Plan 目录、执行范围与 Task 工作目录。读取 `summary.md`、Task 定义及 `plan-toolkit inspect <Plan目录>` 的依赖与状态。缺少快照或定义过期时，先交回规划同步。
+## 模式识别与分流
 
-主 Agent 专职负责流程调度、运行 `plan-toolkit` CLI 命令流转状态、派发 subagent 以及执行结果登记；**严禁**直接编写或修改业务代码、执行业务实现脚本或自行生成验收证据。执行与审核工作必须分别派发给独立的 `task_developer` 与 `evaluator` subagent。缺少独立 subagent 能力时，暂停执行并向用户报告。
+读取目标 Plan 目录内的 `summary.md`，按其 YAML 头 `plan-type` 字段进行分流：
 
-## 执行调度流程
+- **`plan-type: agile`**：读取并执行[Agile 模式调度指引](references/agile/guide.md)。
+- **`plan-type: flow` 或未声明 `plan-type`（legacy 兼容）**：读取并执行[Flow 模式调度指引](references/flow/guide.md)。
 
-### 1. 初始化调度
-核对当前文件与状态。如果 Plan 处于 `pending` 或需整体恢复，主 Agent 运行 `plan-toolkit mark <Plan目录> doing`。
+## plan 调度通用规则
 
-### 2. Task 就绪计算与循环派发
-主 Agent 运行 `plan-toolkit get-task <Plan目录>` 获取当前就绪 Task 列表，按依赖拓扑逐项调度：
-
-1. **就绪检查**：
-   - 若存在就绪 Task：选取目标 Task 进入派发。存在文件或契约竞争时按顺序派发。
-   - 若无就绪 Task：检查在途任务。若所有必要 Task 均已 `done`，进入[第 3 节 Plan 终验](#3-plan-终验与收尾)；若仍有在途 Task 则等待；若无在途且仍有未完成 Task，运行 `plan-toolkit block <Plan目录> --reason <阻塞原因>` 并报告。
-
-2. **执行开发**：
-   - 派发前主 Agent 运行 `plan-toolkit mark <Plan目录> <Task编号> doing`。
-   - 派发 `task_developer`，传递 Task 目录、关联 Stub 阶段要求、工作目录、负责范围与交付位置。
-   - 接收开发交付结果：
-     - **正常交付**：取得产物路径与验证证据，进入审核环节。
-     - **执行受阻**：主 Agent 运行 `plan-toolkit block <Plan目录> <Task编号> --reason <具体阻因与继续位置>`。
-     - **任务撤销**：主 Agent 运行 `plan-toolkit cancel <Plan目录> <Task编号> --reason <撤销原因>`。关键 Task 撤销后交回规划同步。
-
-3. **派发审核**：
-   - 开发交付完成后，主 Agent 派发 `evaluator`，传递 Task 目录、关联 Stub 阶段要求、实际产物位置与验证证据。
-   - 接收审核结论并由主 Agent 流转状态：
-     - **`pass`**：确认产物就绪。若 Task 声明了正式成果或领域关系登记，由主 Agent 按 Task 要求执行登记命令并校验结果（登记失败时暂不标记 `done`）；随后运行 `plan-toolkit mark <Plan目录> <Task编号> done`。
-     - **`rework`**：主 Agent 运行 `plan-toolkit mark <Plan目录> <Task编号> rework`。
-     - **`inconclusive`**：若缺项证据可补充，主 Agent 运行 `plan-toolkit mark <Plan目录> <Task编号> rework` 重新派发开发补证；若外部环境缺失无法裁决，运行 `plan-toolkit block <Plan目录> <Task编号> --reason <缺项与受影响范围>`。
-
-4. **推进下一步**：
-   状态变更后，重新运行 `plan-toolkit get-task <Plan目录>` 获取下一组候选，重复上述步骤。
-
-### 3. Plan 终验与收尾
-当全部必要 Task 均达到 `done` 状态后，主 Agent 组织全局终验：
-
-1. **派发总体审核（evaluator）**：
-   主 Agent 派发 `evaluator`，传递 `summary.md`、总体交付目标、总体验收判据、所有 Task 产物与验证证据。
-2. **终验结论流转**：
-   - **`pass`**：主 Agent 运行 `plan-toolkit mark <Plan目录> done`，完成 Plan 交付。
-   - **`rework`**：核对缺陷所在 Task，主 Agent 将受影响的 Task 运行 `plan-toolkit mark <Plan目录> <Task编号> rework`，返回第 2 节重新调度；若涉及架构设计偏差，暂停调度交由规划修订。
-   - **`inconclusive`**：主 Agent 确认缺少依据的范围，运行 `plan-toolkit block <Plan目录> --reason <终验未决项>` 并向用户说明待裁决问题。
-
-每次 CLI 命令调用后核对退出码；报错或状态变更被拒绝时停止派发并排查真实状态。
+1. **严格职责隔离**：主 Agent 专职负责流程调度、维护 Plan 状态与派发独立 subagent；**严禁**直接编写或修改业务代码、执行业务实现脚本或自行生成验收证据。
+2. **开发与审核独立**：开发与审核工作应分别派发给独立的 subagent。缺少独立 subagent 能力时，暂停执行并向用户报告。
+3. **历史审计不可篡改**：严禁修改非当前 Plan 或已完成 Plan 的历史报告与审核记录。

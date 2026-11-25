@@ -4,7 +4,7 @@
 
 ## 架构树
 
-生成 `tree` 图（子节点较多时使用 `tree list`），以项目为根，按 `Architecture Layer → Module → Feature` 展开。沿用 ARD 中的名称与归属，节点用 `label | note` 简述职责。修订时使用变更标记标出新增、移除或修改的项。
+生成 `tree` 图（子节点较多时使用 `tree list`），以项目为根，按 `Architecture Layer → Module → Feature` 展开。沿用 ARD 中的名称、归属与框架模块 `（Arch）` 标注，节点用 `label | note` 简述职责。修订时使用变更标记标出新增、移除或修改的项。
 
 ## 依赖与边界
 

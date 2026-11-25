@@ -1,6 +1,6 @@
 ---
 name: execute-task
-description: 执行或返工指定 Task，交付实际产物、必要验证与未解决问题。
+description: 执行或返工指定 Task，交付实际产物、必要验证与未解决问题；仅在处理 Flow 模式的 Plan 时使用。
 metadata:
   harness-toolkit-type: workflow
 ---
@@ -19,7 +19,7 @@ Task 声明 `installs`、`fills` 或 `uses` 时，读取 summary 中对应的 St
 
 完成 Task 工作范围内的工作，禁止越界。
 
-不负责 Plan 和 Task 的状态变更、正式成果登记与快照同步；不修改非当前 Task 的历史 Plan、已完成 Task 或交付记录。
+不负责 Plan 和 Task 的状态变更与快照同步；不修改非当前 Task 的历史 Plan、已完成 Task 或交付记录。
 
 按验收标准选择必要验证，优先复用已有检查。交付约定或下游使用方式变化时，按实际影响确定验证范围并说明原因。
 
@@ -49,7 +49,7 @@ Task 声明 `installs`、`fills` 或 `uses` 时，读取 summary 中对应的 St
 ## 交接与遗留
 
 - **调用/使用入口**：下游 Task 或使用方接手方式。
-- **未决与限制**：本次未覆盖的边界或遗留问题（无特殊事项写“无。”）。
+- **未决与限制**：本次未覆盖的边界或遗留问题（无特殊事项直接填 `无`）。
 ```
 
 ## 交付约束规则

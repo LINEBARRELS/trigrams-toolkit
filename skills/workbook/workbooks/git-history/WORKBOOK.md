@@ -2,6 +2,8 @@
 name: Git 关键变更整理
 description: 按指定分支和提交区间，从 Git 日志与 diff 增量生成关键变更记录，供后续历史分析使用。适用于手动整理或已配置的定时任务。
 resourceId: core:workbook:git-history
+includes:
+- core:principle:workflow/define-stubs-by-verifiable-delivery-boundaries
 ---
 
 # Git 关键变更整理
@@ -19,9 +21,9 @@ resourceId: core:workbook:git-history
 3. 记录影响后续理解的行为、接口、兼容性和故障修复，写明受影响模块、前后变化、提交背景与可定位的验证结果，附完整提交 SHA 和路径。动笔编辑文档前使用 doc-polish。
 4. 核对来源与范围后写入记录，成功后标记完整覆盖。无值得摘要的变化时只保存覆盖范围与判断依据；仅改动本输出目录的提交不生成新的经验条目。
 
-## Task 切分与交接
+## 工序切分与交接
 
-一次独立整理可由一个 general Task 完成，无需预先安装框架。范围过大时按连续提交区间拆分，各段交付已覆盖范围与下一段起点。后段消费前段完整覆盖结果时声明 `dependsOn`。
+一次独立整理作为单一 Stub 完成。范围过大时按连续提交区间切分为多个串联 Stub，各段交付已覆盖范围与下一段起点，后段顺序等待前段完整覆盖结果。
 
 ## 产出与验收
 

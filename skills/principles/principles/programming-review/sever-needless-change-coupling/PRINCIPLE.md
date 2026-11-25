@@ -1,5 +1,5 @@
 ---
-description: 验收 arch 框架产出或审查代码结构，排查反向依赖、内部实现泄漏、浅模块与调用方特判污染等不必要耦合时使用（review.needless-links）。
+description: 审查代码结构，排查反向依赖、内部实现泄漏、浅模块与调用方特判污染等不必要耦合时使用（review.needless-links）。
 ---
 # Sever Needless Change Coupling
 

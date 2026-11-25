@@ -2,6 +2,15 @@
 
 版本号以 `toolkit.json` 与 `pyproject.toml` 为准，四个公共 CLI 的 `--version` 统一来自 Python 包元数据。
 
+## 0.5.0
+
+- `to-plan` 改为显式调用。新建 Plan 默认采用 Agile 模式，Flow 模式需显式指定。Agile Plan 在 `summary.md` 定义可独立验收的 Stub，在 `Sxx-result.md` 记录开发交付和审核，在 `review.md` 记录整体验收。[规划指引](skills/to-plan/SKILL.md) · [Agile 调度指引](skills/execute-plan/references/agile/guide.md)
+- `plan-toolkit` 仅处理 Flow Plan。带 `plan-type: agile` 的 Plan 返回 `unsupported_plan`，未知的 `plan-type` 返回 `invalid_plan`。未声明 `plan-type` 的既有 Flow Plan 仍可读取。[Plan 协议](src/trigrams_toolkit/resources/plan/PROTOCOL.md)
+- Workbook 可按条件将调度、执行和审核规则写入 Agile Plan。编程开发 workbook 按改动规模选择单轮交付或分阶段审核。[Agile 规划指引](skills/to-plan/references/agile/guide.md) · [编程开发 workbook](skills/workbook/workbooks/programming-development/WORKBOOK.md)
+- `toolkit-maintenance` 将 `maintenance-knowledge`、`maintenance-skill`、`maintenance-tooling` 和 `maintenance-workbook` 合入 `maintenance-extension`，并将维护原则整理为 6 个 scope。同时移除 `core:workbook:document-production`。升级时，已接入维护扩展的项目可同步扩展快照，并更新项目中指向已移除资源的引用。[维护扩展](extensions/toolkit-maintenance/README.md) · [项目接入](docs/getting-started.md)
+- `architect` 要求 ARD 至少定义一个带 `（Arch）` 标记的框架模块。框架模块负责工程底座，业务模块负责领域行为，登记时保留模块原名。[架构设计 Skill](skills/architect/SKILL.md)
+- CI 将 4 组平台检查汇总为 `PR checks`。发版 PR 校验源码并验收发行包，发布标签工作流构建并跨平台验收实际上传 PyPI 的发行包。[维护与发布](docs/maintenance.md)
+
 ## 0.3.4
 
 - 明确 `architect` 编写 DEVTECH、ARD 或 Implementation Spec 时可参阅 `docs/research/` 中的研究内容。正式文档中仍禁止添加指向这些研究文档的链接。[architect](skills/architect/SKILL.md)

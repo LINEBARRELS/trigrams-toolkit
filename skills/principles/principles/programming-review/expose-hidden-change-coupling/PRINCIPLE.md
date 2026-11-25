@@ -1,5 +1,5 @@
 ---
-description: 验收 arch 框架产出或审查代码结构，排查跨位置同步、双真相源、隐式全局状态与时序约定等隐式耦合时使用（review.hidden-links）。
+description: 审查代码结构，排查跨位置同步、双真相源、隐式全局状态与时序约定等隐式耦合时使用（review.hidden-links）。
 ---
 # Expose Hidden Change Coupling
 

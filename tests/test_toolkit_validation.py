@@ -81,6 +81,24 @@ class SourceValidationTests(unittest.TestCase):
                 self.assertFalse(result["ok"])
                 self.assertIn("README.md", result["issues"][0])
 
+    def test_finished_agile_plan_links_are_historical_without_plan_json(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "toolkit.json").write_text(json.dumps({
+                "core": {"manifest": str(ROOT / "skills/resources.json")}, "extensions": {}}), encoding="utf-8")
+            plan = root / "docs/plans/agile-example"
+            plan.mkdir(parents=True)
+            (plan / "S01-result.md").write_text("[Prior artifact](missing.md)\n", encoding="utf-8")
+            prepared = {"ok": True, "resources": 0, "sources": []}
+            with patch.object(verify_toolkit, "ROOT", root), patch.object(verify_toolkit, "validate_source_catalog", return_value=prepared):
+                for status, expected in (("done", True), ("cancelled", True), ("doing", False),
+                                         ("pending", False), ("blocked", False), (None, False)):
+                    with self.subTest(status=status):
+                        header = f"---\nplan-type: agile\nstatus: {status}\n---\n" if status else "---\nplan-type: agile\n---\n"
+                        (plan / "summary.md").write_text(header + "[Prior source](missing.md)\n", encoding="utf-8")
+                        result = verify_toolkit.validate()
+                        self.assertEqual(result["ok"], expected, result)
+
     def test_validation_discovers_one_catalog_and_keeps_its_counts(self) -> None:
         with patch.object(GuideCatalog, "discover", wraps=GuideCatalog.discover) as discover:
             result = verify_toolkit.validate()

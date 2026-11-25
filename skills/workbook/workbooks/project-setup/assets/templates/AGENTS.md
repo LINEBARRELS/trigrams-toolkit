@@ -16,7 +16,7 @@
 | 路径 | 用途与读取时机 |
 | --- | --- |
 | `docs/implementation-specs/` | Implementation Spec（含模块级技术术语）；设计或实现对应功能时读取 |
-| `docs/plans/` | Plan；规划与整体协调读取 summary，执行或审核 Task 读取正文及选中片段 |
+| `docs/plans/` | Plan 仓库 |
 | `docs/knowledge/decisions/` | 项目宏观决策记录与索引；追溯设计选择、约束与取舍理由时读取 |
 | `docs/knowledge/retrospectives/` | 项目复盘与关键变更记录；查证历史故障与演化背景时读取 |
 | `docs/research/` | 研究草稿；仅在探索特定问题或设计方案定稿时读取 |
@@ -54,7 +54,7 @@
 
 | 命令 | 用途 |
 | --- | --- |
-| `plan-toolkit` | 计划读取、依赖检查与当前状态 |
-| `project-state` | 项目内架构实体、成果与关系的登记和查询 |
 | `handbook` | workbook 与 principle 的发现和加载 |
+| `project-state` | 项目内架构实体、成果与关系的登记和查询 |
+| `plan-toolkit` | plan（仅Flow 模式）的读取、依赖检查与当前状态 |
 | `harness-install` | 项目工具包资源装配 |

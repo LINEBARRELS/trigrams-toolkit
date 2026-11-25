@@ -1,11 +1,11 @@
 ---
-description: 规划或执行编程任务时必读的原则，规定先确定框架契约再填充具体逻辑。
+description: 编写、修改或重构代码时必读的原则，要求先确立代码框架与公开契约，再填充具体逻辑实现。
 ---
 # 先确定框架再填充逻辑
 
-规划与实现编程任务时，应先确定本次范围内的框架契约，再编写具体逻辑。
+In software development, you should first establish the code framework and public contracts the relevant modules before implementing the specific logic; this prevents the ad-hoc creation of interfaces while writing business logic and avoids "reinventing the wheel."
 
-框架构建与任务编排应满足以下要求：
-- 先复用并核对既有框架，再补齐本次所需的类、函数签名、常量、枚举及工具函数，明确职责、依赖方向、输入输出和失败语义。
-- 分阶段交接框架时，先安排 Stub 安装 Task 交付框架并完成安装验收，再安排装填 Task 实现具体逻辑；`uses` 等待框架 installed，依赖完整行为时用 `dependsOn` 指向装填 Task。
-- 单一 Task 内的编程工作，同样应先确定框架契约再实现具体逻辑。
+框架确立与逻辑实现应满足以下要求：
+- 优先核对并复用既有代码框架与公共能力，不重复定义同责结构。
+- 编写具体算法或业务逻辑前，先补齐本次所需的模块边界、类、函数签名、数据结构、常量、枚举与核心工具定义，明确职责、依赖方向、输入输出及失败语义。
+- 在结构关系、命名与契约稳定后再填充具体逻辑；若实现中发现框架契约不合理，应先优化框架定义再继续实现。

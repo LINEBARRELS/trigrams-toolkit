@@ -1,10 +1,10 @@
 # Plan Toolkit
 
-`plan-toolkit` 读取 Plan 文稿，编译调度快照，维护 Plan、Task 与 Stub 的当前状态。
+`plan-toolkit` 专用于 `flow` 模式 Plan：读取 Plan 文稿，编译调度快照，维护 Plan、Task 与 Stub 的当前状态。`agile` 模式 Plan 不经由本工具调度，调用时返回 `unsupported_plan`。
 
 ## 编写与检查
 
-先编写 `summary.md` 和 `tasks/T01/task.md`。Task 声明 installs、fills、uses 中的 Stub 编号与名称；完整要求保存在 summary 的 Stub 块。完整格式通过 `to-plan` Skill 获取。
+先编写 `summary.md`（建议在 YAML 头声明 `plan-type: flow`）和 `tasks/T01/task.md`。Task 声明 installs、fills、uses 中的 Stub 编号与名称；完整要求保存在 summary 的 Stub 块。完整格式通过 `to-plan` Skill 获取。
 
 ```powershell
 plan-toolkit validate docs/plans/P01 --sync
