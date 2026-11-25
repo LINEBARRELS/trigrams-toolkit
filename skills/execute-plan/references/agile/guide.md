@@ -22,7 +22,7 @@
    1. 开发 agent 汇报因外部缺项受阻时，将 `status` 更新为 `blocked` 并向用户报告缺项内容并停止工作。
 2. **派发审核**：开发交付后，派发独立审核 subagent，交付项目根、`summary.md` 路径、本次审核对象、待核验产物与 `<StubID>-result.md` 路径，要求其先阅读 `summary.md` 并遵守[审核约束文档](review-constraints.md)。
 3. **流转审核结论**：
-   - **`pass`**：若 `<schedule-rule>` 声明了需主 Agent 执行的正式登记（如 `project-state`），先执行并核对退出码（失败不视为完成），再推进后续调度。
+   - **`pass`**：确认产物就绪，推进后续调度。
    - **`rework`**：携带 `open` 问题编号重新派发开发返工，完成后复验。
    - **`inconclusive`**：开发可补证时按 `rework` 处理；外部依据或验证环境缺失无法裁决时，将 `status` 更新为 `blocked` 并向用户说明待裁决项。
 
@@ -30,6 +30,6 @@
 
 全部必要 Stub 达到最终 `pass` 后（无论单 Stub 还是多 Stub），派发独立审核 subagent 执行 Plan 总体终验。交付项目根、`summary.md` 与全部 `Sxx-result.md` 路径，要求其对照 `summary.md` 核实整个 Plan 的目标实现、总体验收标准、跨 Stub 一致性（如有）及遗留项，遵守[审核约束文档](review-constraints.md)并将结论写入 `<Plan目录>/review.md`：
 
-- **`pass`**：完成 `<schedule-rule>` 声明的 Plan 级正式登记或收尾操作（如有）并核对退出码后，将 `status` 更新为 `done`。
+- **`pass`**：将 `status` 更新为 `done`，完成交付。
 - **`rework`**：定位缺陷所属 Stub，返回第 2 节返工与复验；涉及整体方案偏差时，暂停调度并报告用户修订 Plan。
 - **`inconclusive`**：将 `status` 更新为 `blocked` 并向用户说明待裁决项。

@@ -7,7 +7,7 @@ metadata:
 
 # delivery-review
 
-进行独立审查，交付结论；不更新 Task 或 Plan 状态，不执行正式成果登记或 Plan 快照同步命令。Task 的 `result.md` 仅作为上次执行者的工作报告，不能替代真实证据。
+进行独立审查，交付结论；不更新 Task 或 Plan 状态，不执行 Plan 快照同步命令。Task 的 `result.md` 仅作为上次执行者的工作报告，不能替代真实证据。
 
 ## 审核范围与职责
 

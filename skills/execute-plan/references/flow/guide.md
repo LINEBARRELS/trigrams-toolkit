@@ -29,7 +29,7 @@ Flow 模式适用于含 `tasks/Txx/task.md` 与 `plan.json` 的重型编排 Plan
 3. **派发审核**：
    - 开发交付完成后，主 Agent 派发 `evaluator`，传递 Task 目录、关联 Stub 阶段要求、实际产物位置与验证证据。
    - 接收审核结论并由主 Agent 流转状态：
-     - **`pass`**：确认产物就绪。若 Task 声明了正式成果或领域关系登记，由主 Agent 按 Task 要求执行登记命令并校验结果（登记失败时暂不标记 `done`）；随后运行 `plan-toolkit mark <Plan目录> <Task编号> done`。
+     - **`pass`**：确认产物就绪，运行 `plan-toolkit mark <Plan目录> <Task编号> done`。
      - **`rework`**：主 Agent 运行 `plan-toolkit mark <Plan目录> <Task编号> rework`。
      - **`inconclusive`**：若缺项证据可补充，主 Agent 运行 `plan-toolkit mark <Plan目录> <Task编号> rework` 重新派发开发补证；若外部环境缺失无法裁决，运行 `plan-toolkit block <Plan目录> <Task编号> --reason <缺项与受影响范围>`。
 

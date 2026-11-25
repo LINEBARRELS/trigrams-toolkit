@@ -20,8 +20,8 @@ metadata:
 
 ### 草稿转正与边界约束
 
-- 未经用户确认选定方向并补齐可判定规则前，严禁将 `docs/research/gameplay/` 下的研究草稿直接移入 `docs/gameplays/`。
-- 研究草稿转为正式定稿时，清理未决候选分支，核对新增术语、实体状态域、核心内循环结算、失败边界与直接组合约束完整自洽，迁入 `docs/gameplays/` 后登记新的正式 Artifact ID。
+- 严禁将 `docs/research/gameplay/` 下的研究草稿直接移入 `docs/gameplays/`。
+- 研究草稿可在正式定稿时作为内容输入与参考，但是禁止在正式文稿中直接引用 `docs/research` 中的内容。
 
 ## 文档职责
 
@@ -31,9 +31,7 @@ metadata:
 
 ## 正式交付与登记
 
-仅对 `docs/gameplays/` 下的正式定稿执行身份与关系登记。交付文稿路径、已有身份、直接组合关系增删及受影响的消费者和 Task。新增正式稿取得新身份；已有正式 Spec 的移动、改名与修订沿用原 ID。
-
-直接设计时，主 Agent 在授权范围内登记；作为 Task 产出时，执行者交付登记信息，由主调度者接收。
+仅在新的正式 `gameplay-spec` 交付时，执行身份与关系登记，并交付文稿路径、已有身份、直接组合关系增删及受影响的消费者和在途工作。
 
 1. 运行 `project-state register artifact <路径> --kind game:gameplay-spec [--module <ID>] [--feature <ID>...]`。路径取本次 `docs/gameplays/` 下的正式稿，归属取真实且已确定的 Module／Feature；无技术归属时独立登记。
 2. 取得登记返回的 ID，运行 `project-state relate <组合Spec> game:composes <被使用Spec> [--remove]`，按正文同步两端已登记玩法的直接关系。

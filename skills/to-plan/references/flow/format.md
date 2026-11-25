@@ -50,7 +50,7 @@ plan-type: flow
 
 将当前 Task 应阅读的 principle ID 以 Markdown 列表固定写入“相关 principle”章节，只列完整 ID，不附加选型理由。`workbook` 按工作阶段或条件指定必读与条件 principle 时，规划者判断当前 Task 是否适用，并将适用的完整 ID 列入该章节。
 
-正文只写当前 Task 特有的工作要求、特定登记或工具调用参数及验收判据，不复述 `execute-task`、`execute-plan` 等 Skill 已定义的通用动作。确有不可偏离的操作流程，或需说明复杂的条件、依赖与状态关系时，使用 Mermaid 图或类 Python 伪代码进行结构化表达，避免使用模糊的语言描述流程。
+正文只写当前 Task 特有的工作要求、特定工具调用参数及验收判据，不复述 `execute-task`、`execute-plan` 等 Skill 已定义的通用动作。确有不可偏离的操作流程，或需说明复杂的条件、依赖与状态关系时，使用 Mermaid 图或类 Python 伪代码进行结构化表达，避免使用模糊的语言描述流程。
 
 ```yaml
 ---
