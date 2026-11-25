@@ -11,7 +11,7 @@
 ## 两类审核的核对重点
 
 - **Stub 审核**（写入 `<Plan目录>/<StubID>-result.md` 末尾）：仅针对当前 Stub 与当前审核轮次，核对是否严守范围边界、满足本 Stub 契约与 `<review-rule>`、遵守适用 `principle`、自验真实充分及目录清洁（无散落调试文件，探针均在项目根 `.tmp/`）；必要时独立重跑关键校验。Stub 审核不代替 Plan 总体终验。
-- **Plan 总体终验**（写入 `<Plan目录>/review.md`）：面向整个 Plan 的最终交付，对照 `summary.md` 的工作内容、总体验收标准与补充约束，核实总体目标完整实现、全部 Stub 产物一致且通过必要全局验证、所有 `Sxx-result.md` 无未闭环的 `open` 问题及目录清洁。
+- **Plan 总体终验**（写入 `<Plan目录>/review.md`）：面向整个 Plan 的最终交付，对照 `summary.md` 的工作内容、总体验收标准与补充约束，核实 Plan 总体目标完成度、所有 `Sxx-result.md` 无未闭环的 `open` 问题并且目录清洁。
 
 ## 裁决判据
 
@@ -29,7 +29,7 @@
 ```markdown
 ## 审核记录
 
-- **[审核项] 结论**：`pass` | `rework` | `inconclusive`（YYYY-MM-DD）——[宏观判定理由，严格控制在 100 字以内，直截了当给出依据。]
+- **[审核项] 结论**：`pass` | `rework` | `inconclusive`（YYYY-MM-DD）——[宏观判定理由，严格控制在 100 字以内，直截了当给出判断。]
 
 ### 问题清单
 

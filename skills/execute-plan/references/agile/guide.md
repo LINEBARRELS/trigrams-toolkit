@@ -16,20 +16,20 @@
 
 ### 2. 按 Plan 调度开发与审核
 
-默认以 `Stub` 为调度单元，按依赖顺序推进（无依赖且无共享文件竞争时可并行），每个 Stub 经开发交付与独立审核闭环；若 `summary.md` 的 `<schedule-rule>` 定义了附加调度方式、阶段划分或派发指引，优先遵守 `<schedule-rule>`。
+默认以 `Stub` 为调度单元，按依赖顺序推进（无依赖且无共享文件竞争时可并行），每个 Stub 经开发交付与独立审核闭环；若 `summary.md` 的 `<schedule-rule>` 定义了附加调度方式和阶段划分，优先遵守 `<schedule-rule>`。
 
-1. **派发开发**：派发独立开发 subagent，交付项目根、`summary.md` 路径、本次负责的 Stub（及 `<schedule-rule>` 指定的具体任务范围），要求其阅读并遵守[开发约束文档](dev-constraints.md)。
-   1. 开发 agent 汇报因外部缺项受阻时，将 `status` 更新为 `blocked` 并向用户报告缺项内容并停止工作。
-2. **派发审核**：开发交付后，派发独立审核 subagent，交付项目根、`summary.md` 路径、本次审核对象、待核验产物与 `<StubID>-result.md` 路径，要求其先阅读 `summary.md` 并遵守[审核约束文档](review-constraints.md)。
-3. **流转审核结论**：
+1. **派发开发**：派发独立开发 subagent，告知当前 `summary.md` 路径和本次负责的 Stub，要求其遵守[开发约束文档](dev-constraints.md)。
+   1. 开发 agent 汇报因外部缺项受阻时，将 `status` 更新为 `blocked` 并汇报缺项内容并停止工作。
+2. **派发审核**：开发交付后，派发独立审核 subagent，告知当前 `summary.md` 路径、本次待核验内容以及开发 agent 汇报的交接产物，要求其遵守[审核约束文档](review-constraints.md)。
+3. **审核结论**：
    - **`pass`**：确认产物就绪，推进后续调度。
-   - **`rework`**：携带 `open` 问题编号重新派发开发返工，完成后复验。
-   - **`inconclusive`**：开发可补证时按 `rework` 处理；外部依据或验证环境缺失无法裁决时，将 `status` 更新为 `blocked` 并向用户说明待裁决项。
+   - **`rework`**：携带 `open` 问题编号要求开发 agent 返工，完成后复验。
+   - **`inconclusive`**：优先指定开发 agent 按 `rework` 处理；明确因外部依据或环境依赖缺失而无法推进时，将 `status` 更新为 `blocked` 并汇报待裁决项。
 
 ### 3. Plan 总体终验与收尾
 
-全部必要 Stub 达到最终 `pass` 后（无论单 Stub 还是多 Stub），派发独立审核 subagent 执行 Plan 总体终验。交付项目根、`summary.md` 与全部 `Sxx-result.md` 路径，要求其对照 `summary.md` 核实整个 Plan 的目标实现、总体验收标准、跨 Stub 一致性（如有）及遗留项，遵守[审核约束文档](review-constraints.md)并将结论写入 `<Plan目录>/review.md`：
+全部必要 Stub 达到最终 `pass` 后，派发独立审核 subagent 执行 Plan 总体终验。基于 `summary.md` 与全部 `Sxx-result.md`，核实整个 Plan 的目标实现、总体验收标准、跨 Stub 一致性（如有）及遗留项，遵守[审核约束文档](review-constraints.md)，审核结论分为：
 
-- **`pass`**：将 `status` 更新为 `done`，完成交付。
-- **`rework`**：定位缺陷所属 Stub，返回第 2 节返工与复验；涉及整体方案偏差时，暂停调度并报告用户修订 Plan。
-- **`inconclusive`**：将 `status` 更新为 `blocked` 并向用户说明待裁决项。
+- **`pass`**：将 Plan 的 `status` 更新为 `done`，完成交付。
+- **`rework`**：定位缺陷所属 Stub，进行返工与复验；涉及整体方案偏差时，暂停调度并汇报问题所在。
+- **`inconclusive`**：将 `status` 更新为 `blocked` 并汇报待裁决项。
