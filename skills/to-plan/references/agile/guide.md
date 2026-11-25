@@ -9,9 +9,9 @@ Agile 模式：以单份 `summary.md` 定义需求、依据、验收、约束与
 ```text
 docs/plans/<label>/
   summary.md      # Plan 唯一正文（含 YAML 状态头与全部 Stub 定义）
-  S01-result.md   # 执行期由开发维护交付说明、审核可追加评论
+  S01-result.md   # 执行期由开发维护交付说明、审核追加审核记录
   S02-result.md
-  review.md       # 仅多 Stub 时的总体终验结论（单 Stub 时省略）
+  review.md       # Plan 总体终验结论
   evidence/       # 按需仅存放通过验收的最终关键证据
 ```
 
