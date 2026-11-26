@@ -16,7 +16,7 @@
 仓库采用 `dev` + `main` 双分支配合短生命周期特性分支工作：
 
 - **`dev`**：日常集成分支。新功能、缺陷修复与文档改动从 `dev` 切出短生命周期分支（例如 `feat/*`、`fix/*`、`docs/*`，Agent 创建的分支使用 `codex/` 前缀），经 PR 合并回 `dev`。
-- **`main`**：正式发版分支。默认安装入口 `npx skills add` 指向 `main`，所以 `main` 应保持与当前 PyPI 正式版本一致。仅在发布新版本或紧急修复时通过 PR 合并至 `main`。
+- **`main`**：正式发版分支。默认 Skill 安装读取 `main`。CLI 通过独立的 `vcli-*` 标签发布至 PyPI。发布新版本或紧急修复时，通过 PR 合并至 `main`。
 - **`hotfix/*`**：紧急修复分支。从 `main` 切出并经 PR 合入 `main` 后，应同步回合并入 `dev`。
 
 **警告：** 将 `dev` 合并至 `main` 时，使用 Merge Commit 或 Fast-Forward，不要使用 Squash Merge。Squash Merge 会重写提交历史，导致后续每次发版 PR 产生重复冲突。
@@ -58,7 +58,7 @@
 
 PR 模板收集交接信息，不替代仓库内的 Plan / Task 协议。维护者在检查通过后合并；有其他可用维护者时，由未参与实现的人审核。
 
-版本变化记录在 [CHANGELOG.md](CHANGELOG.md)。文档与品牌调整先记入未发布章节，不自动提升工具包或 CLI 版本。
+工具包变更记入[工具包更新记录](CHANGELOG.md)，CLI 变更记入 [CLI 更新记录](docs/cli-changelog.md)。文档与品牌调整先记入工具包的未发布章节。
 
 ## 来源与许可
 

@@ -3,7 +3,7 @@ name: Release to PyPI
 on:
   push:
     tags:
-      - 'v*'
+      - 'vcli-*'
 
 permissions:
   contents: read
@@ -31,12 +31,12 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.13'
-      - name: Install Python package and development checks
-        run: python -m pip install -e '.[dev]' uv
-      - name: Check tag and release version alignment
+      - name: Check CLI tag and release version alignment
         env:
           RELEASE_TAG: ${{ github.ref_name }}
-        run: python tasks.py check-release --tag "$RELEASE_TAG"
+        run: python tasks.py check-release --target cli --tag "$RELEASE_TAG"
+      - name: Install Python package and development checks
+        run: python -m pip install -e '.[dev]' uv
       - name: Build release artifacts into dist/
         run: python tasks.py build
       - name: Upload release distributions
