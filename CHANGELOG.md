@@ -2,6 +2,10 @@
 
 版本号以 `toolkit.json` 与 `pyproject.toml` 为准，四个公共 CLI 的 `--version` 统一来自 Python 包元数据。
 
+## 0.5.3
+
+- 明确 `doc-polish` 在编辑技术类或产品类文档前加载语言规范。美术与文本创作保留原有表达。[文档润色 Skill](skills/doc-polish/SKILL.md)
+
 ## 0.5.2
 
 - 明确 `architect` 的 Implementation Spec 承载 Module 与 Feature 的详细程序设计。模板集中定义模块边界、公开契约和核心状态，并按模块形态选用运行机制与可靠性章节。[架构设计 Skill](skills/architect/SKILL.md) · [Implementation Spec 模板](skills/architect/references/templates/implementation-spec.temp.md)
