@@ -10,7 +10,7 @@ Trigrams toolkit 采用统一 Python CLI 包、Vercel skills 与项目级扩展�
 python -m pip install -e '.[dev]'
 ```
 
-安装后提供 `project-state`、`plan-toolkit`、`handbook`、`harness-install` 四个标准入口，运行版本统一来自包元数据（当前发布版本见 [pyproject.toml](../pyproject.toml) 与[更新记录](../CHANGELOG.md)），数据协议版本和资料版本独立维护。CLI 运行依赖由 `pyproject.toml` 声明。
+安装后提供 `project-state`、`plan-toolkit`、`handbook`、`harness-install` 四个标准入口。四个命令从包元数据读取版本，发布版本见 [CLI 更新记录](cli-changelog.md)。CLI 版本与[工具包版本](../CHANGELOG.md)、数据协议版本独立维护。CLI 运行依赖由 `pyproject.toml` 声明。
 
 四个公共 CLI 的帮助（`-h`／`--help`）和版本（`-v`／`--version`）可在任意目录查看；`handbook`、`project-state`、`plan-toolkit` 会自动向上查找 `.agents/harness.json` 对齐项目根目录，`harness-install` 作用于当前目录。
 
@@ -21,8 +21,10 @@ python -m pip install -e '.[dev]'
 ```sh
 python tasks.py setup-hooks            # 启用本地 .githooks/ 分支与标签保护钩子
 python tasks.py check                  # 资源校验、协议校验与 mypy
-python tasks.py bump X.Y.Z             # 统一更新 pyproject.toml 与各清单版本号
-python tasks.py check-release --tag vX.Y.Z  # 核对版本清单、CHANGELOG 与标签一致
+python tasks.py bump X.Y.Z                 # 更新工具包与资源清单版本
+python tasks.py bump X.Y.Z --target cli    # 更新 pyproject.toml 中的 CLI 版本
+python tasks.py check-release --tag vX.Y.Z       # 核对工具包版本、标签和更新记录
+python tasks.py check-release --tag vcli-X.Y.Z   # 核对 CLI 版本、标签和更新记录
 python tasks.py test                   # 运行 tests/ 与 tests/runtime/ 全部测试
 python tasks.py build                  # 清理并构建标准 sdist 与 wheel 至 dist/
 python tasks.py verify-package         # 使用 uv 在仓库外隔离验收 dist/ 发行包
@@ -31,7 +33,7 @@ python tasks.py publish --test         # 可选：本地试发 TestPyPI 或应�
 
 按改动范围也可单独运行 `tests/` 或 `tests/runtime/` 中的测试（例如 `test_project_state.py`、`test_project_paths.py`）。`build` 默认先生成 sdist 再由 sdist 构建 wheel 输出到 `dist/`，并同步在 `.tmp/direct-wheel/` 生成直接 wheel 供一致性校验；隔离验收回执保留在 `.tmp/package-check/`。命令手册与协议位于 `src/trigrams_toolkit/resources/<component>/`。
 
-CI 在 Ubuntu 与 Windows 的 Python 3.11／3.13 上运行检查：面向 `dev` 的 PR 运行类型、源码校验与测试；面向 `main` 的发版 PR、每日 `dev` 定时巡检与手动触发额外运行构建与隔离安装验收；向 `main` 推送 `v*` 标签由 `.github/workflows/release.yml` 完成单次构建、跨平台验收并通过 PyPI Trusted Publishing（OIDC）自动发布。具体配置见[维护说明](maintenance.md)。
+CI 在 Ubuntu 与 Windows 的 Python 3.11／3.13 上运行源码检查与测试。改动涉及 CLI 包或其构建和验收流程的发版 PR 还会运行构建与隔离安装验收。将 `vcli-X.Y.Z` 标签推送到远端后，GitHub Actions 验收并发布 CLI 包到 PyPI。具体配置见[维护说明](maintenance.md)。
 
 ## 目标安装与项目接入
 
