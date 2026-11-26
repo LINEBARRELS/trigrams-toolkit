@@ -46,10 +46,32 @@ jobs:
             $shouldRun = -not [string]::IsNullOrWhiteSpace($recentCommit)
           }
           $isReleasePr = ($event -eq 'pull_request') -and ($env:GITHUB_BASE_REF -eq 'main')
-          $runPackage = ($event -ne 'pull_request') -or $isReleasePr
+          $runPackage = $event -ne 'pull_request'
+          if ($isReleasePr) {
+            # HEAD is the PR merge commit. Its first parent is the base branch.
+            $packagePaths = @(
+              'src', 'pyproject.toml', 'MANIFEST.in', 'setup.cfg',
+              'README.md', 'docs/pypi-readme.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md',
+              'tasks.py', 'scripts/check_package.py', '.github/workflows'
+            )
+            $changed = git diff --name-only 'HEAD^1' HEAD -- $packagePaths
+            if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect CLI package inputs' }
+            $runPackage = [bool]$changed
+          }
           "should_run=$($shouldRun.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
           "run_package_acceptance=$($runPackage.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
           "target_ref=$targetRef" >> $env:GITHUB_OUTPUT
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        with:
+          python-version: '3.13'
+      - name: Verify release metadata
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        shell: pwsh
+        run: |
+          python tasks.py check-release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python tasks.py check-release --target cli
 
   platform-checks:
     needs: check-changes

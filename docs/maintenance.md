@@ -34,7 +34,7 @@ python tasks.py check
 | 安装、归档与源码校验 | `tests/` 中相关定向测试 |
 | 多工具协作 | `tests/test_source_acceptance.py`。从临时项目根调用当前源码，覆盖资料、Registry、Plan 与安装归属 |
 | Project State | `tests/test_project_state.py` 与 `tests/test_project_paths.py`；覆盖身份、文稿保真、锁与平台路径 |
-| 打包与发布 | `python tasks.py check-release --tag vX.Y.Z` 核对版本一致，`python tasks.py build` 输出至 `dist/`，`python tasks.py verify-package` 隔离验收；正式发布由 `v*` 标签触发 `.github/workflows/release.yml` 自动上传 PyPI |
+| 打包与发布 | `python tasks.py check-release --tag <tag>` 核对对应的版本和更新记录。CLI 包使用 `python tasks.py build` 构建，再用 `python tasks.py verify-package` 隔离验收。 |
 
 过程回执放在 `.tmp/`。记录平台、Python 版本、已运行的命令与未验证范围。源包与安装包验收使用隔离的 Skill 目录和临时项目，覆盖快照装配、全局依赖补齐与旧记录迁移。包验收隔离 uv 工具目录、bin、缓存及宿主 `PYTHONPATH`。从项目外检查帮助与版本，在隔离项目根验证标准入口和 Bash／pwsh 参数传递。
 
@@ -42,20 +42,32 @@ python tasks.py check
 
 仓库采用 `dev`（日常集成）+ `main`（正式发版）双分支策略，并拆分日常校验与标签发布两条工作流，隔离只读检查与发布凭据。分支职责与合并策略见[参与维护](../CONTRIBUTING.md#分支与合并模型)。
 
+### 版本来源
+
+| 发布对象 | 版本来源 | 更新记录 | Git 标签 |
+| --- | --- | --- | --- |
+| 工具包 Skill 与资源 | `toolkit.json`、core 资源清单和各扩展清单 | [工具包更新记录](../CHANGELOG.md) | `vX.Y.Z` |
+| CLI 包及随包交付的协议、类型和 adapter | `pyproject.toml` 的 `[project].version` | [CLI 更新记录](cli-changelog.md) | `vcli-X.Y.Z` |
+
+两个版本号各自递增。四个公共 CLI 的 `--version` 读取 CLI 包版本。数据协议和运行状态的版本字段由各自契约维护。
+
+修订 Skill、workbook 或 principle 时，可单独发布工具包。依赖新 CLI 能力的 Skill 应在该 CLI 发布后再合入 `main`，因为默认 Skill 安装入口读取 `main`。历史标签沿用发布时的版本含义。
+
 ### 日常与候选校验（`.github/workflows/ci.yml`）
 
-`.github/workflows/ci.yml` 全程使用 `contents: read` 只读权限，在 Ubuntu 与 Windows 的 Python 3.11／3.13 矩阵上分两档运行：
+`.github/workflows/ci.yml` 使用 `contents: read` 权限，在 Ubuntu 与 Windows 的 Python 3.11／3.13 矩阵上运行以下检查。
 
 - **日常 PR 检查（`base != main`）**：运行 `mypy`、`scripts/verify_toolkit.py`、`scripts/check_protocols.py` 及 `tests/`、`tests/runtime/` 测试。
-- **发版候选与定时验收**：目标为 `main` 的发版 PR（`base == main`）、手动触发（`workflow_dispatch`）或每日定时检查（`origin/dev` 过去 24 小时有提交时，检出 `dev`）除运行上述全部静态检查与测试外，还构建直接 wheel、sdist 与由 sdist 生成的 wheel，在合成项目与隔离 Skill 目录中运行 `scripts/check_package.py` 跨平台验收。
+- **发版 PR**核对工具包和 CLI 的版本声明及更新记录，并运行源码检查与测试。涉及 CLI 包内容、构建或验收流程时，再构建直接 wheel、sdist 与由 sdist 生成的 wheel，并跨平台隔离验收。
+- **手动与定时检查**运行源码检查、测试和隔离包验收。定时检查在 `origin/dev` 过去 24 小时有提交时检出 `dev`。
 
 `PR checks` 汇总 PR 的四组平台检查。四组均成功时，`PR checks` 才通过。
 
-### 标签自动发布（`.github/workflows/release.yml`）
+### CLI 自动发布（`.github/workflows/release.yml`）
 
-推送 `v*` 标签后，`.github/workflows/release.yml` 自动完成构建、验收与 PyPI 发布，本机无需保存 PyPI API Token：
+推送 `vcli-X.Y.Z` 标签后，GitHub Actions 使用 PyPI Trusted Publishing 发布 CLI 包。
 
-1. **`build` 作业**在 `ubuntu-latest` 上校验当前标签提交位于 `origin/main` 历史中，再执行 `python tasks.py check-release --tag <tag>` 核对版本与 `CHANGELOG.md`。`python tasks.py build` 单次构建 sdist、wheel 与校验用直接 wheel。
+1. **`build` 作业**校验标签提交位于 `origin/main` 历史中，再核对标签、`pyproject.toml` 和 CLI 更新记录。`python tasks.py build` 构建 sdist、wheel 与校验用直接 wheel。
 2. **`verify` 作业**在 Ubuntu 与 Windows 的 Python 3.11／3.13 矩阵上下载 `build` 产出的同一批包，并执行 `python tasks.py verify-package`。合并前的四组平台作业负责源码静态检查和源码测试。
 3. **`publish-pypi` 作业**：仅在 `build` 与全部 `verify` 矩阵通过后运行；该作业绑定 GitHub Environment `pypi`，仅申请 `id-token: write` 权限，通过 `pypa/gh-action-pypi-publish` 使用 OIDC Trusted Publishing 上传已验收的 `dist/` 发行包并附带 PEP 740 数字证明。
 
@@ -73,30 +85,23 @@ python tasks.py check
 | Workflow name | `release.yml` |
 | Environment name | `pypi` |
 
-3. 在 GitHub 仓库的 `Settings -> Environments` 中创建同名环境 `pypi`，并将部署规则限制为仅允许 `v*` 标签（可选开启人工审批）。
+3. 在 GitHub 仓库的 `Settings -> Environments` 中创建环境 `pypi`。部署规则应允许 `vcli-*` 标签，现有的 `v*` 规则也覆盖这些标签。
 
 #### 发布新版本步骤
 
-**警告：** 不要推送尚未合并至 `main` 或尚未对齐版本号的 `v*` 标签。`build` 作业会在祖先检查、版本或 `CHANGELOG.md` 不匹配时中止发布。
-
-**警告：** 将 `dev` 合并至 `main` 时不要使用 Squash Merge。它会重写提交历史，导致后续发版 PR 产生重复冲突。
-
-1. 在 `dev` 分支同步 `pyproject.toml`、`toolkit.json`、`skills/resources.json` 与各扩展 `extension.json` 中的 `version`（`schemaVersion`、`protocolVersion` 与运行状态 revision 按协议独立维护）：
-   ```sh
-   python tasks.py bump <version>
-   ```
-2. 在 `CHANGELOG.md` 中新增对应 `## <version>` 节。
-3. 运行本地核对：`python tasks.py check-release --tag v<version>` 与 `python tasks.py check`。
-4. 提交变更并推送到 `dev`，向 `main` 提交 Release PR。
-   结果：CI 自动运行全部跨平台测试及打包隔离验收（`build` 与 `verify-package`）。
-5. 等待必过状态检查 `PR checks` 通过，再使用 **Merge Commit**（或 Fast-Forward）将 `dev` 合并至 `main`。
-6. 切换并拉取最新 `main`，创建并推送附注标签：
+1. 在 `dev` 上更新待发布对象的版本。发布工具包时运行 `python tasks.py bump X.Y.Z`。发布 CLI 时运行 `python tasks.py bump X.Y.Z --target cli`。
+2. 在对应的更新记录中新增 `## X.Y.Z` 节。
+3. 运行 `python tasks.py check` 和 `python tasks.py check-release --tag <tag>`，其中 `<tag>` 使用上表中该发布对象的标签格式。
+4. 将提交推送到 `dev`，向 `main` 提交发版 PR。
+5. 等待 `PR checks` 通过，再使用 **Merge Commit** 或 Fast-Forward 合并。
+6. 切换到 `main` 并拉取发版提交。从该提交创建并推送对应的附注标签。
    ```sh
    git checkout main
-   git pull origin main
-   git tag -a v<version> -m "Release v<version>"
-   git push origin v<version>
+   git pull --ff-only origin main
+   git tag -a <tag> -m "Release <tag>"
+   git push origin <tag>
    ```
-   结果：GitHub Actions 自动运行 `Release to PyPI`，全部跨平台验收通过后发布至 PyPI。
+
+工具包标签标记 GitHub 上的 Skill 和资源版本。CLI 标签触发 `Release to PyPI` 工作流，跨平台验收通过后上架 PyPI。
 
 如需本地试发 TestPyPI 或应急手动上传，可使用 `python tasks.py publish --test`（或 `--dry-run` 预演）。

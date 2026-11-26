@@ -177,12 +177,27 @@ class SourceValidationTests(unittest.TestCase):
             (root / "skills/resources.json").write_text('{"version": "1.2.3"}', encoding="utf-8")
             (root / "extensions/ext").mkdir(parents=True)
             (root / "extensions/ext/extension.json").write_text('{"version": "1.0.0"}', encoding="utf-8")
-            (root / "CHANGELOG.md").write_text("# Changelog\n\n## 1.0.0\n", encoding="utf-8")
-            failed = tasks.check_release_metadata(root, tag="v1.2.3")
-            self.assertFalse(failed["ok"])
-            self.assertEqual(len(failed["issues"]), 3, failed)
+            (root / "CHANGELOG.md").write_text("# Changelog\n\n## 1.2.3\n", encoding="utf-8")
+            (root / "docs").mkdir()
+            cli_changelog = root / "docs/cli-changelog.md"
+            cli_changelog.write_text("# CLI changelog\n\n## 1.2.3\n", encoding="utf-8")
 
-    def test_bump_version_updates_all_manifests_atomically(self) -> None:
+            toolkit = tasks.check_release_metadata(root, tag="v1.2.0")
+            self.assertEqual(toolkit["target"], "toolkit")
+            self.assertEqual(toolkit["version"], "1.2.0")
+            self.assertFalse(toolkit["ok"])
+            self.assertEqual(len(toolkit["issues"]), 3, toolkit)
+            self.assertNotIn("pyproject.toml", toolkit["checked"])
+
+            cli = tasks.check_release_metadata(root, tag="vcli-1.2.3")
+            self.assertTrue(cli["ok"], cli)
+            self.assertEqual(cli["target"], "cli")
+            self.assertEqual(cli["checked"], ["pyproject.toml", "docs/cli-changelog.md"])
+            self.assertFalse(tasks.check_release_metadata(root, tag="vcli-1.2.0")["ok"])
+            cli_changelog.unlink()
+            self.assertFalse(tasks.check_release_metadata(root, tag="vcli-1.2.3")["ok"])
+
+    def test_bump_version_updates_only_selected_release(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "pyproject.toml").write_text(
@@ -204,15 +219,39 @@ class SourceValidationTests(unittest.TestCase):
 
             preview = tasks.bump_version(root, "2.0.0", dry_run=True)
             self.assertTrue(preview["dryRun"])
-            self.assertEqual(len(preview["updated"]), 4)
-            self.assertIn('version = "1.0.0"', (root / "pyproject.toml").read_text(encoding="utf-8"))
+            manifests = [root / relative for relative in preview["updated"]]
+            self.assertEqual(len(manifests), 3)
+            self.assertNotIn("pyproject.toml", preview["updated"])
+            original = [path.read_bytes() for path in manifests]
+            pyproject = root / "pyproject.toml"
+            cli_before = pyproject.read_bytes()
+
+            open_file = Path.open
+
+            def deny_extension_write(path, mode="r", *args, **kwargs):
+                if path == root / "extensions/ext/extension.json" and mode == "r+":
+                    raise PermissionError(path)
+                return open_file(path, mode, *args, **kwargs)
+
+            with patch.object(Path, "open", deny_extension_write):
+                with self.assertRaises(PermissionError):
+                    tasks.bump_version(root, "2.0.0")
+            self.assertEqual([path.read_bytes() for path in manifests], original)
 
             applied = tasks.bump_version(root, "2.0.0")
             self.assertFalse(applied["dryRun"])
             self.assertFalse(applied["changelogReady"])
-            self.assertIn('version = "keep"', (root / "pyproject.toml").read_text(encoding="utf-8"))
-            checked = tasks.check_release_metadata(root, tag="v2.0.0", check_changelog=False)
-            self.assertTrue(checked["ok"], checked)
+            self.assertEqual(pyproject.read_bytes(), cli_before)
+            toolkit_before = [path.read_bytes() for path in manifests]
+
+            applied = tasks.bump_version(root, "1.1.0", target=tasks.ReleaseTarget.CLI)
+            self.assertEqual(applied["updated"], ["pyproject.toml"])
+            self.assertEqual([path.read_bytes() for path in manifests], toolkit_before)
+            self.assertIn('version = "keep"', pyproject.read_text(encoding="utf-8"))
+            for tag in ("v2.0.0", "vcli-1.1.0"):
+                with self.subTest(tag=tag):
+                    checked = tasks.check_release_metadata(root, tag=tag, check_changelog=False)
+                    self.assertTrue(checked["ok"], checked)
 
     def test_github_workflows_pin_actions_and_scope_oidc_permissions(self) -> None:
         pinned_re = re.compile(r"^[^@]+@[0-9a-f]{40}$")
@@ -233,9 +272,10 @@ class SourceValidationTests(unittest.TestCase):
         self.assertIn("refs/remotes/origin/dev", ci_changes)
         release = workflows["release.yml"]
         release_triggers = release.get("on", release.get(True))
-        self.assertEqual(release_triggers["push"]["tags"], ["v*"])
+        self.assertEqual(release_triggers["push"]["tags"], ["vcli-*"])
         build_steps = "\n".join(step.get("run", "") for step in release["jobs"]["build"]["steps"])
         self.assertIn("git merge-base --is-ancestor HEAD refs/remotes/origin/main", build_steps)
+        self.assertIn('check-release --target cli --tag "$RELEASE_TAG"', build_steps)
         for job_name, job in release["jobs"].items():
             if job_name == "publish-pypi":
                 self.assertEqual(job["permissions"], {"id-token": "write"})
