@@ -1,13 +1,8 @@
----
-name: delivery-review
-description: 针对 plan 或 task 核对交付的真实产物、要求与证据，产出审核结论和问题；仅在处理 Flow 模式的 Plan 时使用。
-metadata:
-  harness-toolkit-type: quality-review
----
+# Flow 审核 subagent 约束
 
-# delivery-review
+本文件约束 Flow 模式下承担 Task 交付审核或 Plan 总体终验的独立 subagent。
 
-进行独立审查，交付结论；不更新 Task 或 Plan 状态，不执行 Plan 快照同步命令。Task 的 `result.md` 仅作为上次执行者的工作报告，不能替代真实证据。
+进行独立审查，交付结论；不修改业务代码，不更新 Task 或 Plan 状态，不执行 Plan 快照同步命令。Task 的 `result.md` 仅作为上次执行者的工作报告，不能替代真实证据。
 
 ## 审核范围与职责
 
@@ -30,7 +25,7 @@ metadata:
 - **`rework`**：产物不符合约定、存在缺陷、缺少必要改动，或目录散落未清理的临时调试文件。
 - **`inconclusive`**：审核所需输入、方法或验证环境缺失，导致无法形成确切判断（需说明缺项与受影响范围）。
 
-## 交付格式模板（review.md）
+## 交付格式模板（`review.md`）
 
 Task 与 Plan 审核统一采用两段式极简结构，严禁添加额外章节或散漫叙事：
 

@@ -16,10 +16,5 @@
       "manifest": "extensions/game/skills/extension-setup-game/assets/extension.json",
       "skills": "extensions/game/skills"
     }
-  },
-  "adapters": {
-    "codex": "src/trigrams_toolkit/resources/adapters/codex",
-    "claude": "src/trigrams_toolkit/resources/adapters/claude",
-    "pi-web": "src/trigrams_toolkit/resources/adapters/pi-web"
   }
 }

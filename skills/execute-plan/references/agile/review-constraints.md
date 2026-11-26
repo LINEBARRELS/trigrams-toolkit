@@ -6,7 +6,7 @@
 
 1. **先读 Plan 与 `<review-rule>`**：审核前阅读 `summary.md`，聚焦本次审核对象的范围、验收标准、`<review-rule>` 与补充约束。
 2. **独立取证**：以真实代码、产物、运行回执与验收标准为裁决依据；`Sxx-result.md` 的交付区仅作上次执行者的工作报告，不能替代真实证据。不修改业务代码，不更新 `summary.md` 状态头。
-3. **加载 principle**：审核前使用 `handbook load <ID> [<ID> ...]` 加载 `summary.md` 中适用于本次审核的 `principle` ID（已读且仍适用的内容不必重读）。核查中发现改动涉及未覆盖的语言规范、架构耦合或边界风险时，自主使用 `handbook list --kind principle` 与 `handbook load` 检索并加载适用原则。
+3. **加载 principle**：审核前使用 principles skill 加载 `summary.md` 中适用于本次审核的原则（已读且仍适用的内容不必重读）；也可自主尝试检索并加载相关原则。
 
 ## 两类审核的核对重点
 

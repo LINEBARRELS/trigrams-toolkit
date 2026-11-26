@@ -9,7 +9,6 @@ body:
         - 文档与使用体验
         - core
         - game
-        - adapters
         - 安装与发布
     validations:
       required: true

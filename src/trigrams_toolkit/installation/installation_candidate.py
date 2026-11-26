@@ -9,7 +9,6 @@ from trigrams_toolkit.handbook.guides import GuideCatalog
 from trigrams_toolkit.handbook.package import ProviderPackage, manifest_owner, package_manifest, resource_paths
 from trigrams_toolkit.handbook.skill_sources import global_core, setup_package, snapshot_resource_paths
 from trigrams_toolkit.handbook.sources import ProviderSource
-from trigrams_toolkit.resources import adapter_files
 from trigrams_toolkit.shared.errors import require
 from trigrams_toolkit.shared.paths import is_link
 from trigrams_toolkit.shared.schema import SchemaCatalog
@@ -73,9 +72,9 @@ def _changes(project: Path, previous: dict, desired: dict[str, dict]) -> tuple[l
 def _is_uninstall(previous: dict, desired: dict, changes: list[dict]) -> bool:
     before = {(entry["extension"], entry["version"]) for entry in previous["extensions"]}
     after = {(entry["extension"], entry["version"]) for entry in desired["extensions"]}
-    old_platforms, new_platforms = set(previous["platforms"]), set(desired["platforms"])
-    return (previous.get("agent") == desired["agent"] and after <= before and new_platforms <= old_platforms
-            and (after < before or new_platforms < old_platforms)
+    retiring_core = any(item["source"] == "core" for item in previous["managed"])
+    return (previous.get("agent") == desired["agent"] and after <= before
+            and (after < before or (retiring_core and bool(changes)))
             and all(change["action"] == "remove" for change in changes))
 
 
@@ -89,7 +88,7 @@ def build_candidate(project: Path, data: dict, schemas: SchemaCatalog, operation
     selected = data.get("extensions", [item["extension"] for item in previous["extensions"]])
     parameters = {**data, "agent": agent.name, "extensions": sorted(selected)}
     packages = _sources(project, parameters, agent, schemas)
-    material = ProjectMaterials(parameters["platforms"])
+    material = ProjectMaterials()
     extensions = []
     for package in packages:
         owner = manifest_owner(package.manifest)
@@ -101,9 +100,6 @@ def build_candidate(project: Path, data: dict, schemas: SchemaCatalog, operation
             material.extension(package)
             extensions.append({"extension": owner, "version": package.manifest["version"]})
         material.declared(package)
-    for platform in parameters["platforms"]:
-        for target, raw in adapter_files(platform).items():
-            material.add(target, "core", raw)
     validate_owned_paths(list(material.records), INSTALLATION)
     changes, conflicts = _changes(project, previous, material.records)
     source_roots = {manifest_owner(p.manifest): str(p.root) for p in packages if manifest_owner(p.manifest) != "core"}
@@ -115,7 +111,6 @@ def build_candidate(project: Path, data: dict, schemas: SchemaCatalog, operation
                     "path_outside_root", f"Installation target overlaps its source: {change['path']}")
     state = {"schemaVersion": 2, "stateRevision": previous["stateRevision"] + 1, "agent": agent.name,
              "extensions": sorted(extensions, key=lambda item: item["extension"]),
-             "platforms": parameters["platforms"],
              "managed": [material.records[path] for path in sorted(material.records)]}
     schemas.validate(SNAPSHOT_SCHEMA, state)
     dependency_agent = None if _is_uninstall(previous, state, changes) else agent

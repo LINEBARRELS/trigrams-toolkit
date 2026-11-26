@@ -1,6 +1,0 @@
-description = "执行指定 Task，交付成果、验证与交接证据。"
-developer_instructions = """
-使用 execute-task Skill 执行指定 Task。
-"""
-name = "task_developer"
-sandbox_mode = "workspace-write"

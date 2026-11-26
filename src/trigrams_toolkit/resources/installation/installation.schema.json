@@ -2,17 +2,6 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:harness:installation",
   "$defs": {
-    "platforms": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "enum": [
-          "codex",
-          "claude",
-          "pi-web"
-        ]
-      }
-    },
     "managed": {
       "$ref": "#/$defs/snapshotFile"
     },
@@ -189,16 +178,12 @@
       "$ref": "#/$defs/snapshotFile"
     },
     "installation": {
-      "$ref": "#/$defs/snapshotInstallation"
-    },
-    "snapshotInstallation": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "schemaVersion",
         "stateRevision",
         "extensions",
-        "platforms",
         "managed",
         "agent"
       ],
@@ -217,7 +202,47 @@
           }
         },
         "platforms": {
-          "$ref": "#/$defs/platforms"
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:harness:common#/$defs/token"
+          }
+        },
+        "managed": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/snapshotFile"
+          }
+        },
+        "agent": {
+          "$ref": "#/$defs/agent"
+        }
+      }
+    },
+    "snapshotInstallation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "stateRevision",
+        "extensions",
+        "managed",
+        "agent"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 2
+        },
+        "stateRevision": {
+          "$ref": "urn:harness:common#/$defs/revision"
+        },
+        "extensions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/snapshotExtension"
+          }
         },
         "managed": {
           "type": "array",

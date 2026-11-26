@@ -35,7 +35,7 @@
 
 ## 0.3.3
 
-- 明确正式设计、计划交付与 `docs/research/` 研究草稿的边界：在 [architect](skills/architect/SKILL.md)、[to-plan](skills/to-plan/SKILL.md)、[execute-task](skills/execute-task/SKILL.md) 与 [project-setup `AGENTS.md` 模板](skills/workbook/workbooks/project-setup/assets/templates/AGENTS.md) 中禁止在正式设计文档、Plan 与 Task 中引用研究草稿，执行阶段统一以正式设计为准。
+- 明确正式设计、计划交付与 `docs/research/` 研究草稿的边界：在 [architect](skills/architect/SKILL.md)、[to-plan](skills/to-plan/SKILL.md)、`execute-task` 与 [project-setup `AGENTS.md` 模板](skills/workbook/workbooks/project-setup/assets/templates/AGENTS.md) 中禁止在正式设计文档、Plan 与 Task 中引用研究草稿，执行阶段统一以正式设计为准。
 - 建立 `dev`（日常集成）+ `main`（正式发版）双分支工作流与本地保护钩子（`.githooks/pre-commit`、`.githooks/pre-push`），并在 [参与维护](CONTRIBUTING.md)、[开发与接入](docs/getting-started.md) 与 [维护与发布](docs/maintenance.md) 中补充分支策略、合并方式与 GitHub Rulesets 配置说明。
 - 在 [tasks.py](tasks.py) 新增 `bump`（原子对齐 `pyproject.toml`、`toolkit.json` 与各资源清单版本）和 `setup-hooks` 子命令。
 - 更新 [ci.yml](.github/workflows/ci.yml) 与 [release.yml](.github/workflows/release.yml)：面向 `main` 的 Release PR 自动执行打包与隔离验收，每日定时巡检跟踪 `origin/dev`，并在发布标签构建前校验其属于 `origin/main` 历史。

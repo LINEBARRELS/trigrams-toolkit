@@ -163,14 +163,6 @@
           },
           "target": {
             "$ref": "urn:harness:common#/$defs/path"
-          },
-          "platforms": {
-            "type": "array",
-            "minItems": 1,
-            "uniqueItems": true,
-            "items": {
-              "$ref": "urn:harness:common#/$defs/token"
-            }
           }
         }
       }

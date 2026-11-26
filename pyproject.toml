@@ -37,7 +37,7 @@ harness-install = "trigrams_toolkit.installation.harness_install:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-trigrams_toolkit = ["py.typed", "resources/**/*.json", "resources/**/*.md", "resources/**/*.toml"]
+trigrams_toolkit = ["py.typed", "resources/**/*.json", "resources/**/*.md"]
 
 [tool.mypy]
 python_version = "3.11"

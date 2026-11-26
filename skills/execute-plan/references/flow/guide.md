@@ -2,7 +2,7 @@
 
 Flow 模式适用于含 `tasks/Txx/task.md` 与 `plan.json` 的重型编排 Plan。读取 `summary.md`、Task 定义及 `plan-toolkit inspect <Plan目录>` 的依赖与状态；缺少快照或定义过期时，先交回规划同步。
 
-主 Agent 运行 `plan-toolkit` CLI 流转状态；执行与审核工作必须分别派发给独立的 `task_developer` 与 `evaluator` subagent。
+主 Agent 运行 `plan-toolkit` CLI 流转状态；开发与审核工作应分别派发给独立的 subagent，按当前宿主环境灵活分派，不强行绑定预设角色名。
 
 ## 执行调度流程
 
@@ -20,14 +20,14 @@ Flow 模式适用于含 `tasks/Txx/task.md` 与 `plan.json` 的重型编排 Plan
 
 2. **执行开发**：
    - 派发前主 Agent 运行 `plan-toolkit mark <Plan目录> <Task编号> doing`。
-   - 派发 `task_developer`，传递 Task 目录、关联 Stub 阶段要求、工作目录、负责范围与交付位置。
+   - 派发独立开发 subagent，传递 Task 目录、关联 Stub 阶段要求、工作目录、负责范围与交付位置，要求其遵守[开发约束文档](dev-constraints.md)。
    - 接收开发交付结果：
      - **正常交付**：取得产物路径与验证证据，进入审核环节。
      - **执行受阻**：主 Agent 运行 `plan-toolkit block <Plan目录> <Task编号> --reason <具体阻因与继续位置>`。
      - **任务撤销**：主 Agent 运行 `plan-toolkit cancel <Plan目录> <Task编号> --reason <撤销原因>`。关键 Task 撤销后交回规划同步。
 
 3. **派发审核**：
-   - 开发交付完成后，主 Agent 派发 `evaluator`，传递 Task 目录、关联 Stub 阶段要求、实际产物位置与验证证据。
+   - 开发交付完成后，主 Agent 派发独立审核 subagent，传递 Task 目录、关联 Stub 阶段要求、实际产物位置与验证证据，要求其遵守[审核约束文档](review-constraints.md)。
    - 接收审核结论并由主 Agent 流转状态：
      - **`pass`**：确认产物就绪，运行 `plan-toolkit mark <Plan目录> <Task编号> done`。
      - **`rework`**：主 Agent 运行 `plan-toolkit mark <Plan目录> <Task编号> rework`。
@@ -40,8 +40,8 @@ Flow 模式适用于含 `tasks/Txx/task.md` 与 `plan.json` 的重型编排 Plan
 
 当全部必要 Task 均达到 `done` 状态后，主 Agent 组织全局终验：
 
-1. **派发总体审核（evaluator）**：
-   主 Agent 派发 `evaluator`，传递 `summary.md`、总体交付目标、总体验收判据、所有 Task 产物与验证证据。
+1. **派发总体审核**：
+   主 Agent 派发独立审核 subagent，传递 `summary.md`、总体交付目标、总体验收判据、所有 Task 产物与验证证据，要求其遵守[审核约束文档](review-constraints.md)。
 2. **终验结论流转**：
    - **`pass`**：主 Agent 运行 `plan-toolkit mark <Plan目录> done`，完成 Plan 交付。
    - **`rework`**：核对缺陷所在 Task，主 Agent 将受影响的 Task 运行 `plan-toolkit mark <Plan目录> <Task编号> rework`，返回第 2 节重新调度；若涉及架构设计偏差，暂停调度交由规划修订。

@@ -33,7 +33,7 @@ class ProjectResourceTests(RuntimeCase):
     def test_existing_fields_survive_and_repeat_requests_do_not_rewrite(self) -> None:
         manifest = {"schemaVersion": 1, "source": "project", "version": "2.3.4-beta",
                     "resourceRoots": ["workbooks"],
-                    "install": [{"source": "skills/local", "target": ".agents/skills/local", "platforms": ["codex"]}],
+                    "install": [{"source": "skills/local", "target": ".agents/skills/local"}],
                     "artifactTypes": ["project:feature"]}
         write_json(self.path, manifest)
         prepared = self.prepare("knowledge/principles", "knowledge/principles")

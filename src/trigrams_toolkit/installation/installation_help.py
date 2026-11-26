@@ -10,7 +10,6 @@ FIELDS = {
     "agent": "Vercel agent: codex, claude-code or pi. Omitted uses the project record or codex.",
     "packages": "Explicit absolute source roots for local development.",
     "extensions": "Selected extension names; omit to retain, or pass [] to remove all.",
-    "platforms": "Target hosts: codex, claude, pi-web; select any combination.",
     "preview": "Exact reviewed preview returned by install preview.",
     "confirmedBy": "Approver identity: {id, kind}; kind is human, agent or service.",
 }

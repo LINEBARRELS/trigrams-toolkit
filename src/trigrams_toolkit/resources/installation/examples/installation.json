@@ -8,7 +8,6 @@
       "version": "1.0.0"
     }
   ],
-  "platforms": [],
   "managed": [
     {
       "path": ".agents/extensions/example/extension.json",

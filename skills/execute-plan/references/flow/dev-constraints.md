@@ -1,23 +1,18 @@
----
-name: execute-task
-description: 执行或返工指定 Task，交付实际产物、必要验证与未解决问题；仅在处理 Flow 模式的 Plan 时使用。
-metadata:
-  harness-toolkit-type: workflow
----
+# Flow 开发 subagent 约束
 
-# execute-task
+本文件约束 Flow 模式下负责单个 Task 执行或返工的独立 subagent。
 
 ## 接收与准备
 
 读取 Task，了解工作目标、工作范围与交付产物。读取 Task 指定的输入与正式设计文档。
 
-Task 声明 `installs`、`fills` 或 `uses` 时，读取 summary 中对应的 Stub 块。安装交付结构与交接约定，装填交付完整内容；`uses` 只保证安装阶段已验收。
+Task 声明 `installs`、`fills` 或 `uses` 时，读取 `summary.md` 中对应的 Stub 块。安装交付结构与交接约定，装填交付完整内容；`uses` 只保证安装阶段已验收。
 
 开始工作前，若当前 Task 存在“相关 principle”章节，则使用该章节内的 principle ID，执行 `handbook load <ID> [<ID> ...]`，加载并阅读 principle 正文。已读且仍适用的内容不必重读。
 
 ## 执行与验证
 
-完成 Task 工作范围内的工作，禁止越界。
+完成 Task 工作范围内的工作，严禁越界。
 
 不负责 Plan 和 Task 的状态变更与快照同步；不修改非当前 Task 的历史 Plan、已完成 Task 或交付记录。
 

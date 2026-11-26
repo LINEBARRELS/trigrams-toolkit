@@ -95,7 +95,7 @@ class SourceAcceptanceTests(unittest.TestCase):
                     shutil.copytree(self.session.extension / "skills/validation-helper", setup.parent / "validation-helper")
             elif not (self.project / ".agents/skills" / f"extension-setup-{provider}").exists():
                 copy_extension(self.project, provider)
-        parameters = {"extensions": extensions, "platforms": ["codex", "claude", "pi-web"]}
+        parameters = {"extensions": extensions}
         result = self.invoke("harness-install", ["install", "preview", "--input", "-"], parameters)
         candidate = result["data"]
         self.assertEqual(Path(candidate["projectRoot"]), self.project)
@@ -348,14 +348,10 @@ class SourceAcceptanceTests(unittest.TestCase):
         self.assertFalse((self.project / ".project-state").exists())
         self.assertFalse((self.project / ".agents/skills").exists())
         self.assertFalse((self.project / ".agents/roles").exists())
-        for directory, suffix in ((".codex", ".toml"), (".claude", ".md"), (".pi", ".md")):
-            for name, skill in (("task_developer", "execute-task"), ("evaluator", "delivery-review")):
-                entry = self.project / directory / "agents" / (name + suffix)
-                self.assertIn(f"使用 {skill} Skill", entry.read_text(encoding="utf-8"))
-                if directory == ".pi":
-                    data = yaml.safe_load(entry.read_text(encoding="utf-8").split("---", 2)[1])
-                    self.assertIs(data["load_skills"], True)
-                    self.assertNotIn("model", data)
+        for directory in (".codex", ".claude", ".pi"):
+            self.assertFalse((self.project / directory / "agents").exists())
+        record = json.loads((self.project / ".agents/harness.json").read_text(encoding="utf-8"))
+        self.assertNotIn("platforms", record)
         self.install(["toolkit-maintenance", "validation"], 1)
         skill = self.project / ".agents/skills/validation-helper"
         self.assertTrue((skill / "references/check.md").is_file())
@@ -366,7 +362,6 @@ class SourceAcceptanceTests(unittest.TestCase):
         self.assertFalse((self.project / ".agents/extensions/validation/skills").exists())
         self.assertFalse((self.project / ".agents/extensions/validation/tools").exists())
         self.assertFalse((self.project / ".agents/scripts").exists())
-        self.assertTrue((self.project / ".codex/agents/task_developer.toml").is_file())
         self.invoke("handbook", ["validate"])
         document = self.project / "docs/validation.md"
         document.parent.mkdir(exist_ok=True)

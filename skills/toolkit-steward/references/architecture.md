@@ -15,7 +15,7 @@
 | **Plan / Stub / Task** | Plan 统筹目标与 Stub 范围边界；`agile` 模式以单份 `summary.md` 与平铺结果文件推进，`flow` 模式额外拆分为 `tasks/Txx/` 并由 `plan-toolkit` 校验拓扑 |
 | **项目知识** | 保存项目 principle、规划决策、关键变更和模块建议，按用途维护 |
 | **公共工具** | 维护身份、定位、Flow Plan 状态、资料检索与安装归属 |
-| **extensions / adapters** | 扩展补充领域能力，平台适配器随 CLI 包提供 Flow 模式的宿主角色入口 |
+| **extensions** | 扩展补充领域 Skill、workbook、principle 与可选成果类型 |
 
 简单问答和单步工作不必强行创建 plan。多阶段工作、跨角色交接或持续追踪通过 Plan 组织：日常开发工作默认采用 `agile` 模式，复杂多模块开发按需采用 `flow` 模式。
 
@@ -52,10 +52,9 @@ Agent 按任务相关性从索引中选择原则；固定流程的必读原则�
 | 层次 | 职责与分发方式 |
 | --- | --- |
 | **core Skill** | 通用行为 Skill 及随 `principles`、`workbook` 携带的核心资料；通过 Vercel skills 全局安装到目标 agent |
-| **公共 CLI 工具** | 四个统一 Python CLI（`plan-toolkit`、`project-state`、`handbook`、`harness-install`）；通过包管理器安装，契约、核心类型与 adapter 模板随包交付 |
+| **公共 CLI 工具** | 四个统一 Python CLI（`plan-toolkit`、`project-state`、`handbook`、`harness-install`）；通过包管理器安装，契约与核心类型随包交付 |
 | **外部必需 Skill** | `answer-me-with-html` 与 `smell-check`。`harness-install install apply` 在首次装配、增补或同步时通过 Vercel skills 补齐目标 `agent` 的全局安装 |
-| **项目扩展与快照** | 扩展 Skill（含 `extension-setup-<extension>`）通过 Vercel skills 安装到项目；`harness-install` 将 `assets/` 装配为 `.agents/extensions/<extension>/` 快照并复制宿主 adapter，`.agents/harness.json` 记录版本与文件基线 |
+| **项目扩展与快照** | 扩展 Skill（含 `extension-setup-<extension>`）通过 Vercel skills 安装到项目；`harness-install` 将 `assets/` 装配为 `.agents/extensions/<extension>/` 快照，`.agents/harness.json` 记录版本与文件基线 |
 | **项目自有内容** | 正式成果、Plan、知识、自建资料（`docs/resources.json`）与本地配置 |
-| **adapters** | 宿主 subagent 入口直接调用 core Skill，维护角色模型与权限配置 |
 
 全局扩展来源不自动启用项目扩展。上游扩展 Skill 更新后，由 `harness-install` 显式预览并同步项目快照；显式同步前项目继续读取既有快照。

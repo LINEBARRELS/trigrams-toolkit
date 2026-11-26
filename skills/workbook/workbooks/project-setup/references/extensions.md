@@ -12,7 +12,7 @@
 
 ## 安装或增补扩展
 
-1. **确认当前配置**：读取 `.agents/harness.json` 中的 `agent`、`extensions` 与 `platforms`，增补扩展沿用同一 `agent`。
+1. **确认当前配置**：读取 `.agents/harness.json` 中的 `agent` 与 `extensions`，增补扩展沿用同一 `agent`。
 2. **安装扩展 Skill**：在项目根目录运行：
    ```sh
    npx skills add LINEBARRELS/trigrams-toolkit/extensions/<extension>/skills --skill '*'

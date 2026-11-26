@@ -26,7 +26,7 @@
 | --- | --- |
 | `skills/` | 通用 core Skill 唯一维护源；核心 workbook 与 principle 随对应 Skill 维护 |
 | `extensions/` | 官方扩展唯一维护源（`extensions/game/`、`extensions/toolkit-maintenance/`）；各扩展通过 `skills/extension-setup-<extension>/assets/` 维护自身的 `extension.json`、`principles/` 与 `workbooks/` |
-| `src/trigrams_toolkit/` | 统一 Python CLI 包源码（`project-state`、`plan-toolkit`、`handbook`、`harness-install`）；协议、核心类型与平台 adapter 随 `src/trigrams_toolkit/resources/` 交付 |
+| `src/trigrams_toolkit/` | 统一 Python CLI 包源码（`project-state`、`plan-toolkit`、`handbook`、`harness-install`）；协议与核心类型随 `src/trigrams_toolkit/resources/` 交付 |
 | `scripts/` | 仓库只读校验与发行包验收脚本（`verify_toolkit.py`、`check_protocols.py`、`check_package.py`） |
 | `tests/` | 单元测试、运行时测试（`tests/runtime/`）与多工具源码验收测试 |
 | `tasks.py`、`toolkit.json` | 跨平台检查、测试、构建与发布统一入口，以及源码仓清单 |
@@ -54,7 +54,6 @@
 
 - **core 资料**：随全局 `principles`、`workbook` Skill 分发的通用原则与工作方法，资源 ID 前缀为 `core:`。
 - **扩展快照（extension snapshot）**：由 `harness-install` 固化到目标项目 `.agents/extensions/<extension>/` 的扩展清单、原则与工作方法副本。
-- **平台 adapter**：随 Python CLI 包交付并装配到目标项目宿主目录（`.codex/agents/`、`.claude/agents/`、`.pi/agents/`）的角色入口文件。
 
 ### 公共工具与项目配置
 

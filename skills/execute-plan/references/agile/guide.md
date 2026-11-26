@@ -1,6 +1,6 @@
 # Agile 模式调度指引
 
-依据当前 Plan 的 `summary.md` 完成工作，不回查 `workbook`，不调用 `plan-toolkit` 及 Flow 专用 Skill（`execute-task`、`delivery-review`）。
+依据当前 Plan 的 `summary.md` 完成工作，不回查 `workbook`，不调用 `plan-toolkit`。
 
 - **规则分工**：主 Agent 遵循 `<schedule-rule>`，开发 subagent 遵循 `<exec-rule>`，审核 subagent 遵循 `<review-rule>`。
 - **状态维护**：`summary.md` YAML 头的 `status`（`pending`、`doing`、`blocked`、`done`）仅由主 Agent 维护。
