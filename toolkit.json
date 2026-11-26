@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "trigrams-toolkit",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "core": {
     "manifest": "skills/resources.json",
     "skills": "skills",

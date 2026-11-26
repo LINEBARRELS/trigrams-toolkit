@@ -2,7 +2,7 @@
 
 本页记录工具包版本，版本号以 `toolkit.json` 为准。CLI 版本以 `pyproject.toml` 为准，见 [CLI 更新记录](docs/cli-changelog.md)。
 
-## 未发布
+## 0.5.4
 
 - 工具包与 CLI 独立发布。工具包用 `vX.Y.Z` 标签，CLI 用 `vcli-X.Y.Z` 标签触发 PyPI 发布。[维护与发布](docs/maintenance.md#ci-与发布)
 
