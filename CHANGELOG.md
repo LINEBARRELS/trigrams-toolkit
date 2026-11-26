@@ -2,6 +2,11 @@
 
 版本号以 `toolkit.json` 与 `pyproject.toml` 为准，四个公共 CLI 的 `--version` 统一来自 Python 包元数据。
 
+## 0.5.1
+
+- 明确 `architect` 的可视化汇报交接。主 Agent 提供设计文档、引用和报告指引的路径，子代理独立读取指引并生成 ARD 或 Implementation Spec 的 HTML 报告。[架构设计 Skill](skills/architect/SKILL.md)
+- README 增加首份 Plan 的规划与执行示例，并介绍默认 Agile 模式的交付流程和文件结构。[README](README.md)
+
 ## 0.5.0
 
 - `to-plan` 改为显式调用。新建 Plan 默认采用 Agile 模式，Flow 模式需显式指定。Agile Plan 在 `summary.md` 定义可独立验收的 Stub，在 `Sxx-result.md` 记录开发交付和审核，在 `review.md` 记录整体验收。[规划指引](skills/to-plan/SKILL.md) · [Agile 调度指引](skills/execute-plan/references/agile/guide.md)
