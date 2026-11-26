@@ -61,10 +61,12 @@ ARD 节点格式如下；按实际结构重复 Module 与 Feature。框架模块
 
 新建或修订 ARD 或 Implementation Spec 后，派发不继承当前会话上下文的独立 subagent 生成供用户审阅的可视化报告。ARD 单独成页，Implementation Spec 按 Module 单独成页。
 
-1. **派发**：向 subagent 提供项目目录、维护后的文档、必要引用与指引路径（修订时可附文档差异，供标注变更）：
+1. **派发**：向 subagent 提供维护后的文档、必要引用（修订时可附文档差异，供标注变更），并且告知 subagent 需要遵守的汇报规则文件路径：
    - 通用规则：[报告通用指引](references/report-guide.md)
    - 专项规则：ARD 使用[ARD 报告指引](references/ard-report.md)，Implementation Spec 使用[Spec 报告指引](references/implementation-spec-report.md)
 2. **交付**：subagent 按指引生成单页 HTML，返回成品路径与核对摘要。主 Agent 在回复中直接附上链接，交由用户审阅。
+
+可视化汇报的规则仅由 subagent 读取和使用，主 Agent 切勿插手做额外的阅读和指导。
 
 ## 工作边界
 
