@@ -2,6 +2,11 @@
 
 版本号以 `toolkit.json` 与 `pyproject.toml` 为准，四个公共 CLI 的 `--version` 统一来自 Python 包元数据。
 
+## 0.5.2
+
+- 明确 `architect` 的 Implementation Spec 承载 Module 与 Feature 的详细程序设计。模板集中定义模块边界、公开契约和核心状态，并按模块形态选用运行机制与可靠性章节。[架构设计 Skill](skills/architect/SKILL.md) · [Implementation Spec 模板](skills/architect/references/templates/implementation-spec.temp.md)
+- Implementation Spec 的可视化报告将独立功能流和复杂子流程分别成图。[报告指引](skills/architect/references/implementation-spec-report.md)
+
 ## 0.5.1
 
 - 明确 `architect` 的可视化汇报交接。主 Agent 提供设计文档、引用和报告指引的路径，子代理独立读取指引并生成 ARD 或 Implementation Spec 的 HTML 报告。[架构设计 Skill](skills/architect/SKILL.md)
