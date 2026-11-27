@@ -11,6 +11,7 @@
 | `architect` | 维护宏观架构（ARD）、Module / Feature 边界与 Implementation Spec |
 | `doc-polish` | 中文技术文档标准语言规范与润色检查 |
 | `how` / `why` / `effect` | 调查当前实现机制与历史设计决策理由；在用户显式触发时评估变更影响范围 |
+| `axiomatic-audit` | 在用户显式触发时，以 `PRODUCT.md` 与 ARD 为入口直查源码，基于 MIT 公理设计重排设计矩阵并输出可视化耦合报告 |
 | `principle-maintenance` / `decision-maintenance` | 提炼与入库项目 principle 草稿；在用户显式触发时提炼、修订与演进项目决策记录 |
 | `answer-me-with-html` / `smell-check` | 外部必需全局依赖，分别负责可视化架构报告与代码坏味道审计。应用项目装配时补齐缺项 |
 

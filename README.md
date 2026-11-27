@@ -88,7 +88,7 @@ Skill 定义 Agent 的行为。
 | 要做的事 | Core Skill |
 | --- | --- |
 | **接入项目，加载工作依据** | [`toolkit-steward`](skills/toolkit-steward/SKILL.md) · [`workbook`](skills/workbook/SKILL.md) · [`principles`](skills/principles/SKILL.md) |
-| **调查现状，推敲设计** | [`how`](skills/how/SKILL.md) · [`why`](skills/why/SKILL.md) · [`effect`](skills/effect/SKILL.md) · [`architect`](skills/architect/SKILL.md) |
+| **调查现状，推敲设计** | [`how`](skills/how/SKILL.md) · [`why`](skills/why/SKILL.md) · [`effect`](skills/effect/SKILL.md) · [`axiomatic-audit`](skills/axiomatic-audit/SKILL.md) · [`architect`](skills/architect/SKILL.md) |
 | **规划工作，执行与审核交付** | [`to-plan`](skills/to-plan/SKILL.md) · [`execute-plan`](skills/execute-plan/SKILL.md) |
 | **维护文档、原则与决策** | [`doc-polish`](skills/doc-polish/SKILL.md) · [`principle-maintenance`](skills/principle-maintenance/SKILL.md) · [`decision-maintenance`](skills/decision-maintenance/SKILL.md) |
 
