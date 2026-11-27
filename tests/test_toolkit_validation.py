@@ -70,8 +70,9 @@ class SourceValidationTests(unittest.TestCase):
             (root / "toolkit.json").write_text(json.dumps({
                 "core": {"manifest": str(ROOT / "skills/resources.json")}, "extensions": {}}), encoding="utf-8")
             plan = root / "docs/plans/agile-example"
-            plan.mkdir(parents=True)
-            (plan / "S01-result.md").write_text("[Prior artifact](missing.md)\n", encoding="utf-8")
+            (plan / "S01/findings").mkdir(parents=True)
+            (plan / "S01/result.md").write_text("[Prior artifact](missing.md)\n", encoding="utf-8")
+            (plan / "S01/findings/R01.md").write_text("[Prior log](missing.log)\n", encoding="utf-8")
             prepared = {"ok": True, "resources": 0, "sources": []}
             with patch.object(verify_toolkit, "ROOT", root), patch.object(verify_toolkit, "validate_source_catalog", return_value=prepared):
                 for status, expected in (("done", True), ("cancelled", True), ("doing", False),

@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | 工作要求 | `agile`：`summary.md`（含 YAML `plan-type: agile`、`status` 与 Stub 清单）；`flow`：`summary.md`、`tasks/T01/task.md` | `flow` 模式由 `plan-toolkit` 检查目录结构与依赖关系；`agile` 模式不经由 `plan-toolkit` |
 | 调度快照与当前状态 | `agile`：`summary.md` YAML 头 `status`；`flow`：Plan 目录的 `plan.json`（定义从文稿编译） | `agile` 模式由调度者直接维护 `status`；`flow` 模式由 `plan-toolkit` 同步快照、计算可执行任务并更新状态 |
-| 实际交付与审核 | `agile`：Plan 目录下平铺的 `Sxx-result.md`（含追加审核记录）与 `review.md`；`flow`：Task 目录及明确引用的源码和证据 | 普通文件，由对应执行与审核入口消费 |
+| 实际交付与审核 | `agile`：Plan 目录下按 Stub 划分的 `Sxx/`（`result.md`、按需 `handoff.md`、`stub-review.md`、按需 `findings/Rxx.md`）与根级 `review.md`（及按需 `findings/Rxx.md`）；`flow`：Task 目录及明确引用的源码和证据 | 普通文件，由对应执行与审核入口消费 |
 | 架构身份与关系 | `.project-state/state.json` 及文稿头维护的身份与归属元数据 | `project-state` 统一维护文稿头与索引，提供定位与关系查询 |
 | workbook 与 principle | `WORKBOOK.md`、`PRINCIPLE.md` 的正文和头信息 | `handbook` 发现、加载、校验与原则入库 |
 | 资源声明与安装归属 | 扩展 `assets/extension.json`、`docs/resources.json`、`.agents/harness.json`、`skills-lock.json` | `harness-install` 负责快照装配与受管文件基线保护；Skill 目录由 Vercel skills 管理 |

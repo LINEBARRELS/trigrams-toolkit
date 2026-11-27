@@ -2,17 +2,23 @@
 
 Agile 模式：以单份 `summary.md` 定义需求、依据、验收、约束与 Stub 清单，不拆分 `tasks/` 目录，不生成 `plan.json`，不使用 `plan-toolkit`。
 
-## 目录与文件布局
+## Plan 目录结构与文件布局
 
 沿用项目目录约定；无约定时使用 `docs/plans/<label>/`。
 
 ```text
 docs/plans/<label>/
-  summary.md      # Plan 唯一正文（含 YAML 状态头与全部 Stub 定义）
-  S01-result.md   # 执行期由开发维护交付说明、审核追加审核记录
-  S02-result.md
-  review.md       # Plan 总体终验结论
-  evidence/       # 按需仅存放通过验收的最终关键证据
+  summary.md              # Plan 唯一正文（含 YAML 状态头与全部 Stub 定义）
+  review.md               # Plan 总体终验结论与问题索引
+  findings/               # 按需：仅当 Plan 总体终验提出跨 Stub 问题时创建
+    R01.md
+  evidence/               # 按需仅存放通过验收的最终关键证据
+  S01/                    # 执行期开工时按需创建
+    result.md             # 开发维护：产物清单与验证依据
+    handoff.md            # 开发按需维护：交接与遗留（无特殊交接时不创建）
+    stub-review.md        # 审核维护：各轮结论、验证摘要与问题索引
+    findings/             # 审核按需维护：每条 Rxx 独立文档（无问题时不创建）
+      R01.md
 ```
 
 ## `summary.md` 模板与填写规范
@@ -95,6 +101,6 @@ status: pending
 3. **Stub合理切分**：Stub 声明的相互依赖无环，各 Stub 的内容保持正交，避免因范围越界或重叠而导致的脏读、脏写。
 4. **引用可达**：核对 `summary.md` 中引用的文件路径、章节定位等内容真实有效。
 
-修订已开始（`doing`）的 Agile Plan 时，核对已有进展与 `Sxx-result.md`，保留有效产物与已确认的历史审核结论；若修订影响已通过审核的 Stub，在 `summary.md` 中写明需重验的范围。
+修订已开始（`doing`）的 Agile Plan 时，核对已有进展与各 `Sxx/` 下的交付、审核记录，保留有效产物与已确认的历史审核结论；若修订影响已通过审核的 Stub，在 `summary.md` 中写明需重验的范围。
 
 最终向用户汇报 Plan 目录、Plan 质检结论、规划期可能发现的问题以及设计或规划内容缺项。

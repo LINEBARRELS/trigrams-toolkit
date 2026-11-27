@@ -12,7 +12,7 @@
 | **workbook** | 针对特定工作领域定义适用条件、输入、工作流程、工序切分、Stub 交接与验收|
 | **principle** | 提供特定工作范围内普适的判断标准 |
 | **Artifact** | 保存正式设计与交付物；正文单点维护，身份与关系进入登记库 |
-| **Plan / Stub / Task** | Plan 统筹目标与 Stub 范围边界；`agile` 模式以单份 `summary.md` 与平铺结果文件推进，`flow` 模式额外拆分为 `tasks/Txx/` 并由 `plan-toolkit` 校验拓扑 |
+| **Plan / Stub / Task** | Plan 统筹目标与 Stub 范围边界；`agile` 模式以单份 `summary.md` 规划、执行期按 Stub 建 `Sxx/` 子目录沉淀交付与审核，`flow` 模式额外拆分为 `tasks/Txx/` 并由 `plan-toolkit` 校验拓扑 |
 | **项目知识** | 保存项目 principle、规划决策、关键变更和模块建议，按用途维护 |
 | **公共工具** | 维护身份、定位、Flow Plan 状态、资料检索与安装归属 |
 | **extensions** | 扩展补充领域 Skill、workbook、principle 与可选成果类型 |
