@@ -36,7 +36,7 @@
   - 在已拆分的纯业务程序集或命名空间中，通过架构测试禁止引用 `System.IO`、`System.Net.Http`、数据库客户端及系统静态时钟等副作用入口。
 - **留给 Review**：未按命名空间隔离的类型内部，纯规则计算与状态修改是否混杂在同一方法中。
 
-## `core:principle:programming-design-abstraction/assign-a-single-owner-to-mutable-state`
+## `core:principle:programming-design-state/assign-a-single-owner-to-mutable-state`
 
 - **可静态拦截**：
   - 启用 Roslyn 分析器拦截可写的 `public static` 字段与未加 `readonly` 的共享静态成员。
@@ -48,11 +48,11 @@
   - 通过 `NetArchTest.Rules` / `ArchUnitNET` 限制指定第三方 NuGet 命名空间仅允许在适配器程序集或指定包装命名空间内引用。
 - **留给 Review**：包装接口是否使用项目领域类型、是否将第三方异常转换为项目失败语义。
 
-## `core:principle:programming-pragmatic/enforce-strict-boundaries-with-lightweight-internals`
+## `core:principle:programming-design-architecture/validate-external-input-at-trust-boundaries`
 
 - **可静态拦截**：
   - 对 `public` 入口方法启用参数空值校验分析器，配合严格可空编译守住边界契约。
-- **留给 Review**：信任边界校验是否覆盖全部外部输入，以及内部实现是否避免冗余校验与过度包装。
+- **留给 Review**：外部输入是否在进入内部代码前完成运行时校验，内部调用是否能依赖已建立的约束。
 
 ## 显式禁区（不转化为静态规则）
 
@@ -60,5 +60,5 @@
 
 - `core:principle:programming-design-abstraction/extract-shared-knowledge-not-coincidental-shape`：禁止用代码查重工具强制合并形似但变化轴不同的代码。
 - `core:principle:programming-review/eliminate-surplus-indirection`：静态分析无法可靠区分“冗余转发包装”与“为依赖倒置设立的合法边界接口”。
-- `core:principle:programming-review/expose-hidden-change-coupling`：跨模块隐式同步约定与双真相源无法由编译器发现，应留给设计审查与状态不变量测试。
+- `core:principle:programming-review/find-hidden-dependencies-in-rules-state-and-call-order`：跨模块隐式同步约定与双真相源无法由编译器发现，应留给设计审查与状态不变量测试。
 - `core:principle:programming-review/reject-test-fitted-domain-models`：编译器与分析器仅校验类型自洽，无法识别将通用多步业务焊死为固定字段或硬编码测试探针常量的退化建模，应留给架构与代码审查。

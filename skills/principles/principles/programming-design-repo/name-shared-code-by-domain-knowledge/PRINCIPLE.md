@@ -1,5 +1,5 @@
 ---
-description: 放置跨模块共享代码并避免创建 Utils／Helpers 杂物间时使用（repo.no-junk-drawer）。
+description: 放置跨模块共享代码并避免创建 Utils／Helpers 杂物间时使用。
 ---
 # Name Shared Code by Domain Knowledge
 

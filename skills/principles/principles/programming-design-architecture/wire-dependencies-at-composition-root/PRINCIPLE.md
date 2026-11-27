@@ -1,5 +1,5 @@
 ---
-description: 组织应用入口依赖装配与配置注入时使用（layer.composition-root）。
+description: 组织应用入口依赖装配与配置注入时使用。
 ---
 # Wire Dependencies at the Composition Root
 

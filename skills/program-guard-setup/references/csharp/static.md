@@ -2,7 +2,7 @@
 
 下列 principle 的核心条款可直接转化为 C# 编译器、Roslyn 分析器与架构测试的确定性检查。实际配置前，通过 `handbook load` 读取对应正文核对例外条件。
 
-## `core:principle:programming-scale/keep-code-within-scale-limits`
+## `core:principle:programming-code-metrics/review-code-size-and-nesting`
 
 - **验证工具**：Roslyn 代码度量分析器（如 .NET 内置代码度量、SonarAnalyzer 或自定义 Roslyn Analyzer）。
 - **映射方向**：
