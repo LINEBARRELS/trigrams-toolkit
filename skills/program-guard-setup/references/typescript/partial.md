@@ -13,7 +13,7 @@
 
 - **可静态拦截**：
   - 数据字段与数组不可变 → `typescript-eslint` 的 `prefer-readonly` 及只读数组／参数约定；若项目约定禁用 `enum`，可用 `no-restricted-syntax` 拦截 `TSEnumDeclaration`。
-- **留给 Review**：互斥状态是否用可辨识联合替代多布尔组合、哪些原始类型 ID 需要声明 Brand 类型、多态场景下 `interface` 与 `class` 的取舍。
+- **留给 Review**：互斥状态是否用可辨识联合替代多布尔组合、静态配置表与策略路由映射是否使用 `satisfies` 保留字面量推导并替代单对象字符串分支、哪些原始类型 ID 应声明 Brand 类型、以及多态场景下 `interface` 与 `class` 的取舍。
 
 ## `core:principle:programming-typescript-javascript/control-js-promise-concurrency-and-avoid-aliasing-traps`
 
@@ -60,3 +60,4 @@
 - `core:principle:programming-design-abstraction/extract-shared-knowledge-not-coincidental-shape`：禁止用代码查重工具（如 AST 重复检测）强制合并形似但变化轴不同的代码。
 - `core:principle:programming-review/eliminate-surplus-indirection`：静态工具无法可靠区分“冗余转发包装”与“为依赖倒置设立的合法边界接口”。
 - `core:principle:programming-review/expose-hidden-change-coupling`：跨模块隐式同步约定与双真相源无法由类型系统或语法检查发现，应留给设计审查与状态不变量测试。
+- `core:principle:programming-review/reject-test-fitted-domain-models`：类型系统与 ESLint 无法识别将通用状态机退化为单次探针特例或硬编码测试夹具常量的建模缺陷，应留给架构与代码审查。
