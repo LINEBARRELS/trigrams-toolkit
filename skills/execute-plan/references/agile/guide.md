@@ -47,7 +47,8 @@ docs/plans/<label>/
 
 全部必要 Stub 达到最终 `pass` 后，派发独立审核 subagent 执行 Plan 总体终验，命令其：
 - 基于 `summary.md` 与各 `Sxx/`（优先核对 `stub-review.md`、`result.md` 及按需存在的 `handoff.md`），核实整个 Plan 的目标实现、总体验收标准、跨 Stub 一致性（如有）及遗留项，遵守[审核约束文档](review-constraints.md)
-- 审核结论分为：
+
+根据返回的审核结论：
   - **`pass`**：将 Plan 的 `status` 更新为 `done`，完成交付。
   - **`rework`**：定位缺陷所属 Stub 或按根级 `findings/Rxx.md` 派发返工与复验；涉及整体方案偏差时，暂停调度并汇报问题所在。
   - **`inconclusive`**：将 `status` 更新为 `blocked` 并汇报待裁决项。

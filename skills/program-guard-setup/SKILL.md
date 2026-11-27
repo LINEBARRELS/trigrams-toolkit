@@ -18,8 +18,8 @@ metadata:
      - TypeScript / JavaScript：[toolchain.md](references/typescript/toolchain.md)（必读）、[static.md](references/typescript/static.md)（强可转化映射）与 [partial.md](references/typescript/partial.md)（半可转化映射，按需读取）。
      - C# / .NET：[toolchain.md](references/csharp/toolchain.md)（必读）、[static.md](references/csharp/static.md)（强可转化映射）与 [partial.md](references/csharp/partial.md)（半可转化映射，按需读取）。
      - Python：[toolchain.md](references/python/toolchain.md)（必读）、[static.md](references/python/static.md)（强可转化映射）与 [partial.md](references/python/partial.md)（半可转化映射，按需读取）。
-   - 调用 `handbook load <ID> [<ID> ...]` 读取选中的内置 principle 正文，核对每条原则的适用条件与例外。
-   - 调用 `handbook list --kind principle` 检查当前项目是否存在 `project:` 或扩展新增的编码原则；存在时现场评估其中可机械化校验的条款，纳入本次候选。
+   - 使用 principles skill 加载并阅读选中的内置 principle 正文，核对每条原则的适用条件与例外。
+      - 若存在现场发现的可机械化校验的条款，纳入本次候选。
    - 未列入 `static.md` 与 `partial.md` 的内置原则归入语义审查层，不强行编造静态规则。
 3. **对齐范围与存量策略**：向用户确认本次落地的 principle 范围、规模上限档位（默认 `medium`）以及存量代码启用策略。用户已明确指定时直接执行。
 4. **版本核验与增量装配**：
