@@ -2,6 +2,12 @@
 
 本页记录工具包版本，版本号以 `toolkit.json` 为准。CLI 版本以 `pyproject.toml` 为准，见 [CLI 更新记录](docs/cli-changelog.md)。
 
+## 0.6.1
+
+- `architect` 的 Implementation Spec 用目标语言的精简声明定义核心类型和公开签名，并用文字补充数据所有权、不变量和失败语义。模板新增常驻的生命周期与驱动机制小节，报告指引同步更新。[架构设计 Skill](skills/architect/SKILL.md) · [Implementation Spec 模板](skills/architect/references/templates/implementation-spec.temp.md) · [报告指引](skills/architect/references/implementation-spec-report.md)
+- `principle-maintenance` 在起草新原则前核对已有 scope，优先复用匹配的 scope，并检查候选名称是否重名。[原则维护 Skill](skills/principle-maintenance/SKILL.md)
+- 编程开发 workbook 明确按任务涉及的语言加载对应 scope 下的 principle。[编程开发 workbook](skills/workbook/workbooks/programming-development/WORKBOOK.md)
+
 ## 0.6.0
 
 - 新增 `axiomatic-audit`。显式调用后，审查源码中的显式依赖和隐式变更耦合，并用设计矩阵呈现证据与结论。[审计 Skill](skills/axiomatic-audit/SKILL.md)

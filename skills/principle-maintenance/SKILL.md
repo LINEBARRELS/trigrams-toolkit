@@ -14,7 +14,8 @@ metadata:
 1. **事实调查**：核对实施事实与决策问题。需要核实当前事实时调用 `how`；缺少历史原因时调用 `why`。提供项目上下文、已有证据、资料来源与可用的实际 Plan 目录。资料不足部分保留未知，不阻断已有证据分析。
 2. **提炼原则候选草稿**：
    - 比较目标、结果、偏差与适用前提，提炼跨任务复用的判断准则候选。
-   - 拟定英文小写连字符 `scope` 与 `name`，将候选草稿写入 `docs/research/principle-drafts/<scope>/<name>.md`（有真实候选时创建）。正式身份为 `project:principle:<scope>/<name>`；修订已有原则时沿用原身份。
+   - 拟定英文小写连字符 `scope` 与 `name`：新增原则时，先运行 `handbook scopes --kind principle` 核对既有 `scope`。新原则契合既有 `scope` 时宜优先复用，使项目原则随同名 `scope` 合并检索；无匹配 `scope` 时再新建 `scope`。同 `scope` 下的项目原则与既有原则并存而不覆盖。宜运行 `handbook list --kind principle --scope <scope>` 核对已有条目，选用不重名的 `name`，以免短名加载冲突。修订已有原则时沿用原身份。
+   - 将候选草稿写入 `docs/research/principle-drafts/<scope>/<name>.md`（有真实候选时创建），正式身份为 `project:principle:<scope>/<name>`。
    - 草稿采用完整原则格式：YAML 头仅包含 `description`；正文包含判断准则、适用条件、必要理由、例外与来源。草稿属于研究记录，不参与正式索引与发现。
    - 按正式入口位置核对正文中的相对引用与附件，修正引用并安排附件位置，再提交审定。CLI 原样写入正文，不改写引用或搬运附件。
 3. **修订影响分析**：

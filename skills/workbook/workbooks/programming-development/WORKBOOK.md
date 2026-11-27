@@ -38,7 +38,7 @@ includes:
 按当前工作节点加载并遵守对应 principle：
 - **架构与抽象设计：** 必读 `programming-design-architecture` 全部 principle；按决策点从 `programming-design-abstraction` 选读，涉及模块边界、仓库结构或实用取舍时从 `programming-design-module`、`programming-design-repo`、`programming-pragmatic` 按需选读。
 - **源码溯源标识：** 除单文件微小修补外，加载 `core:principle:programming/mark-stubs-and-handoff-notes-in-source` 维护 `@plan-stub` 注释。
-- **编程语言规范：** 按涉及编程语言从 `programming-csharp`、`programming-python`、`programming-typescript-javascript` 加载对应 principle；控制代码复杂度或拆解模块时参考 `core:principle:programming-scale/keep-code-within-scale-limits`。
+- **编程语言规范：** 按涉及编程语言从对应语言 scope（如 `programming-csharp`、`programming-python`、`programming-typescript-javascript`）加载对应 principle；控制代码复杂度或拆解模块时参考 `core:principle:programming-scale/keep-code-within-scale-limits`。
 
 模块内有沉淀价值的局部经验时，可在模块所在目录用 `KNOWLEDGE.md` 记录简短、内聚的非强制建议；内容应聚焦模块内部，不外链或耦合模块外代码。
 </exec-rule>
