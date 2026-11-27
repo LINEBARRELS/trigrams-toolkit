@@ -1,5 +1,5 @@
 ---
-description: 划分源文件职责边界、命名文件或分离模块公开入口时使用（repo.file-per-concept）。
+description: 划分源文件职责边界、命名文件或分离模块公开入口时使用。
 ---
 # Keep One Primary Concept per File
 

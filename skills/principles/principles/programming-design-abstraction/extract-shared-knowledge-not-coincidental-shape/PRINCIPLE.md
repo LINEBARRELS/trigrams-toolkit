@@ -1,5 +1,5 @@
 ---
-description: 面对相似代码判断是否提取公共函数、类型或常量时使用（abstraction.knowledge-not-shape）。
+description: 面对相似代码判断是否提取公共函数、类型或常量时使用。
 ---
 # Extract Shared Knowledge, Not Coincidental Shape
 

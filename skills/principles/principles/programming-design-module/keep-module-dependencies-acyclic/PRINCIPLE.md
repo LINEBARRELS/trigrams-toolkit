@@ -1,5 +1,5 @@
 ---
-description: 检查模块依赖图或打破跨模块循环依赖时使用（module.acyclic）。
+description: 检查模块依赖图或打破跨模块循环依赖时使用。
 ---
 # Keep Module Dependencies Acyclic
 

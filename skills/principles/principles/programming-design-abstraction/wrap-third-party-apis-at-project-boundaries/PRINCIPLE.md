@@ -1,5 +1,5 @@
 ---
-description: 在业务代码中引入或隔离第三方库接口与异常时使用（abstraction.foreign-wrap）。
+description: 在业务代码中引入或隔离第三方库接口与异常时使用。
 ---
 # Wrap Third-Party APIs at Project Boundaries
 

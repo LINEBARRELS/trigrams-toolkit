@@ -7,7 +7,7 @@ metadata:
 
 # architect
 
-使用 `principles` skill，加载 `programming-design-architecture` scope 下的全部原则，并按本次设计目标从 `programming-design-abstraction`、`programming-design-module`、`programming-design-repo`、`programming-pragmatic` scope 中选取适用原则。涉及类型、属性、常量或公共签名声明时，从对应编程语言的 scope 中选取适用 principle。沿用项目 `AGENTS.md` 或已有路径、绑定与标识；新项目无约定时，默认使用 `DEVTECH.md`、`docs/ARD.md`、`docs/implementation-specs/` 和 `docs/research/`。
+使用 `principles` skill，加载 `programming-design-architecture` scope 下的全部原则。按设计问题选择其他 scope：抽象、状态建模、模块边界和目录组织分别查 `programming-design-abstraction`、`programming-design-state`、`programming-design-module` 和 `programming-design-repo`。涉及类型、属性、常量或公共签名声明时，从对应编程语言的 scope 中选取适用 principle。各种文档的保存路径默认使用 `DEVTECH.md`、`docs/ARD.md`、`docs/implementation-specs/` 和 `docs/research/`。
 
 ## 设计与文档
 

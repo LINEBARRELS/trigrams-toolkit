@@ -1,5 +1,5 @@
 ---
-description: 建模对象本质分类与状态能力装配、判断是否使用继承或组合时使用（abstraction.composition-first）。
+description: 建模对象本质分类与状态能力装配、判断是否使用继承或组合时使用。
 ---
 # Prefer Composition over Inheritance
 

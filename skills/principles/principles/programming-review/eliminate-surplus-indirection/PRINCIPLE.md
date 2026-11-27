@@ -1,5 +1,5 @@
 ---
-description: 审查代码结构，排查纯转发包装层、无真实变体的假扩展点与无主死代码等冗余设计时使用（review.no-surplus）。
+description: 审查代码结构，排查纯转发包装层、无真实变体的假扩展点与无主死代码等冗余设计时使用。
 ---
 # Eliminate Surplus Indirection
 

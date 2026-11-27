@@ -1,5 +1,5 @@
 ---
-description: 审查代码结构，排查面向验收样例焊死步骤基数、硬编码测试夹具常量或残留测试假实现等退化建模时使用（review.no-test-fitting）。
+description: 审查代码结构，排查面向验收样例焊死步骤基数、硬编码测试夹具常量或残留测试假实现等退化建模时使用。
 ---
 # Reject Test-Fitted Domain Models
 

@@ -1,5 +1,5 @@
 ---
-description: 新增目录、模块或接口前对齐仓库既有结构与复用现有能力时使用（repo.follow-existing）。
+description: 新增目录、模块或接口前对齐仓库既有结构与复用现有能力时使用。
 ---
 # Follow Existing Repository Conventions
 

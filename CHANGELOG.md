@@ -2,6 +2,12 @@
 
 本页记录工具包版本，版本号以 `toolkit.json` 为准。CLI 版本以 `pyproject.toml` 为准，见 [CLI 更新记录](docs/cli-changelog.md)。
 
+## 0.6.2
+
+- 重组跨语言编程原则。`programming-workflow` 和 `programming-code-metrics` 分别接替 `programming` 和 `programming-scale`，状态建模独立为 `programming-design-state`。移除 `programming-pragmatic` scope 和「依赖指向稳定模块」原则。[编程开发 workbook](skills/workbook/workbooks/programming-development/WORKBOOK.md)
+- 合并模块划分的重复原则。仅集中实现同一规则的重复分派，并明确引入抽象和校验外部输入的适用条件。[模块职责](skills/principles/principles/programming-design-module/group-module-responsibilities-by-reason-to-change/PRINCIPLE.md) · [分派](skills/principles/principles/programming-design-abstraction/centralize-repeated-dispatch-for-the-same-rule/PRINCIPLE.md)
+- 同步 workbook、Skill 和编程门禁指引中的资源 ID，清除旧的点号短键和无效的 scope 引用。自定义 workbook 或脚本如果引用了旧 ID，用 `handbook list --kind principle` 查询新版 ID 后更新引用。[Handbook 指引](src/trigrams_toolkit/resources/handbook/README.md)
+
 ## 0.6.1
 
 - `architect` 的 Implementation Spec 用目标语言的精简声明定义核心类型和公开签名，并用文字补充数据所有权、不变量和失败语义。模板新增常驻的生命周期与驱动机制小节，报告指引同步更新。[架构设计 Skill](skills/architect/SKILL.md) · [Implementation Spec 模板](skills/architect/references/templates/implementation-spec.temp.md) · [报告指引](skills/architect/references/implementation-spec-report.md)

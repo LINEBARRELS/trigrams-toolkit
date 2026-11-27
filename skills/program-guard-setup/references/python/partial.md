@@ -28,7 +28,7 @@
   - 在已拆分的纯业务决策包下，通过 `import-linter`、`tach` 或 Ruff 禁用 API 规则，禁止导入 `os`、`pathlib`、`subprocess`、网络客户端与全局系统时钟等副作用模块。
 - **留给 Review**：未按包隔离的模块内部，纯规则计算与状态修改是否混杂在同一函数中。
 
-## `core:principle:programming-design-abstraction/assign-a-single-owner-to-mutable-state`
+## `core:principle:programming-design-state/assign-a-single-owner-to-mutable-state`
 
 - **可静态拦截**：
   - 通过 Ruff 拦截 `global` 语句与可变默认参数，抑制隐式共享可变状态。
@@ -40,11 +40,11 @@
   - 通过 `import-linter`、`tach` 或 Ruff 禁用导入规则，限制指定第三方库仅允许在适配层或指定包装模块导入。
 - **留给 Review**：包装接口是否使用项目领域类型、是否将第三方异常翻译为项目基异常语义。
 
-## `core:principle:programming-pragmatic/enforce-strict-boundaries-with-lightweight-internals`
+## `core:principle:programming-design-architecture/validate-external-input-at-trust-boundaries`
 
 - **可静态拦截**：
   - 在边界入口模块启用 Pyright / mypy 严格模式，禁止公开签名退化为裸 `Any` 与隐式未知类型。
-- **留给 Review**：外部未验证数据是否在边界完成运行时校验（如 Pydantic 或显式解析函数），以及内部实现是否避免冗余防御。
+- **留给 Review**：外部输入是否在进入内部代码前完成运行时校验，内部调用是否能依赖已建立的约束。
 
 ## 显式禁区（不转化为静态规则）
 
@@ -52,5 +52,5 @@
 
 - `core:principle:programming-design-abstraction/extract-shared-knowledge-not-coincidental-shape`：禁止用代码查重工具强制合并形似但变化轴不同的代码。
 - `core:principle:programming-review/eliminate-surplus-indirection`：静态分析无法可靠区分“冗余转发包装”与“为依赖倒置设立的合法边界接口”。
-- `core:principle:programming-review/expose-hidden-change-coupling`：跨模块隐式同步约定与双真相源无法由类型检查或 Linter 发现，应留给设计审查与状态不变量测试。
+- `core:principle:programming-review/find-hidden-dependencies-in-rules-state-and-call-order`：跨模块隐式同步约定与双真相源无法由类型检查或 Linter 发现，应留给设计审查与状态不变量测试。
 - `core:principle:programming-review/reject-test-fitted-domain-models`：类型检查与 Linter 无法判断数据模型或状态分支是否面向单次验收样例退化硬编码，应留给架构与代码审查。

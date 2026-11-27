@@ -1,5 +1,5 @@
 ---
-description: 分离纯规则计算与文件、网络、状态修改等副作用时使用（abstraction.effect-edge）。
+description: 分离纯规则计算与文件、网络、状态修改等副作用时使用。
 ---
 # Push Side Effects to Orchestration Edges
 

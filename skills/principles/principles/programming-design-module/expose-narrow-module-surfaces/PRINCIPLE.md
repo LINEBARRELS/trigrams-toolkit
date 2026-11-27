@@ -1,5 +1,5 @@
 ---
-description: 设计模块公开接口、按调用方拆分接口或隐藏内部数据结构时使用（module.narrow-surface）。
+description: 设计模块公开接口、按调用方拆分接口或隐藏内部数据结构时使用。
 ---
 # Expose Narrow Module Surfaces
 

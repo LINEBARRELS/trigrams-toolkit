@@ -1,5 +1,5 @@
 ---
-description: 为带约束的原始值、成组参数或状态类别声明领域类型与常量时使用（abstraction.domain-types）。
+description: 为带约束的原始值、成组参数或状态类别声明领域类型与常量时使用。
 ---
 # Model Domain Concepts with Explicit Types
 

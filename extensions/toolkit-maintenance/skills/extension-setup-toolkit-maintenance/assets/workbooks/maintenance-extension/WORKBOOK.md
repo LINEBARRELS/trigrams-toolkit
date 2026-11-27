@@ -26,7 +26,7 @@ includes:
 | 身份或版本迁移 | 以显式 `resourceId` 或同步索引维持现行引用可达，更新 `toolkit.json` 与版本声明，并核验快照刷新结果 |
 | 结构合规核验 | 执行完整六维扩展结构预期检查与工具链实测，输出可复现的逐项证据（只读核验不修改源码） |
 
-跨能力协同：涉及 `src/trigrams_toolkit/` 或 `tests/` 的 Python 源码重构时，衔接 `core:workbook:programming-development` 并按需加载 `core:principle:programming*`；涉及目标项目底座集成验证时，对照 `core:workbook:project-setup`；中文文稿遵循 `doc-polish`。
+跨能力协同：涉及 `src/trigrams_toolkit/` 或 `tests/` 的 Python 源码重构时，衔接 `core:workbook:programming-development`，按其中的工作节点选读编程原则；涉及目标项目底座集成验证时，对照 `core:workbook:project-setup`；中文文稿遵循 `doc-polish`。
 </schedule-rule>
 
 <exec-rule>
@@ -41,7 +41,7 @@ includes:
    - Skill 类型、内聚边界与文档生命周期：从 `maintenance-skill` 按需加载；
    - 公共 CLI、私有脚本、静态契约与 Schema：从 `maintenance-tooling` 按需加载；
    - 规则分层、公开契约暴露与正向表述：从 `maintenance` 按需加载；
-   - Python 源码与测试改动：按需加载 `core:principle:programming*`。
+   - Python 源码与测试改动：从 `programming-python` scope 选读语言原则，按编程开发 workbook 的指引选读跨语言原则。
 4. 执行“扩展结构预期检查”硬性核心流程（逐项落实，发现不符应修复或明确标定阻断，不应跳过）：
 
 | 检查维度 | 硬性检查动作 | 对应原则 / 验证入口 |
@@ -49,8 +49,8 @@ includes:
 | 1. 仓库登记与包边界 | 核对 `toolkit.json` 指向唯一包根 `assets/`，无散落清单、生成物缓存或退役打包物 | `maintenance-extension/keep-extension-self-contained-in-setup-assets`、`scripts/verify_toolkit.py` |
 | 2. Setup 入口契约 | 核对 `extension-setup-<name>/SKILL.md` 四段正交结构、`disable-model-invocation: true` 及 `agents/openai.yaml` | `maintenance-extension/structure-extension-setup-as-orthogonal-increment`、`tests/test_toolkit_validation.py` |
 | 3. 清单 Schema 与隔离 | 核对 `assets/extension.json` 符合 Schema、`<ext>:*` 前缀隔离及 `install` 安全边界 | `maintenance-extension/isolate-extension-namespace-and-manifest-contracts`、`guides.schema.json` |
-| 4. 资源布局与引用闭包 | 核对 `principles/` 两级目录与纯 `description` 头、`WORKBOOK.md` 头与 `includes` 闭包、`assets/` 封闭链接及规则标签完整闭合 | `maintenance-knowledge/*`、`maintenance-workbook/*`、`maintenance/keep-reference-chains-reachable-and-complete` |
-| 5. 领域 Skill 与说明对齐 | 核对扩展内全部 `skills/*/SKILL.md` 命名一致且全仓无重名，核对 `README.md` 与 Setup 列举和 `assets/` 实存一致 | `maintenance-skill/*`、实存目录比对 |
+| 4. 资源布局与引用闭包 | 核对 `principles/` 两级目录与纯 `description` 头、`WORKBOOK.md` 头与 `includes` 闭包、`assets/` 封闭链接及规则标签完整闭合 | `maintenance-knowledge` 与 `maintenance-workbook` 两个 scope 下的原则、`maintenance/keep-reference-chains-reachable-and-complete` |
+| 5. 领域 Skill 与说明对齐 | 核对扩展内全部 `skills/*/SKILL.md` 命名一致且全仓无重名，核对 `README.md` 与 Setup 列举和 `assets/` 实存一致 | `maintenance-skill` scope 下的原则、实存目录比对 |
 | 6. 工具链实测与快照验证 | 实跑 `PYTHONPATH=src python scripts/verify_toolkit.py`（改协议或 Schema 时加跑 `scripts/check_protocols.py`）；改 `WORKBOOK.md` 时推演一次 `agile` 与 `flow` 规则抽取及原则可达性；涉快照或发布时核对 `harness-install`、`handbook validate`/`list`/`load` 与 `tasks.py check-release` | `maintenance-extension/separate-extension-source-from-installed-snapshot`、实际命令退出码与 JSON 输出 |
 
 5. 涉及目标项目集成时，用 `harness-install` 预览并应用装配，验证快照刷新与移除清理结果；涉及发布版本时，核对 `tasks.py check-release`。
@@ -67,7 +67,7 @@ includes:
 交付扩展维护源改动（只读核验交付结构检查结论）、关联文档与测试同步状态、实测校验命令与输出，以及未运行范围和原因（若有）。
 
 <review-rule>
-**独立审核：** 必读 `toolkit-maintenance:principle:maintenance/ground-review-in-verifiable-evidence`、`maintenance-extension` 全部 principle 及改动材料对应的 scope principle（涉及源码改动时加读 `core:principle:programming-review`）。
+**独立审核：** 必读 `toolkit-maintenance:principle:maintenance/ground-review-in-verifiable-evidence`、`maintenance-extension` 全部 principle 及改动材料对应的 scope principle。涉及源码改动时，按 `programming-review` scope 列出原则并加载返回的资源 ID。
 
 逐项复核以下 6 个结构预期维度与实测证据：
 1. `toolkit.json` 登记、`assets/` 唯一包根及禁用产物清理情况；
