@@ -18,7 +18,10 @@ metadata:
 - **ARD**：依据 `DEVTECH` 已确立的 `Architecture Layer` 清单，规划并展示当前架构的 `Module → Feature` 结构，使用下方格式。若 `DEVTECH` 未列明当前项目的 `Architecture Layer` 清单或现有层级无法覆盖本次变更时，因缺少稳定的层级划分基准，无法维护 `ARD` 架构树；应先停工、通知用户在 `DEVTECH` 中确立或修订架构层划分。Module、Feature 名称使用 `kebab-case` 格式，职责简述使用用户语言。Feature 按行为职责进行正交划分。
   - **框架模块（`Arch`）**：ARD 应明确定义承载代码工程底座的 “框架模块”，其作为代码工程落地的第一步。框架模块及其内部 Feature 定义最终代码工程的物理与运行形态（如包与工程管理、主循环与启动器、容器与依赖装配、层内公共底座契约...），并决定各架构层内业务模块的具体实现与承载方式（类、包、子工程、链接库等）。全项目至少设置一个框架模块，其内部 Feature 仅列出框架搭建的关键点，不包含具体业务功能。
   - **Spec 检索**：ARD 不列举模块对应的 Spec；运行 `project-state related <Module ID>`，检查退出码为 0 和 `ok: true` 后，读取 `data.items` 中 Artifact 的 `path`。从 Feature 导航共享资料时，先取 `locate <Feature ID>` 的 `data.moduleId` 或 `related <Feature ID>` 返回的 Module，再查询该 Module。
-- **Implementation Spec**：每个 Module 的实现设计集中在一份 Spec，承载 ARD 中该 Module 及其 Feature 的详细程序设计，按[模板](references/templates/implementation-spec.temp.md)选用适用章节编写。文档聚焦模块边界、公开契约、核心状态与关键运行机制，仅约束影响协作与正确性的设计决策，不逐行复述内部实现，也不为填满模板虚构章节。
+- **Implementation Spec**：每个 Module 的实现设计集中在一份 Spec，承载 ARD 中该 Module 及其 Feature 的详细程序设计，按[模板](references/templates/implementation-spec.temp.md)编写常驻章节并按需启用可选章节。文档仅约束影响跨模块协作、状态不变量与运行正确性的设计决策，不为填满模板虚构章节，编写时遵循以下准则：
+  - **自外向内推导**：先从架构层方向与调用场景出发，界定依赖端口与数据、资源所有权。随后依次提炼领域模型与权威状态、锁定对外签名与失败语义，再展开生命周期与驱动机制。
+  - **代码声明定契约**：依赖端口、关键的常量、枚举、领域与持久化结构、公开签名及错误类型，应以项目目标语言写成无函数体的精简声明（跨进程协议可用 IDL 或路由契约）。演进既有模块时沿用工程真实符号。不直接对外暴露的内部状态，仅在承载核心状态机、并发边界或持久化格式时声明骨架。函数体控制流与私有辅助结构留给编码阶段实现。
+  - **文字仅补动态语义**：代码声明锁定命名、类型、可空性、可变性与调用签名。自然语言只补充代码未能表达的所有权归属、合法值域、状态不变量、前置后置条件及失败影响。代码已声明的字段与参数不再用文字重复罗列。
 
 ARD 节点格式如下；按实际结构重复 Module 与 Feature。框架模块在模块名后紧接 `（Arch）` 标注（登记 `project-state` 时传入的模块名称不含 `（Arch）`）；已登记节点填写真实 ID，尚未登记时省略 ID 括号，登记成功后回填。
 
