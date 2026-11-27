@@ -49,7 +49,7 @@
 
 - **纳入版本管理**：`.project-state/state.json` 仅保存逻辑实体身份、相对路径提示与关系，与文稿 YAML 头中的 `artifact-id` 配对生效，启用后应随文稿正常提交。
 - **始终忽略运行锁与回滚状态**：`.project-state/*.lock.sqlite*`、`**/.plan.lock`、`.harness/`（含带本机绝对路径的 `receipt.json` 与备份）及 `.harness-archive/` 属于运行期与本机恢复产物，严禁提交。
-- **本仓忽略本地 dogfooding 装配产物**：通过 Vercel skills 与 `harness-install` 在本仓本地装回的 `.agents/skills/`、`.agents/extensions/`、`.agents/harness.json`、`.claude/`、`.codex/`、`.pi/` 与 `skills-lock.json` 仅用于本地开发环境，不纳入本仓版本控制——既避免污染 Vercel skills 的仓库发现路径，也避免与 `extensions/`、`src/trigrams_toolkit/resources/adapters/` 形成双份副本或把单一宿主偏好锁死在公共仓库中。
+- **本仓忽略本地 dogfooding 装配产物**：通过 Vercel skills 与 `harness-install` 在本仓本地装回的 `.agents/skills/`、`.agents/extensions/`、`.agents/harness.json`、`.claude/`、`.codex/`、`.pi/` 与 `skills-lock.json` 仅用于本地开发环境，不纳入本仓版本控制——既避免污染 Vercel skills 的仓库发现路径，也避免与 `extensions/` 形成双份副本或把单一宿主偏好锁死在公共仓库中。
 - **普通使用方项目**：接入 Trigrams toolkit 的业务仓库按 [project-setup `.gitignore` 模板](skills/workbook/workbooks/project-setup/assets/templates/.gitignore) 配置；业务项目通常应提交 `.agents/harness.json` 与 `.agents/extensions/` 快照以锁定团队扩展版本，仅忽略运行锁、回滚目录与本地 Skill 安装目录。
 
 ## 审核与合并

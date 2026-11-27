@@ -9,7 +9,6 @@ import os
 from pathlib import Path
 import re
 import sys
-import tomllib
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -104,24 +103,6 @@ def _validate_sources(root: Path) -> tuple[list[str], int]:
     return issues, links
 
 
-def _validate_adapters(root: Path) -> list[str]:
-    issues = []
-    for platform, suffix in (("codex", ".toml"), ("claude", ".md"), ("pi-web", ".md")):
-        for path in (root / "src/trigrams_toolkit/resources/adapters" / platform).glob("*" + suffix):
-            if path.name == "README.md":
-                continue
-            source = path.read_text(encoding="utf-8")
-            data = tomllib.loads(source) if suffix == ".toml" else frontmatter(path)
-            if data.get("name") != path.stem or (suffix == ".toml" and not data.get("developer_instructions")):
-                issues.append(f"Invalid {platform} role: {path.name}")
-            if platform == "pi-web" and data.get("load_skills") is not True:
-                issues.append(f"Pi Web role must load Skills: {path.name}")
-            skill_refs = re.findall(r"使用 ([a-z][a-z0-9-]*) Skill", source)
-            if not skill_refs or any(not (root / "skills" / ref / "SKILL.md").is_file() for ref in skill_refs):
-                issues.append(f"Missing core Skill reference: {path}")
-    return issues
-
-
 def _validate_guard_references(root: Path) -> list[str]:
     references = root / "skills/program-guard-setup/references"
     if not references.is_dir():
@@ -144,7 +125,6 @@ def validate() -> dict:
     issues, skills = _validate_skills(ROOT, components)
     source_issues, links = _validate_sources(ROOT)
     issues.extend(source_issues)
-    issues.extend(_validate_adapters(ROOT))
     issues.extend(_validate_guard_references(ROOT))
     return {"ok": not issues, "skills": sorted(skills), "resources": catalog["resources"],
             "sources": catalog["sources"], "local_links": links,

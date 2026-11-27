@@ -25,11 +25,4 @@ def schema_paths() -> tuple[Path, ...]:
                  if entry.name.endswith(".schema.json"))
 
 
-def adapter_files(platform: str) -> dict[str, bytes]:
-    targets = {"codex": ".codex/agents", "claude": ".claude/agents", "pi-web": ".pi/agents"}
-    root = files(__package__).joinpath("adapters", platform)
-    return {f"{targets[platform]}/{entry.name}": entry.read_bytes()
-            for entry in root.iterdir() if entry.is_file()}
-
-
-__all__ = ["resource_path", "schema_paths", "adapter_files"]
+__all__ = ["resource_path", "schema_paths"]

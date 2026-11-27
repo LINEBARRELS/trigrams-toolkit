@@ -34,32 +34,6 @@ class SourceValidationTests(unittest.TestCase):
                 self.assertTrue(path.is_file())
                 path.unlink()
 
-    def test_adapters_call_existing_skills_directly(self) -> None:
-        self.assertEqual(verify_toolkit._validate_adapters(ROOT), [])
-        for platform, suffix in (("codex", ".toml"), ("claude", ".md"), ("pi-web", ".md")):
-            for name, skill in (("task_developer", "execute-task"), ("evaluator", "delivery-review")):
-                with self.subTest(platform=platform, name=name):
-                    source = (ROOT / "src/trigrams_toolkit/resources/adapters" / platform / (name + suffix)).read_text(encoding="utf-8")
-                    self.assertIn(f"使用 {skill} Skill", source)
-        with patch.object(Path, "is_file", return_value=False):
-            self.assertEqual(len(verify_toolkit._validate_adapters(ROOT)), 6)
-
-    def test_pi_web_roles_load_skills_and_inherit_the_model(self) -> None:
-        for name in ("task_developer", "evaluator"):
-            path = ROOT / "src/trigrams_toolkit/resources/adapters/pi-web" / (name + ".md")
-            data = verify_toolkit.frontmatter(path)
-            self.assertIs(data["load_skills"], True)
-            self.assertNotIn("model", data)
-        frontmatter = verify_toolkit.frontmatter
-        def without_skills(path):
-            data = frontmatter(path)
-            return {**data, "load_skills": False} if path.parent.name == "pi-web" else data
-        with patch.object(verify_toolkit, "frontmatter", side_effect=without_skills):
-            self.assertCountEqual(verify_toolkit._validate_adapters(ROOT), [
-                "Pi Web role must load Skills: evaluator.md",
-                "Pi Web role must load Skills: task_developer.md",
-            ])
-
     def test_finished_plan_links_are_historical_but_active_links_fail(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

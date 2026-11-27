@@ -139,7 +139,7 @@ class GameProjectTests(unittest.TestCase):
         return response
 
     def install_game(self) -> None:
-        parameters = {"extensions": ["game"], "platforms": ["codex", "claude"]}
+        parameters = {"extensions": ["game"]}
         preview = self.invoke("harness-install", "install", "preview", "--input", "-", data=parameters)["data"]
         self.assertEqual(preview["conflicts"], [])
         request = {"preview": preview, "confirmedBy": {"id": "game-extension-test", "kind": "human"}}

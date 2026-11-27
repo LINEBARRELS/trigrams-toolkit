@@ -48,7 +48,7 @@ class InstallationTests(unittest.TestCase):
         environment.start()
         self.addCleanup(environment.stop)
         self.schemas = SchemaCatalog(schema_paths())
-        self.parameters = {"extensions": ["extra"], "platforms": ["codex", "claude"]}
+        self.parameters = {"extensions": ["extra"]}
 
     def candidate(self, **changes):
         return build_candidate(self.project, {**self.parameters, **changes}, self.schemas)
@@ -95,25 +95,22 @@ class InstallationTests(unittest.TestCase):
         self.assertFalse(self.apply(repeated)["changed"])
         self.assertEqual(lock.read_bytes(), b'{"version":2,"skills":{}}')
 
-    def test_selection_omission_explicit_clear_and_platform_material(self):
+    def test_selection_omission_explicit_clear_and_declared_material(self):
         manifest = read_json(self.extra / "extension.json")
         write(self.extra / "manual.txt", b"Manual")
-        manifest["install"] = [{"source": "manual.txt", "target": ".agents/extensions/extra/materials/manual.txt",
-                                "platforms": ["pi-web"]}]
+        manifest["install"] = [{"source": "manual.txt", "target": ".agents/extensions/extra/materials/manual.txt"}]
         write(self.extra / "extension.json", manifest)
-        self.apply(self.candidate(platforms=["pi-web"]))
+        self.apply(self.candidate())
         manual = self.snapshot / "materials/manual.txt"
         self.assertEqual(manual.read_bytes(), b"Manual")
-        self.assertTrue((self.project / ".pi/agents/evaluator.md").is_file())
-        inputs = {name: value for name, value in self.parameters.items() if name != "extensions"}
-        retained = build_candidate(self.project, inputs, self.schemas)
+        retained = build_candidate(self.project, {}, self.schemas)
         self.assertEqual(retained.preview["parameters"]["extensions"], ["extra"])
-        self.apply(retained)
-        self.assertFalse(manual.exists())
-        self.assertFalse((self.project / ".pi/agents/evaluator.md").exists())
+        self.assertFalse(self.apply(retained)["changed"])
+        self.assertTrue(manual.is_file())
         write(self.snapshot / "personal.txt", b"Local notes")
         write(self.project / "docs/personal.md", b"Project document")
         self.apply(self.candidate(extensions=[]))
+        self.assertFalse(manual.exists())
         self.assertEqual((self.snapshot / "personal.txt").read_bytes(), b"Local notes")
         self.assertEqual((self.project / "docs/personal.md").read_bytes(), b"Project document")
         self.assertTrue((self.extra.parent / "SKILL.md").is_file())
@@ -147,34 +144,39 @@ class InstallationTests(unittest.TestCase):
         self.assertFalse((self.project / ".agents/scripts").exists())
         nested = self.project / "nested"
         nested.mkdir()
-        self.assertEqual(run(["preview"], {"platforms": []}, cwd=nested)["projectRoot"], str(nested))
+        self.assertEqual(run(["preview"], {}, cwd=nested)["projectRoot"], str(nested))
         for flag in ("--config", "--project", "--init-root"):
             with self.subTest(flag=flag):
                 self.assertEqual(run(["preview", flag, str(self.project)], self.parameters, ok=False)["code"],
                                  "invalid_arguments")
-        obsolete = {**self.parameters, "projectRoot": str(self.project)}
-        self.assertEqual(run(["preview"], obsolete, ok=False)["code"], "invalid_schema")
+        for obsolete in ({**self.parameters, "projectRoot": str(self.project)},
+                         {**self.parameters, "platforms": ["codex"]}):
+            self.assertEqual(run(["preview"], obsolete, ok=False)["code"], "invalid_schema")
 
     def test_forbidden_install_targets(self):
         original = read_json(self.extra / "extension.json")
         source = "workbooks/guide/references/check.md"
         for target in ("skills-lock.json", ".claude/skills/other/data", ".agents/skills/other/data",
-                       "aGeNtS.md", "docs/personal.md", ".agents/extensions/another/material"):
+                       "aGeNtS.md", "docs/personal.md", ".agents/extensions/another/material",
+                       ".codex/agents/task_developer.toml"):
             with self.subTest(target=target):
                 write(self.extra / "extension.json", {**original, "install": [{"source": source, "target": target}]})
                 self.assert_code("invalid_reference", self.candidate)
 
     def test_material_edits_are_visible_and_protected(self):
         self.apply(self.candidate())
-        adapter = self.project / ".codex/agents/task_developer.toml"
+        reference = self.snapshot / "workbooks/guide/references/check.md"
         guide = self.snapshot / "workbooks/guide/WORKBOOK.md"
-        write(adapter, b"Local adapter")
+        write(reference, b"Local reference")
         write(guide, b"Local guide")
-        for candidate in (self.candidate(), self.candidate(extensions=[], platforms=[])):
-            expected = {".codex/agents/task_developer.toml", ".agents/extensions/extra/workbooks/guide/WORKBOOK.md"}
+        for candidate in (self.candidate(), self.candidate(extensions=[])):
+            expected = {
+                ".agents/extensions/extra/workbooks/guide/references/check.md",
+                ".agents/extensions/extra/workbooks/guide/WORKBOOK.md",
+            }
             self.assertEqual(set(candidate.preview["conflicts"]), expected)
             self.assert_code("local_modification", lambda: self.apply(candidate))
-        self.assertEqual(adapter.read_bytes(), b"Local adapter")
+        self.assertEqual(reference.read_bytes(), b"Local reference")
         self.assertEqual(guide.read_bytes(), b"Local guide")
 
     def test_stale_sources_and_revision_and_replay_are_distinct(self):
@@ -234,11 +236,44 @@ class InstallationTests(unittest.TestCase):
             secondary.result(timeout=10)
 
     def test_unowned_file_blocks_install(self):
-        adapter = self.project / ".codex/agents/task_developer.toml"
-        write(adapter, b"Personal file")
-        self.assertIn(".codex/agents/task_developer.toml", self.candidate().preview["conflicts"])
+        guide = self.snapshot / "workbooks/guide/WORKBOOK.md"
+        write(guide, b"Personal file")
+        self.assertIn(".agents/extensions/extra/workbooks/guide/WORKBOOK.md", self.candidate().preview["conflicts"])
         self.assert_code("local_modification", lambda: self.apply(self.candidate()))
-        self.assertEqual(adapter.read_bytes(), b"Personal file")
+        self.assertEqual(guide.read_bytes(), b"Personal file")
+
+    def test_legacy_record_retires_managed_adapters_and_protects_local_edits(self):
+        from trigrams_toolkit.installation.operation_files import file_record
+
+        adapter_path = ".codex/agents/task_developer.toml"
+        adapter = self.project / adapter_path
+        raw = b'name = "task_developer"\n'
+        write(adapter, raw)
+        legacy = {
+            "schemaVersion": 2,
+            "stateRevision": 1,
+            "agent": "codex",
+            "extensions": [],
+            "platforms": ["codex"],
+            "managed": [file_record(adapter_path, "core", raw)],
+        }
+        write(self.project / ".agents/harness.json", legacy)
+        write(adapter, b"User customized role")
+        blocked = build_candidate(self.project, {}, self.schemas)
+        self.assertEqual(blocked.preview["conflicts"], [adapter_path])
+        self.assert_code("local_modification", lambda: self.apply(blocked))
+        self.assertEqual(adapter.read_bytes(), b"User customized role")
+
+        write(adapter, raw)
+        migrated = build_candidate(self.project, {}, self.schemas)
+        self.assertEqual(migrated.preview["conflicts"], [])
+        self.assertEqual([item["action"] for item in migrated.preview["changes"] if item["path"] == adapter_path],
+                         ["remove"])
+        self.assertTrue(self.apply(migrated)["changed"])
+        self.assertFalse(adapter.exists())
+        record = read_json(self.project / ".agents/harness.json")
+        self.assertNotIn("platforms", record)
+        self.assertEqual(record["managed"], [])
 
 
 if __name__ == "__main__":

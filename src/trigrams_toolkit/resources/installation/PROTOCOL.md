@@ -6,19 +6,19 @@
 
 在目标项目根目录运行装配和归档命令。帮助（`-h`／`--help`）与版本（`-v`／`--version`）可在任意目录查看。预览在项目根按 `agent` 查找 `extension-setup-<extension>`，读取其 `assets/extension.json`。受支持的名称为 `codex`、`claude-code`、`pi`。省略 `agent` 时沿用已装配记录的选择，首次默认 `codex`。Codex 与 Pi 共享 `.agents/skills/`，Claude Code 使用 `.claude/skills/`，支持链接或同内容复制。发现同名异源时先统一来源再预览。
 
-Vercel skills 安装全局 core Skill 和项目扩展 Skill。全局 `principles`、`workbook` 各自携带 core 资料。`agent` 决定从哪个宿主查找 Skill，adapter 的 `platforms` 单独指定（`codex`、`claude`、`pi-web`）。
+Vercel skills 安装全局 core Skill 和项目扩展 Skill。全局 `principles`、`workbook` 各自携带 core 资料。`agent` 决定从哪个宿主查找 Skill。
 
 `extensions` 是希望保留的完整扩展集合。省略时沿用原选择，显式 `[]` 清空全部扩展。增补时列出已选扩展和新增项。本地开发可显式提供绝对路径 `packages`，使用 `extension.json` 或 `resources.json`。其扩展名称须与所选集合一致，可附带 core 源以验证 includes。
 
 ## 快照与归属
 
-[版本 2 项目记录](examples/installation.json)保存目标 `agent`、`stateRevision`、`extensions`（含 `version`）、`platforms` 和受管路径。快照位于 `.agents/extensions/<extension>/`，包含 `extension.json` 以及完整的 `principles/`、`workbooks/` 材料及其配套文件。handbook 与 Project State 读取记录登记的快照。上游 Skill 升级后，在下一次显式装配前继续消费项目中的版本。项目自有资料继续来自 `docs/resources.json`，核心类型与 adapter 随 Python 包发布。
+[版本 2 项目记录](examples/installation.json)保存目标 `agent`、`stateRevision`、`extensions`（含 `version`）和受管路径；读取存量版本 2 记录时兼容忽略已退役的 `platforms` 字段，重新应用装配时按新格式写回并清理旧受管文件。快照位于 `.agents/extensions/<extension>/`，包含 `extension.json` 以及完整的 `principles/`、`workbooks/` 材料及其配套文件。handbook 与 Project State 读取记录登记的快照。上游 Skill 升级后，在下一次显式装配前继续消费项目中的版本。项目自有资料继续来自 `docs/resources.json`，核心类型随 Python 包发布。
 
-每个受管文件保存 `contentDigest`（已安装字节的 SHA-256）。安装和卸载都核对基线，冲突路径在预览显示。卸载保留项目自有文稿和额外文件。声明的 `install` 需要合法相对源、目标与平台；目标归对应扩展所有。Vercel 管理 Skill 目录、宿主 Skill 入口和 `skills-lock.json`。宿主角色 adapter 由安装器从 Python 包复制到 `.codex/agents/`、`.claude/agents/` 或 `.pi/agents/`。
+每个受管文件保存 `contentDigest`（已安装字节的 SHA-256）。安装和卸载都核对基线，冲突路径在预览显示。卸载保留项目自有文稿和额外文件。声明的 `install` 需要合法相对源与目标；目标归对应扩展所有。Vercel 管理 Skill 目录、宿主 Skill 入口和 `skills-lock.json`。
 
 ## 预览、应用与回执
 
-`install preview` 只读，可离线运行。[预览输入](examples/install-preview-input.json)声明需要的扩展和平台。结果包含 `projectRoot`、基准修订号、规范化参数、扩展来源、逐路径新增／更新／移除项与冲突。相同版本与相同字节再次装配时，只有修订记录更新，回执的 `changed` 为 `false`。
+`install preview` 只读，可离线运行。[预览输入](examples/install-preview-input.json)声明需要的目标 `agent` 与扩展集合（均可省略以沿用已有配置或默认值）。结果包含 `projectRoot`、基准修订号、规范化参数、扩展来源、逐路径新增／更新／移除项与冲突。相同版本与相同字节再次装配时，只有修订记录更新，回执的 `changed` 为 `false`。
 
 `install apply` 使用[应用输入](examples/install-apply-input.json)中的完整预览与 `confirmedBy`，并要求 `--request-id req_ID` 和 `--expected-revision N`。命令先核对当前项目根与预览的 `projectRoot`，再持有项目安装锁核对修订号、重建预览并复查来源和目标。来源或目标有变化时刷新预览。最近一次成功的原样请求直接返回已提交回执，同 ID 异参数报 `request_conflict`。
 

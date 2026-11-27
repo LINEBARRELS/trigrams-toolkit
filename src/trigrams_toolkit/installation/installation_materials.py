@@ -12,8 +12,7 @@ from .operation_files import file_record
 
 
 class ProjectMaterials:
-    def __init__(self, platforms: list[str]) -> None:
-        self.platforms = platforms
+    def __init__(self) -> None:
         self.records: dict[str, dict] = {}
         self.files: dict[str, bytes] = {}
         self.path_keys: set[str] = set()
@@ -49,8 +48,6 @@ class ProjectMaterials:
         manifest, root = package.manifest, package.root
         owner = manifest_owner(manifest)
         for mapping in manifest["install"]:
-            if "platforms" in mapping and not set(mapping["platforms"]) & set(self.platforms):
-                continue
             name = mapping["target"]
             relative_path(name)
             normalized = name.casefold()
