@@ -9,7 +9,7 @@
 面向各类工作的 **Agent 工具包**。<br>
 用 Plan 组织多步工作、角色交接和交付验收，按需复用判断标准与工作方法。
 
-[![PyPI 版本](https://img.shields.io/pypi/v/trigrams-toolkit?style=flat&label=PyPI&color=386964)](https://pypi.org/project/trigrams-toolkit/)
+[![CLI PyPI 版本](https://img.shields.io/pypi/v/trigrams-toolkit?style=flat&label=CLI%20PyPI&color=386964)](https://pypi.org/project/trigrams-toolkit/)
 [![MIT License](https://img.shields.io/badge/license-MIT-386964?style=flat)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-386964?style=flat)](pyproject.toml)
 
@@ -67,11 +67,12 @@ Plan 将多步工作拆成可独立验收的交付单元（Stub）。Agent 按�
 <details>
 <summary>查看 Plan 的文件结构</summary>
 
-| 文件 | 内容 |
+| 路径 | 内容 |
 | --- | --- |
-| `summary.md` | 工作目标、验收标准、Stub 清单和依赖 |
-| `Sxx-result.md` | 单个 Stub 的交付、验证和审核记录 |
-| `review.md` | 整份 Plan 的验收结论 |
+| `summary.md` | 工作目标、验收标准、生效规则与 Stub 清单 |
+| `Sxx/` | 单个 Stub 的目录，包含开发交付（`result.md`）、审核记录（`stub-review.md`），以及按需创建的跨 Stub 交接（`handoff.md`）与问题记录（`findings/`） |
+| `review.md` | 所有 Stub 通过后的整份 Plan 验收结论（跨 Stub 问题附 `findings/`） |
+| `evidence/` | 按需存放通过验收的最终关键证据 |
 
 </details>
 
@@ -79,7 +80,11 @@ Plan 将多步工作拆成可独立验收的交付单元（Stub）。Agent 按�
 
 <sub>以爻成卦</sub>
 
-**principle** 提供判断标准，**workbook** 定义工作方法。Agent 按工作目标选择资料。同一条原则可以用于不同领域，各领域可用自己的 workbook 约定工作步骤和交接方式。
+**principle** 提供判断标准，**workbook** 定义工作方法；同一条原则可跨领域复用，工作步骤与交接由各自领域的 workbook 约定：
+
+- **规则按需落盘**：`/to-plan` 制定计划时，会把所选 workbook 里的条件规则（调度、执行、审核规则槽）直接展开写进 `summary.md`，后续执行与独立审核照着 Plan 走即可。
+- **静态门禁落地**：写代码时可用 [`program-guard-setup`](skills/program-guard-setup/SKILL.md) 将可自动校验的编程原则落成编译器、Linter 与架构依赖检查，而不只停在口头约束。
+- **源码耦合审计**：想核查架构真实耦合度时，可显式调用 [`axiomatic-audit`](skills/axiomatic-audit/SKILL.md) 基于 MIT 公理设计直查源码显式依赖与隐式变更耦合，生成可视化矩阵报告。
 
 ## Core Skill
 
@@ -87,7 +92,7 @@ Skill 定义 Agent 的行为。
 
 | 要做的事 | Core Skill |
 | --- | --- |
-| **接入项目，加载工作依据** | [`toolkit-steward`](skills/toolkit-steward/SKILL.md) · [`workbook`](skills/workbook/SKILL.md) · [`principles`](skills/principles/SKILL.md) |
+| **接入项目，配置门禁与加载依据** | [`toolkit-steward`](skills/toolkit-steward/SKILL.md) · [`program-guard-setup`](skills/program-guard-setup/SKILL.md) · [`workbook`](skills/workbook/SKILL.md) · [`principles`](skills/principles/SKILL.md) |
 | **调查现状，推敲设计** | [`how`](skills/how/SKILL.md) · [`why`](skills/why/SKILL.md) · [`effect`](skills/effect/SKILL.md) · [`axiomatic-audit`](skills/axiomatic-audit/SKILL.md) · [`architect`](skills/architect/SKILL.md) |
 | **规划工作，执行与审核交付** | [`to-plan`](skills/to-plan/SKILL.md) · [`execute-plan`](skills/execute-plan/SKILL.md) |
 | **维护文档、原则与决策** | [`doc-polish`](skills/doc-polish/SKILL.md) · [`principle-maintenance`](skills/principle-maintenance/SKILL.md) · [`decision-maintenance`](skills/decision-maintenance/SKILL.md) |
@@ -103,7 +108,7 @@ Skill 定义 Agent 的行为。
 
 - **设计与决策**　[体系架构](skills/toolkit-steward/references/architecture.md) · [项目决策索引](docs/knowledge/decisions/index.md)
 - **能力与工具**　[Skill 与 CLI 索引](skills/toolkit-steward/references/capabilities.md)
-- **开发与维护**　[开发环境](docs/getting-started.md) · [参与开发](CONTRIBUTING.md) · [维护与发布](docs/maintenance.md) · [更新记录](CHANGELOG.md)
+- **开发与维护**　[开发环境](docs/getting-started.md) · [参与开发](CONTRIBUTING.md) · [维护与发布](docs/maintenance.md) · [工具包更新记录](CHANGELOG.md) · [CLI 更新记录](docs/cli-changelog.md)
 - **许可**　[MIT License](LICENSE) · [第三方内容声明](THIRD_PARTY_NOTICES.md)
 
 本页采用默认的 Agile 模式。工具包也提供 [Flow 模式](skills/to-plan/references/flow/guide.md)。
