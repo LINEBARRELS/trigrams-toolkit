@@ -2,6 +2,11 @@
 
 本页记录工具包版本，版本号以 `toolkit.json` 为准。CLI 版本以 `pyproject.toml` 为准，见 [CLI 更新记录](docs/cli-changelog.md)。
 
+## 0.6.3
+
+- Agile 执行和审核约束要求子代理加载 `summary.md` 指定且适用于当前工作的 principle，移除自行检索的说明。审核约束同时明确 `summary.md` 的状态由调度者维护。[执行约束](skills/execute-plan/references/agile/dev-constraints.md) · [审核约束](skills/execute-plan/references/agile/review-constraints.md)
+- 编程开发 workbook 的语言规范只指向任务涉及的语言 scope，移除其中的代码规模检查引用。[编程开发 workbook](skills/workbook/workbooks/programming-development/WORKBOOK.md)
+
 ## 0.6.2
 
 - 重组跨语言编程原则。`programming-workflow` 和 `programming-code-metrics` 分别接替 `programming` 和 `programming-scale`，状态建模独立为 `programming-design-state`。移除 `programming-pragmatic` scope 和「依赖指向稳定模块」原则。[编程开发 workbook](skills/workbook/workbooks/programming-development/WORKBOOK.md)
