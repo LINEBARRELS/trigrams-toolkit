@@ -40,7 +40,7 @@ includes:
 - **源码溯源标识：** 除单文件微小修补外，加载 `core:principle:programming/mark-stubs-and-handoff-notes-in-source` 维护 `@plan-stub` 注释。
 - **编程语言规范：** 按涉及编程语言从 `programming-csharp`、`programming-python`、`programming-typescript-javascript` 加载对应 principle；控制代码复杂度或拆解模块时参考 `core:principle:programming-scale/keep-code-within-scale-limits`。
 
-模块内有沉淀价值的局部经验时，可在模块所在目录用 `KNOWLEDGE.md` 记录简短、内聚的非强制建议，禁止与模块外代码产生关联。
+模块内有沉淀价值的局部经验时，可在模块所在目录用 `KNOWLEDGE.md` 记录简短、内聚的非强制建议；内容应聚焦模块内部，不外链或耦合模块外代码。
 </exec-rule>
 
 <exec-rule if="当前工作处于架构规模">

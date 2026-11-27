@@ -66,10 +66,10 @@ ARD 节点格式如下；按实际结构重复 Module 与 Feature。框架模块
    - 专项规则：ARD 使用[ARD 报告指引](references/ard-report.md)，Implementation Spec 使用[Spec 报告指引](references/implementation-spec-report.md)
 2. **交付**：subagent 按指引生成单页 HTML，返回成品路径与核对摘要。主 Agent 在回复中直接附上链接，交由用户审阅。
 
-可视化汇报的规则仅由 subagent 读取和使用，主 Agent 切勿插手做额外的阅读和指导。
+可视化汇报的规则交由 subagent 独立读取执行，主 Agent 仅负责派发与接收成品，不额外介入汇报细节。
 
 ## 工作边界
 
 - 探索类任务的结论与产出保留在 `docs/research/`，不自动升级为正式文档，不登记架构身份。
-- 在编写正式 DEVTECH、ARD 或 Implementation Spec 文档的过程中可以参阅 research 的研究内容作为输入，但禁止在正式文档中通过链接引用 `docs/research/` 中的文档，避免混淆正式定稿与设计探索的边界。
+- 编写正式 DEVTECH、ARD 或 Implementation Spec 时可参阅 `docs/research/` 中的研究内容作为输入，但正式文档不应链接引用研究草稿，以保持正式定稿与设计探索的清晰边界。
 - 架构实体登记仅在获授权的正式交付时执行。

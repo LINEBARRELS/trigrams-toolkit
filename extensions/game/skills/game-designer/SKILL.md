@@ -11,7 +11,7 @@ metadata:
 
 ## 工作方法与产出分流
 
-玩法讨论、候选机制比较、规则细化与修订统一通过 `workbook` 加载 `game:workbook:gameplay-design`，按任务成熟度定义并分流产出目标，严格区分“研究草稿”与“正式定稿”（动笔编辑文档前使用 `doc-polish`）：
+玩法讨论、候选机制比较、规则细化与修订统一通过 `workbook` 加载 `game:workbook:gameplay-design`，按任务成熟度定义并分流产出目标，明确区分“研究草稿”与“正式定稿”（动笔编辑文档前使用 `doc-polish`）：
 
 | 阶段与请求 | 产出定位与目标路径 | 交付要求与身份边界 |
 | --- | --- | --- |
@@ -20,8 +20,8 @@ metadata:
 
 ### 草稿转正与边界约束
 
-- 严禁将 `docs/research/gameplay/` 下的研究草稿直接移入 `docs/gameplays/`。
-- 研究草稿可在正式定稿时作为内容输入与参考，但是禁止在正式文稿中直接引用 `docs/research` 中的内容。
+- `docs/research/gameplay/` 下的研究草稿属于探索记录，转正时应按正式 Spec 结构整理成稿，不直接移入 `docs/gameplays/`。
+- 编写正式定稿时可参阅研究草稿作为输入，但正式文稿不应链接引用 `docs/research/`，以保持定稿自洽。
 
 ## 文档职责
 

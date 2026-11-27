@@ -23,7 +23,7 @@ docs/plans/<label>/
 
 ## `summary.md` 模板与填写规范
 
-`summary.md` 中禁止通过链接引用 `workbook` ，工作执行与调度中也不会再回查 `workbook`。
+`summary.md` 应直接展开本次生效的规则内容，不通过链接回指 `workbook`。
 
 ```markdown
 ---
