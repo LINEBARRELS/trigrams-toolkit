@@ -1,5 +1,5 @@
 ---
-description: 设计跨层依赖方向或定义外部能力接口时使用（layer.inward-dependency）。
+description: 设计跨层依赖方向或定义外部能力接口时使用。
 ---
 # Point Dependencies Inward Toward Business Decisions
 

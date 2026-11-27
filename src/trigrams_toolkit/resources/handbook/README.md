@@ -17,11 +17,11 @@ handbook load core:principle:programming-design-architecture/separate-business-d
 handbook validate
 ```
 
-principle 使用 `principles/<scope>/<principle>/PRINCIPLE.md`。一级目录完整名称是 scope，二级英文小写连字符目录是原则名称。例如 programming-design-architecture 与 programming 是两个平级 scope，筛选精确匹配。ID 派生为 `<source>:principle:<scope>/<principle>`；唯一时可用 `scope/principle` 短名。
+principle 使用 `principles/<scope>/<principle>/PRINCIPLE.md`。一级目录完整名称是 scope，二级英文小写连字符目录是原则名称。例如 `programming-design-architecture` 与 `programming-workflow` 是两个平级 scope，筛选精确匹配。ID 派生为 `<source>:principle:<scope>/<principle>`；唯一时可用 `scope/principle` 短名。
 
 ```yaml
 ---
-description: 划分表现渲染、外部交互、编排逻辑与业务数据决策职责边界时使用（layer.policy-detail-split）。
+description: 划分表现渲染、外部交互、编排逻辑与业务数据决策职责边界时使用。
 ---
 ```
 

@@ -2,7 +2,7 @@
 
 下列 principle 的核心条款可直接转化为 Pyright / mypy、Ruff 与模块依赖检查工具的确定性检查。实际配置前，通过 `handbook load` 读取对应正文核对例外条件。
 
-## `core:principle:programming-scale/keep-code-within-scale-limits`
+## `core:principle:programming-code-metrics/review-code-size-and-nesting`
 
 - **验证工具**：Ruff（Pylint / McCabe 指标规则族）+ 轻量 CI 物理行数检查（按需）。
 - **映射方向**：

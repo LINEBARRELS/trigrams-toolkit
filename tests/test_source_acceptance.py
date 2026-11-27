@@ -151,24 +151,28 @@ class SourceAcceptanceTests(unittest.TestCase):
         (documents / "resources.json").write_text(json.dumps({
             "schemaVersion": 1, "source": "project", "version": "1.0.0",
             "resourceRoots": ["principles"], "install": []}), encoding="utf-8")
-        entry = documents / "principles/programming-design/local-boundary/PRINCIPLE.md"
+        entry = documents / "principles/programming-workflow-local/local-boundary/PRINCIPLE.md"
         entry.parent.mkdir(parents=True)
         entry.write_text("---\ndescription: Local contract boundary.\n---\n# Local judgment\n", encoding="utf-8")
         scopes = self.invoke("handbook", ["scopes", "--kind", "principle"])["scopes"]
-        self.assertTrue({"programming", "programming-design", "gameplay-rules", "maintenance"} <= set(scopes))
+        self.assertTrue({"programming-workflow", "programming-workflow-local", "gameplay-rules", "maintenance"} <= set(scopes))
         for kind in ("principle", "workbook"):
             values = self.invoke("handbook", ["list", "--kind", kind])["resources"]
             self.assertTrue(values)
             self.assertTrue(all(set(item) == {"resourceId", "description"} for item in values))
-        programming = self.invoke("handbook", ["list", "--kind", "principle", "--scope", "programming"])["resources"]
-        self.assertEqual([item["resourceId"] for item in programming], ["core:principle:programming/define-framework-before-implementation", "core:principle:programming/mark-stubs-and-handoff-notes-in-source"])
-        union = self.invoke("handbook", ["list", "--kind", "principle", "--scope", "programming",
-                                        "--scope", "programming-design"])["resources"]
-        self.assertEqual(len(union), 3)
+        workflow = self.invoke("handbook", ["list", "--kind", "principle", "--scope", "programming-workflow"])
+        self.assertEqual([item["resourceId"] for item in workflow["resources"]], [
+            "core:principle:programming-workflow/confine-edits-to-the-smallest-complete-change",
+            "core:principle:programming-workflow/define-contracts-before-implementation",
+            "core:principle:programming-workflow/trace-source-declarations-to-plan-stubs",
+        ])
+        union = self.invoke("handbook", ["list", "--kind", "principle", "--scope", "programming-workflow",
+                                        "--scope", "programming-workflow-local"])["resources"]
+        self.assertEqual(len(union), 4)
         loaded = self.invoke("handbook", ["load", "core:workbook:programming-development"])["resources"]
         self.assertTrue(all({"content", "source", "entryPath", "name"} <= item.keys() for item in loaded))
         self.assertGreater(len(loaded), 1)
-        self.assertEqual(self.invoke("handbook", ["load", "programming-design/local-boundary"])["resources"][0]["source"], str(documents))
+        self.assertEqual(self.invoke("handbook", ["load", "programming-workflow-local/local-boundary"])["resources"][0]["source"], str(documents))
         sources = self.invoke("handbook", ["validate"])["checkedSources"]
         self.assertEqual({Path(path).resolve() for path in sources},
                          {self.session.core, self.project / ".agents/extensions/game",
@@ -192,7 +196,7 @@ class SourceAcceptanceTests(unittest.TestCase):
             "schemaVersion": 1, "source": "project", "version": "1.0.0",
             "resourceRoots": ["principles", "workbooks"], "install": []}), encoding="utf-8")
         leaf = "project:principle:scope/leaf"
-        framework = "core:principle:programming/define-framework-before-implementation"
+        framework = "core:principle:programming-workflow/define-contracts-before-implementation"
         entries = {
             "principles/scope/leaf/PRINCIPLE.md": {"description": "An independent judgment."},
             "workbooks/local-inner/WORKBOOK.md": {"name": "Inner", "description": "Shared method.",
@@ -216,10 +220,10 @@ class SourceAcceptanceTests(unittest.TestCase):
         missing = self.invoke("handbook", ["load", "local-outer", "missing"], ok=False)
         self.assertEqual(missing["error"]["code"], "invalid_reference")
         self.assertNotIn("resources", missing)
-        alias = documents / "principles/programming/define-framework-before-implementation/PRINCIPLE.md"
+        alias = documents / "principles/programming-workflow/define-contracts-before-implementation/PRINCIPLE.md"
         alias.parent.mkdir(parents=True)
         alias.write_text("---\ndescription: Another provider.\n---\n# Another judgment\n", encoding="utf-8")
-        ambiguous = self.invoke("handbook", ["load", "local-outer", "programming/define-framework-before-implementation"], ok=False)
+        ambiguous = self.invoke("handbook", ["load", "local-outer", "programming-workflow/define-contracts-before-implementation"], ok=False)
         self.assertEqual(ambiguous["error"]["code"], "resource_conflict")
         candidates = ambiguous["error"]["conflicts"]
         self.assertEqual(candidates, [framework, framework.replace("core:", "project:")])

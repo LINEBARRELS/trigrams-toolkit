@@ -35,7 +35,7 @@
   - 在已拆分的纯业务决策目录下，通过 ESLint `no-restricted-imports` 与 `no-restricted-globals` 禁用 `node:fs`、`node:http`、`fetch`、`process.env`、`Date.now`、`Math.random` 等 I/O 与非确定性副作用。
 - **留给 Review**：未按目录隔离的模块内部，纯计算逻辑与状态修改是否混杂在同一函数中。
 
-## `core:principle:programming-design-abstraction/assign-a-single-owner-to-mutable-state`
+## `core:principle:programming-design-state/assign-a-single-owner-to-mutable-state`
 
 - **可静态拦截**：
   - 禁用 `var`（`no-var`）、优先 `const`（`prefer-const`）、禁止导出可变绑定（`import/no-mutable-exports`）以抑制模块级隐式共享可变状态。
@@ -47,11 +47,11 @@
   - 在业务代码目录通过 `no-restricted-imports` 或 `dependency-cruiser` 禁止直接导入指定第三方 SDK（如数据库驱动、支付或第三方 HTTP 客户端），只放行约定的 `adapters/` 或包装模块目录。
 - **留给 Review**：包装层接口是否使用项目领域类型、是否将第三方异常翻译为项目失败语义。
 
-## `core:principle:programming-pragmatic/enforce-strict-boundaries-with-lightweight-internals`
+## `core:principle:programming-design-architecture/validate-external-input-at-trust-boundaries`
 
 - **可静态拦截**：
   - 在边界入口文件禁止 `any` 与不安全断言，配合 `tsconfig` 严格模式迫使外部输入以 `unknown` 进入。
-- **留给 Review**：信任边界的校验是否覆盖全部外部输入，以及内部实现是否避免冗余防御与过度包装。
+- **留给 Review**：外部输入是否在进入内部代码前完成运行时校验，内部调用是否能依赖已建立的约束。
 
 ## 显式禁区（不转化为静态规则）
 
@@ -59,5 +59,5 @@
 
 - `core:principle:programming-design-abstraction/extract-shared-knowledge-not-coincidental-shape`：禁止用代码查重工具（如 AST 重复检测）强制合并形似但变化轴不同的代码。
 - `core:principle:programming-review/eliminate-surplus-indirection`：静态工具无法可靠区分“冗余转发包装”与“为依赖倒置设立的合法边界接口”。
-- `core:principle:programming-review/expose-hidden-change-coupling`：跨模块隐式同步约定与双真相源无法由类型系统或语法检查发现，应留给设计审查与状态不变量测试。
+- `core:principle:programming-review/find-hidden-dependencies-in-rules-state-and-call-order`：跨模块隐式同步约定与双真相源无法由类型系统或语法检查发现，应留给设计审查与状态不变量测试。
 - `core:principle:programming-review/reject-test-fitted-domain-models`：类型系统与 ESLint 无法识别将通用状态机退化为单次探针特例或硬编码测试夹具常量的建模缺陷，应留给架构与代码审查。

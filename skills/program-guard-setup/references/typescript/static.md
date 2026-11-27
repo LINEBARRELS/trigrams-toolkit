@@ -2,7 +2,7 @@
 
 下列 principle 的核心条款可直接转化为 TypeScript 编译器、ESLint / Biome 与架构依赖工具的确定性检查。实际配置前，通过 `handbook load` 读取对应正文核对例外条件。
 
-## `core:principle:programming-scale/keep-code-within-scale-limits`
+## `core:principle:programming-code-metrics/review-code-size-and-nesting`
 
 - **验证工具**：ESLint（或等效 AST 指标规则）。
 - **映射方向**：

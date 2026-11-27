@@ -1,5 +1,5 @@
 ---
-description: 划分表现渲染、外部交互、编排逻辑与业务数据决策职责边界时使用（layer.policy-detail-split）。
+description: 划分表现渲染、外部交互、编排逻辑与业务数据决策职责边界时使用。
 ---
 # Separate Business Decisions from External Details
 
