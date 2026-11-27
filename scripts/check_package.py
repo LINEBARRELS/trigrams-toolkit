@@ -38,7 +38,7 @@ def _verify_contents(wheel: Path, sdist: Path | None, direct_wheel: Path | None)
     runtime = {
         path.relative_to(source.parent).as_posix()
         for path in source.rglob("*")
-        if path.is_file() and path.suffix in (".py", ".typed", ".json", ".md", ".toml")
+        if path.is_file() and path.suffix in (".py", ".typed", ".json", ".md")
     }
     files = {}
     for candidate in (wheel, direct_wheel):
@@ -101,11 +101,11 @@ def check(wheel: Path, output: Path, python: str, *, business: bool = True,
             environment.update(PYTHONIOENCODING="cp1252")
             probe = """import json, sys, importlib.metadata as m
 import trigrams_toolkit, yaml, jsonschema, referencing, ruamel.yaml
-from trigrams_toolkit.resources import schema_paths, adapter_files
+from trigrams_toolkit.resources import schema_paths
 from trigrams_toolkit.shared.schema import SchemaCatalog
 SchemaCatalog(schema_paths())
 print(json.dumps({'package':trigrams_toolkit.__file__, 'paths':sys.path, 'version':m.version('trigrams-toolkit'),
- 'python':sys.version, 'schemas':len(schema_paths()), 'adapters':len(adapter_files('codex')),
+ 'python':sys.version, 'schemas':len(schema_paths()),
  'dependencies':{d.metadata['Name']:d.version for d in m.distributions()}}, ensure_ascii=True))
 """
             result = run([str(runtime), "-I", "-c", probe], cwd=cwd)

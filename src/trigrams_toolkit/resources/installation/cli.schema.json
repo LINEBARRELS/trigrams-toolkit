@@ -5,9 +5,6 @@
     "installPreviewInput": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "platforms"
-      ],
       "properties": {
         "packages": {
           "type": "array",
@@ -35,9 +32,6 @@
               }
             ]
           }
-        },
-        "platforms": {
-          "$ref": "urn:harness:installation#/$defs/platforms"
         },
         "agent": {
           "$ref": "urn:harness:installation#/$defs/agent"

@@ -139,7 +139,7 @@ class ProjectPathTests(StateFixture):
         marker.parent.mkdir(parents=True)
         marker.write_text(json.dumps({
             "schemaVersion": 2, "stateRevision": 1, "agent": "codex",
-            "extensions": [], "platforms": [], "managed": [],
+            "extensions": [], "managed": [],
         }), encoding="utf-8")
         subdir = self.root / "src/nested"
         subdir.mkdir(parents=True)

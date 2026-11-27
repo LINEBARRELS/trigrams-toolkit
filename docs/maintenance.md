@@ -12,7 +12,6 @@
 | 扩展 Skill | `extensions/<extension>/skills/` | setup 的 `assets/extension.json`、`principles/`、`workbooks/` 携带资源 |
 | 公共工具 | `src/trigrams_toolkit/` | 项目上下文、Registry、Plan、资料与安装服务 |
 | 核心类型 | `src/trigrams_toolkit/resources/state/core-types.json` | 唯一类型声明；通过包资源读取 |
-| 适配器 | `src/trigrams_toolkit/resources/adapters/` | Codex、Claude 与 Pi Web 模板，随 CLI 包交付 |
 | 源码索引 | `toolkit.json`、`skills/resources.json` | 供仓库校验（`scripts/verify_toolkit.py`）定位源码资料；安装后由已安装 Skill 与项目快照独立发现 |
 
 修改维护源时，同步更新实际调用方、契约与说明。workbook、principle 的身份、头信息和加载语义见[架构说明](../skills/toolkit-steward/references/architecture.md)。历史 Plan、Task 与交付证据保留原样。
@@ -25,11 +24,11 @@ Python 源码需 3.11+，通过 `python -m pip install -e '.[dev]'` 安装可编
 python tasks.py check
 ```
 
-底层分别调用 `scripts/verify_toolkit.py`、`scripts/check_protocols.py` 与 `python -m mypy`。前两个脚本只读校验源码资料、Skill 元数据、适配入口、schema 引用闭包与命令声明。资料正文变动无需生成或同步包声明。
+底层分别调用 `scripts/verify_toolkit.py`、`scripts/check_protocols.py` 与 `python -m mypy`。前两个脚本只读校验源码资料、Skill 元数据、schema 引用闭包与命令声明。资料正文变动无需生成或同步包声明。
 
 | 改动范围 | 验证方式 |
 | --- | --- |
-| Skill、资料、适配器和说明 | `python tasks.py check` 及实际加载；纯文字改动无需新增代码测试 |
+| Skill、资料和说明 | `python tasks.py check` 及实际加载；纯文字改动无需新增代码测试 |
 | Plan 与 handbook | `tests/runtime/` 中相关行为测试 |
 | 安装、归档与源码校验 | `tests/` 中相关定向测试 |
 | 多工具协作 | `tests/test_source_acceptance.py`。从临时项目根调用当前源码，覆盖资料、Registry、Plan 与安装归属 |
@@ -47,7 +46,7 @@ python tasks.py check
 | 发布对象 | 版本来源 | 更新记录 | Git 标签 |
 | --- | --- | --- | --- |
 | 工具包 Skill 与资源 | `toolkit.json`、core 资源清单和各扩展清单 | [工具包更新记录](../CHANGELOG.md) | `vX.Y.Z` |
-| CLI 包及随包交付的协议、类型和 adapter | `pyproject.toml` 的 `[project].version` | [CLI 更新记录](cli-changelog.md) | `vcli-X.Y.Z` |
+| CLI 包及随包交付的协议与类型 | `pyproject.toml` 的 `[project].version` | [CLI 更新记录](cli-changelog.md) | `vcli-X.Y.Z` |
 
 两个版本号各自递增。四个公共 CLI 的 `--version` 读取 CLI 包版本。数据协议和运行状态的版本字段由各自契约维护。
 

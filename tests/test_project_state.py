@@ -286,7 +286,7 @@ class ProjectStateCases(StateFixture):
                  "version": "1.0.0", "resourceRoots": [], "install": []}
         raw = canonical(value)
         manifest.write_bytes(raw)
-        record = {"schemaVersion": 2, "stateRevision": 1, "agent": "codex", "platforms": [],
+        record = {"schemaVersion": 2, "stateRevision": 1, "agent": "codex",
                   "extensions": [{"extension": "example", "version": "1.0.0"}],
                   "managed": [file_record(".agents/extensions/example/extension.json", "example", raw)]}
         (self.root / ".agents/harness.json").write_text(json.dumps(record))

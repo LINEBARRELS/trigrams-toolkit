@@ -11,10 +11,11 @@ from unittest.mock import patch
 from source_fixture import ROOT, profile_environment, write_skill
 from trigrams_toolkit.installation.installation_candidate import build_candidate
 from trigrams_toolkit.installation.installation_service import apply_installation
+from trigrams_toolkit.installation.operation_files import file_record
 from trigrams_toolkit.resources import schema_paths
 from trigrams_toolkit.shared.errors import ProtocolError
 from trigrams_toolkit.shared.schema import SchemaCatalog
-from trigrams_toolkit.shared.serialization import read_json
+from trigrams_toolkit.shared.serialization import canonical, read_json
 
 
 class GlobalDependencyTests(unittest.TestCase):
@@ -41,7 +42,17 @@ class GlobalDependencyTests(unittest.TestCase):
             self.addCleanup(settings.stop)
 
     def preview(self, **parameters):
-        return build_candidate(self.project, {"platforms": [], **parameters}, self.schemas).preview
+        return build_candidate(self.project, {**parameters}, self.schemas).preview
+
+    def add_extension(self, name: str = "extra") -> Path:
+        setup = self.project / ".agents/skills" / f"extension-setup-{name}"
+        write_skill(setup, setup.name)
+        assets = setup / "assets"
+        assets.mkdir(parents=True, exist_ok=True)
+        (assets / "extension.json").write_bytes(canonical({
+            "schemaVersion": 1, "extension": name, "version": "1.0.0", "resourceRoots": [], "install": [],
+        }))
+        return assets
 
     def apply(self, preview, *, root=None, revision=None):
         request = {"preview": preview, "confirmedBy": {"id": "fixture", "kind": "human"}}
@@ -108,37 +119,38 @@ class GlobalDependencyTests(unittest.TestCase):
     def test_failed_install_preserves_project_and_partial_success_is_reused(self):
         self.present("answer-me-with-html")
         self.present("smell-check")
-        self.apply(self.preview(platforms=["codex"]))
-        adapter = self.project / ".codex/agents/task_developer.toml"
-        before = {path: path.read_bytes() for path in (self.record, self.receipt, adapter)}
+        self.add_extension("extra")
+        self.apply(self.preview(extensions=[]))
+        before = {path: path.read_bytes() for path in (self.record, self.receipt)}
         for name in ("answer-me-with-html", "smell-check"):
             (self.directory(name) / "SKILL.md").unlink()
         self.failed_skill = "smell-check"
-        preview = self.preview(platforms=["codex", "claude"])
+        preview = self.preview(extensions=["extra"])
         error = self.assert_failure("dependency_failed", preview)
         self.assertIn("smell-check for codex: fixture install failed", str(error))
         self.assertEqual(self.calls, [("codex", "answer-me-with-html"), ("codex", "smell-check")])
         self.assertEqual({path: path.read_bytes() for path in before}, before)
-        self.assertFalse((self.project / ".claude/agents").exists())
+        self.assertFalse((self.project / ".agents/extensions/extra").exists())
         self.failed_skill = None
         self.calls.clear()
         self.assertEqual(self.apply(preview)["stateRevision"], 2)
         self.assertEqual(self.calls, [("codex", "smell-check")])
-        self.assertEqual(read_json(self.record)["platforms"], ["codex", "claude"])
+        self.assertEqual(read_json(self.record)["extensions"], [{"extension": "extra", "version": "1.0.0"}])
 
     def test_invalid_root_revision_and_local_conflict_precede_dependency_install(self):
-        preview = self.preview(platforms=["codex"])
+        self.add_extension("extra")
+        preview = self.preview(extensions=["extra"])
         with patch("trigrams_toolkit.installation.global_skills.skill_directory",
                    side_effect=AssertionError("invalid apply dependency check")):
             self.assert_failure("basis_changed", preview, root=self.root)
             self.assertFalse((self.root / ".harness").exists())
             self.assert_failure("revision_conflict", preview, revision=1)
-            adapter = self.project / ".codex/agents/task_developer.toml"
-            adapter.parent.mkdir(parents=True)
-            adapter.write_bytes(b"User-owned adapter")
+            owned = self.project / ".agents/extensions/extra/extension.json"
+            owned.parent.mkdir(parents=True)
+            owned.write_bytes(b"User-owned file")
             self.assert_failure("basis_changed", preview)
-            self.assert_failure("local_modification", self.preview(platforms=["codex"]))
-            self.assertEqual(adapter.read_bytes(), b"User-owned adapter")
+            self.assert_failure("local_modification", self.preview(extensions=["extra"]))
+            self.assertEqual(owned.read_bytes(), b"User-owned file")
         self.assertFalse(self.record.exists())
 
     def test_tool_unavailable_and_success_without_installation(self):
@@ -152,14 +164,35 @@ class GlobalDependencyTests(unittest.TestCase):
         self.assertFalse(self.record.exists())
         self.assertFalse(self.receipt.exists())
 
-    def test_pure_uninstall_remains_offline(self):
-        self.apply(self.preview(platforms=["codex"]))
+    def test_pure_uninstall_and_legacy_adapter_retirement_remain_offline(self):
+        self.add_extension("extra")
+        self.apply(self.preview(extensions=["extra"]))
         for name in ("answer-me-with-html", "smell-check"):
             (self.directory(name) / "SKILL.md").unlink()
         self.calls.clear()
         with patch("trigrams_toolkit.installation.global_skills.skill_directory",
                    side_effect=AssertionError("uninstall dependency check")):
+            self.assertTrue(self.apply(self.preview(extensions=[]))["changed"])
+        self.assertEqual(read_json(self.record)["extensions"], [])
+        self.assertFalse((self.project / ".agents/extensions/extra").exists())
+        self.assertFalse(self.calls)
+
+        adapter_path = ".codex/agents/task_developer.toml"
+        adapter = self.project / adapter_path
+        adapter.parent.mkdir(parents=True)
+        raw = b'name = "task_developer"\n'
+        adapter.write_bytes(raw)
+        self.record.write_bytes(canonical({
+            "schemaVersion": 2,
+            "stateRevision": 2,
+            "agent": "codex",
+            "extensions": [],
+            "platforms": ["codex"],
+            "managed": [file_record(adapter_path, "core", raw)],
+        }))
+        with patch("trigrams_toolkit.installation.global_skills.skill_directory",
+                   side_effect=AssertionError("legacy cleanup dependency check")):
             self.assertTrue(self.apply(self.preview())["changed"])
-        self.assertEqual(read_json(self.record)["platforms"], [])
-        self.assertFalse((self.project / ".codex/agents/task_developer.toml").exists())
+        self.assertFalse(adapter.exists())
+        self.assertNotIn("platforms", read_json(self.record))
         self.assertFalse(self.calls)

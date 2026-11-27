@@ -31,4 +31,4 @@ def read_installation(project: Path, schemas: SchemaCatalog) -> dict | None:
 
 def installation_record(path: Path, schemas: SchemaCatalog) -> dict:
     return read_installation(path.parent.parent, schemas) or {
-        "schemaVersion": 2, "stateRevision": 0, "extensions": [], "platforms": [], "managed": []}
+        "schemaVersion": 2, "stateRevision": 0, "extensions": [], "managed": []}

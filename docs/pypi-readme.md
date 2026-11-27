@@ -1,6 +1,6 @@
 # trigrams-toolkit
 
-Command-line tools, schemas, core types and platform adapters for **Trigrams toolkit**.
+Command-line tools, schemas and core types for **Trigrams toolkit**.
 
 ## Requirements
 
@@ -27,7 +27,7 @@ python -m pip install trigrams-toolkit
 | `project-state` | Register and query project Modules, Features, Artifacts and relations in `.project-state/state.json`. |
 | `plan-toolkit` | Compile plan snapshots, inspect task dependencies, list runnable tasks and track Plan / Task status. |
 | `handbook` | Discover, load, validate and import workbooks and principles from global Skills, installed extensions and project resources. |
-| `harness-install` | Preview and apply project extension snapshots (`.agents/extensions/`) and host adapters, ensure required global Skills, and archive explicit project paths. |
+| `harness-install` | Preview and apply project extension snapshots (`.agents/extensions/`), ensure required global Skills, and archive explicit project paths. |
 
 ## Quick Usage
 

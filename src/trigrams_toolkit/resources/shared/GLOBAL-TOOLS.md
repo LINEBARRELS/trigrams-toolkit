@@ -4,7 +4,7 @@
 
 ## 分发与运行边界
 
-`uv tool install` 安装 CLI，Vercel skills 安装 Skill。包内 `resources/` 是 schema、命令声明、核心类型与 adapter 的维护源，使用 `importlib.resources` 读取；程序版本取自安装包元数据。
+`uv tool install` 安装 CLI，Vercel skills 安装 Skill。包内 `resources/` 是 schema、命令声明与核心类型的维护源，使用 `importlib.resources` 读取；程序版本取自安装包元数据。
 
 core 资料随全局 Skill 发布，扩展资料随项目 setup Skill 发布。Project State、Plan 与安装事务各自维护业务文件锁。`harness-install` 在应用装配时按需补齐目标 agent 的全局 Skill。
 
