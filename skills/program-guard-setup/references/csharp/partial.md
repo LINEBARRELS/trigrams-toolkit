@@ -5,17 +5,24 @@
 ## `core:principle:programming-csharp/choose-csharp-types-and-immutability-by-role`
 
 - **可静态拦截**：
+  - 必传初始化与可空闭合 → 开启可空引用检查并将未初始化非空属性警告（`CS8618`）升错，迫使对象初始化器必传成员显式声明 `required` 或通过构造函数赋值。
   - 继承密封性 → 启用“未预期继承的内部或具体类型应声明 `sealed`”分析器规则。
   - 只读集合与常量规范 → 启用集合属性避免暴露可变具体列表（如 `List<T>`）与字段优先 `readonly` 的分析器规则。
-- **留给 Review**：按实体身份与值相等语义在 `class`、`record`、`struct` 间选型，以及 `readonly struct` 的复制成本与性能取舍。
+- **留给 Review**：按身份与值相等语义在 `class`、`record`、`struct` 间选型、闭合变体（`abstract/sealed record`）与开放接口多态取舍、以及是否用无业务含义的空字符串默认值掩盖必传状态。
 
 ## `core:principle:programming-csharp/declare-explicit-csharp-signatures-and-scale-bounds`
 
 - **可静态拦截**：
   - 可空性契约 → 开启 `<Nullable>enable</Nullable>` 并将公开签名可空警告升错。
-  - 异步签名规范 → 禁止非事件处理器使用 `async void`；要求可取消异步方法的末尾参数为 `CancellationToken`。
+  - 异步与流式签名规范 → 禁止非事件处理器使用 `async void`；要求可取消异步方法的末尾参数为 `CancellationToken`，并将 `IAsyncEnumerable<T>` 缺失 `[EnumeratorCancellation]` 的警告（`CS8425`）升错。
   - 最小可见性 → 启用可见性收窄分析器，默认使用 `private` / `internal`。
-- **留给 Review**：公开入口是否完成外部输入运行时校验、可预期失败是否合理选用 `TryXxx` 或可空返回、构造函数依赖超限时是否拆分职责而非引入服务定位器。
+- **留给 Review**：公开入口是否完成外部输入运行时校验、异步流式产出是否合理选用 `IAsyncEnumerable<T>` 替代全量缓冲、构造函数依赖超限时是否拆分职责而非引入服务定位器。
+
+## `core:principle:programming-csharp/prefer-csharp-compile-time-dispatch-and-spans`
+
+- **可静态拦截**：
+  - 限域禁用反射与引导源生成 → 通过 `Microsoft.CodeAnalysis.BannedApiAnalyzers` 或 `NetArchTest.Rules` / `ArchUnitNET` 在业务程序集中限制直接调用 `System.Reflection`；启用内置源生成提示规则（如引导使用 `[GeneratedRegex]` 与序列化源生成告警）。
+- **留给 Review**：泛型内是否以 `static abstract` 接口约束替代 `typeof(T)` 分支、外部配置标识是否在组合根经 `FrozenDictionary` 单次查表转为接口多态、常规逻辑是否滥用 `dynamic`、以及高频解析路径是否采用 `ReadOnlySpan<T>`。
 
 ## `core:principle:programming-design-module/expose-narrow-module-surfaces`
 
@@ -54,3 +61,4 @@
 - `core:principle:programming-design-abstraction/extract-shared-knowledge-not-coincidental-shape`：禁止用代码查重工具强制合并形似但变化轴不同的代码。
 - `core:principle:programming-review/eliminate-surplus-indirection`：静态分析无法可靠区分“冗余转发包装”与“为依赖倒置设立的合法边界接口”。
 - `core:principle:programming-review/expose-hidden-change-coupling`：跨模块隐式同步约定与双真相源无法由编译器发现，应留给设计审查与状态不变量测试。
+- `core:principle:programming-review/reject-test-fitted-domain-models`：编译器与分析器仅校验类型自洽，无法识别将通用多步业务焊死为固定字段或硬编码测试探针常量的退化建模，应留给架构与代码审查。

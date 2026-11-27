@@ -26,7 +26,7 @@
 | --- | --- |
 | `skills/` | 通用 core Skill 唯一维护源；核心 workbook 与 principle 随对应 Skill 维护 |
 | `extensions/` | 官方扩展唯一维护源（`extensions/game/`、`extensions/toolkit-maintenance/`）；各扩展通过 `skills/extension-setup-<extension>/assets/` 维护自身的 `extension.json`、`principles/` 与 `workbooks/` |
-| `src/trigrams_toolkit/` | 统一 Python CLI 包源码（`project-state`、`plan-toolkit`、`handbook`、`harness-install`）；协议、核心类型与平台 adapter 随 `src/trigrams_toolkit/resources/` 交付 |
+| `src/trigrams_toolkit/` | 统一 Python CLI 包源码（`project-state`、`plan-toolkit`、`handbook`、`harness-install`）；协议与核心类型随 `src/trigrams_toolkit/resources/` 交付 |
 | `scripts/` | 仓库只读校验与发行包验收脚本（`verify_toolkit.py`、`check_protocols.py`、`check_package.py`） |
 | `tests/` | 单元测试、运行时测试（`tests/runtime/`）与多工具源码验收测试 |
 | `tasks.py`、`toolkit.json` | 跨平台检查、测试、构建与发布统一入口，以及源码仓清单 |
@@ -43,8 +43,8 @@
 
 ## 项目约束
 
-- 严禁修改非当前任务所属或已完成（`done`）的历史 Plan、Task、交付证据与审核记录。
-- 历史 Plan 内的旧引用、旧签名与当时快照属于不可篡改的历史审计证据，不得逆向同步。
+- 不应修改非当前任务所属或已完成（`done`）的历史 Plan、Task、交付证据与审核记录。
+- 历史 Plan 内的旧引用、旧签名与当时快照属于历史审计证据，不应逆向同步。
 - 修改维护源时，应同步更新实际调用方、协议契约与文档说明，并运行 `python tasks.py check` 及对应范围测试。
 - 打包、隔离验收与发布统一使用根目录 [tasks.py](tasks.py)。
 - 代码开发时，应按任务和语言查阅[现有原则目录](skills/principles/principles)中的相关 `PRINCIPLE.md`，用于设计、实现与审查。
@@ -54,7 +54,6 @@
 
 - **core 资料**：随全局 `principles`、`workbook` Skill 分发的通用原则与工作方法，资源 ID 前缀为 `core:`。
 - **扩展快照（extension snapshot）**：由 `harness-install` 固化到目标项目 `.agents/extensions/<extension>/` 的扩展清单、原则与工作方法副本。
-- **平台 adapter**：随 Python CLI 包交付并装配到目标项目宿主目录（`.codex/agents/`、`.claude/agents/`、`.pi/agents/`）的角色入口文件。
 
 ### 公共工具与项目配置
 

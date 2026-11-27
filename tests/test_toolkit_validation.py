@@ -34,6 +34,15 @@ class SourceValidationTests(unittest.TestCase):
                 self.assertTrue(path.is_file())
                 path.unlink()
 
+    def test_execute_plan_bundles_agile_and_flow_constraints_without_top_level_subskills(self) -> None:
+        for mode in ("agile", "flow"):
+            for filename in ("guide.md", "dev-constraints.md", "review-constraints.md"):
+                with self.subTest(mode=mode, filename=filename):
+                    self.assertTrue((ROOT / "skills/execute-plan/references" / mode / filename).is_file())
+        for retired in ("execute-task", "delivery-review"):
+            self.assertFalse((ROOT / "skills" / retired).exists())
+        self.assertFalse((ROOT / "src/trigrams_toolkit/resources/adapters").exists())
+
     def test_finished_plan_links_are_historical_but_active_links_fail(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -61,8 +70,9 @@ class SourceValidationTests(unittest.TestCase):
             (root / "toolkit.json").write_text(json.dumps({
                 "core": {"manifest": str(ROOT / "skills/resources.json")}, "extensions": {}}), encoding="utf-8")
             plan = root / "docs/plans/agile-example"
-            plan.mkdir(parents=True)
-            (plan / "S01-result.md").write_text("[Prior artifact](missing.md)\n", encoding="utf-8")
+            (plan / "S01/findings").mkdir(parents=True)
+            (plan / "S01/result.md").write_text("[Prior artifact](missing.md)\n", encoding="utf-8")
+            (plan / "S01/findings/R01.md").write_text("[Prior log](missing.log)\n", encoding="utf-8")
             prepared = {"ok": True, "resources": 0, "sources": []}
             with patch.object(verify_toolkit, "ROOT", root), patch.object(verify_toolkit, "validate_source_catalog", return_value=prepared):
                 for status, expected in (("done", True), ("cancelled", True), ("doing", False),

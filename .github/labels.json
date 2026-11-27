@@ -4,6 +4,5 @@
   {"name":"documentation","color":"0075ca","description":"说明、示例与导航"},
   {"name":"installation","color":"c98a48","description":"部署、迁移与发布"},
   {"name":"core","color":"536878","description":"通用工程能力"},
-  {"name":"game","color":"8064a2","description":"游戏领域扩展"},
-  {"name":"adapters","color":"6f8e85","description":"平台入口与适配"}
+  {"name":"game","color":"8064a2","description":"游戏领域扩展"}
 ]

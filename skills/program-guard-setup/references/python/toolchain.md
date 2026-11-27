@@ -8,6 +8,6 @@
 
 | 验证层次 | 推荐工具 | 负责范围 | 官方文档 |
 | --- | --- | --- | --- |
-| 静态类型检查 | Pyright / mypy | 公开签名完整注解、`None` 收窄、`NewType`、`Protocol`、`Final`、`TypedDict` 与未等待协程检查 | [Pyright Configuration](https://microsoft.github.io/pyright/#/configuration) · [mypy Documentation](https://mypy.readthedocs.io/) |
+| 静态类型检查 | Pyright / mypy | 公开签名与 `@overload` 校验、`None` 与 `TypeIs`／`TypeGuard` 收窄、`match` + `assert_never` 穷尽检查、`NewType`、`Protocol`、`Final`、`TypedDict` 与未等待协程检查 | [Pyright Configuration](https://microsoft.github.io/pyright/#/configuration) · [mypy Documentation](https://mypy.readthedocs.io/) |
 | 语法与质量 Lint | Ruff | 可变默认参数、裸 `except`、异常原因链、`is None` 判别、上下文资源管理、异步阻塞、规模与复杂度 | [Ruff Rules](https://docs.astral.sh/ruff/rules/) |
 | 模块依赖图与分层边界 | `import-linter` / `tach` | 跨包无环依赖、分层单向依赖、禁止绕过公开入口深层导入 | [Import Linter](https://import-linter.readthedocs.io/) · [Tach](https://docs.gauge.sh/) |

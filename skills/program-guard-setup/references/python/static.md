@@ -25,8 +25,9 @@
 - **验证工具**：Ruff + Pyright / mypy。
 - **映射方向**：
   - 禁止可变默认参数 → 启用可变函数参数默认值检测规则。
+  - 重载签名一致性 → 启用 Pyright / mypy 对 `@overload` 声明与实现体签名的匹配检查。
   - 包公开导出与私有边界 → 校验 `__init__.py` 的 `__all__` 导出定义，拦截跨模块访问单下划线 `_` 私有成员。
-- **注意**：公开函数滥用 `**kwargs` 隐藏实际参数以及项目统一基异常的语义设计，仍应在 Review 中把关。
+- **注意**：是否应引入 `@overload` 消除宽泛联合、公开函数滥用 `**kwargs` 隐藏实际参数以及项目统一基异常的语义设计，仍应在 Review 中把关。
 
 ## `core:principle:programming-design-module/keep-module-dependencies-acyclic`
 

@@ -9,7 +9,7 @@ metadata:
 
 只读调查当前实现、职责边界与在途状态，说清系统实际如何运转。
 
-- **取证入口**：优先阅读用户指定材料与源码；按需查阅 `DEVTECH.md`、`docs/ARD.md`、`docs/implementation-specs/`。查询登记身份与关系时只读调用 `project-state`；查询在途 Plan 进度时按 `summary.md` 的 `plan-type` 区分：`agile` 模式直接只读查看 `summary.md`（YAML 头 `status` 与 Stub 清单）及同级平铺的 `Sxx-result.md`／`review.md`，`flow` 模式（含未声明 `plan-type` 的历史 Plan）只读调用 `plan-toolkit`。
+- **取证入口**：优先阅读用户指定材料与源码；按需查阅 `DEVTECH.md`、`docs/ARD.md`、`docs/implementation-specs/`。查询登记身份与关系时只读调用 `project-state`；查询在途 Plan 进度时按 `summary.md` 的 `plan-type` 区分：`agile` 模式直接只读查看 `summary.md`（YAML 头 `status` 与 Stub 清单）、各 `Sxx/` 下的 `stub-review.md`／`result.md` 及根级 `review.md`，`flow` 模式（含未声明 `plan-type` 的历史 Plan）只读调用 `plan-toolkit`。
 - **关键约束**：
   - 区分设计意图与当前实际行为，存在分歧直接指出。
   - 查询失败或快照缺失、过期时，**不补写或同步**，如实记为取证缺口。

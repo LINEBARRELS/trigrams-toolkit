@@ -2,6 +2,14 @@
 
 本页记录工具包版本，版本号以 `toolkit.json` 为准。CLI 版本以 `pyproject.toml` 为准，见 [CLI 更新记录](docs/cli-changelog.md)。
 
+## 0.6.0
+
+- 新增 `axiomatic-audit`。显式调用后，审查源码中的显式依赖和隐式变更耦合，并用设计矩阵呈现证据与结论。[审计 Skill](skills/axiomatic-audit/SKILL.md)
+- `execute-plan` 统一承担 Agile 和 Flow 的执行入口。原 `execute-task` 与 `delivery-review` 的约束并入 Flow 指南，由调度者派发开发和审核子代理。[执行 Skill](skills/execute-plan/SKILL.md)
+- Agile Plan 在 `summary.md` 中展开适用的调度、执行与审核规则。每个 Stub 的交付和审核记录归入对应目录。[Agile 规划指南](skills/to-plan/references/agile/guide.md)
+- 新增防止测试反推领域模型的审核原则，补充 C#、Python 和 TypeScript 的类型与分派原则，并同步 `program-guard-setup` 的静态检查映射。[编程门禁 Skill](skills/program-guard-setup/SKILL.md)
+- 项目装配以 `agent` 指定宿主，并沿用已有扩展配置。使用新版装配指南前，先升级 CLI 至 `0.6.0`。[CLI 更新记录](docs/cli-changelog.md#060)
+
 ## 0.5.4
 
 - 工具包与 CLI 独立发布。工具包用 `vX.Y.Z` 标签，CLI 用 `vcli-X.Y.Z` 标签触发 PyPI 发布。[维护与发布](docs/maintenance.md#ci-与发布)
@@ -35,7 +43,7 @@
 
 ## 0.3.3
 
-- 明确正式设计、计划交付与 `docs/research/` 研究草稿的边界：在 [architect](skills/architect/SKILL.md)、[to-plan](skills/to-plan/SKILL.md)、[execute-task](skills/execute-task/SKILL.md) 与 [project-setup `AGENTS.md` 模板](skills/workbook/workbooks/project-setup/assets/templates/AGENTS.md) 中禁止在正式设计文档、Plan 与 Task 中引用研究草稿，执行阶段统一以正式设计为准。
+- 明确正式设计、计划交付与 `docs/research/` 研究草稿的边界：在 [architect](skills/architect/SKILL.md)、[to-plan](skills/to-plan/SKILL.md)、`execute-task` 与 [project-setup `AGENTS.md` 模板](skills/workbook/workbooks/project-setup/assets/templates/AGENTS.md) 中禁止在正式设计文档、Plan 与 Task 中引用研究草稿，执行阶段统一以正式设计为准。
 - 建立 `dev`（日常集成）+ `main`（正式发版）双分支工作流与本地保护钩子（`.githooks/pre-commit`、`.githooks/pre-push`），并在 [参与维护](CONTRIBUTING.md)、[开发与接入](docs/getting-started.md) 与 [维护与发布](docs/maintenance.md) 中补充分支策略、合并方式与 GitHub Rulesets 配置说明。
 - 在 [tasks.py](tasks.py) 新增 `bump`（原子对齐 `pyproject.toml`、`toolkit.json` 与各资源清单版本）和 `setup-hooks` 子命令。
 - 更新 [ci.yml](.github/workflows/ci.yml) 与 [release.yml](.github/workflows/release.yml)：面向 `main` 的 Release PR 自动执行打包与隔离验收，每日定时巡检跟踪 `origin/dev`，并在发布标签构建前校验其属于 `origin/main` 历史。

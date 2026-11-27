@@ -26,7 +26,7 @@
 - **验证工具**：C# 编译器（Roslyn）+ .NET Code Analyzers。
 - **映射方向**：
   - 可空引用与空值断言 → 启用可空引用上下文并将可空相关警告升错；拦截无依据的 `!` 空值宽容运算符（或要求行级豁免说明）。
-  - 有限状态穷尽分派 → 将 `switch` 表达式非穷尽编译器警告升为错误。
+  - 模式匹配与穷尽分派 → 将 `switch` 表达式非穷尽编译器警告升为错误；启用模式匹配代码样式规则（如 `IDE0019`、`IDE0020`、`IDE0078`，按项目 SDK 版本核验）替代 `as` 判空与冗余类型强转。
   - 避免 LINQ 重复枚举 → 启用检测 `IEnumerable<T>` 多次枚举的分析器规则，督促在多次遍历前物化。
 
 ## `core:principle:programming-design-module/keep-module-dependencies-acyclic`

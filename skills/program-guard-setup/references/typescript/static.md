@@ -18,7 +18,7 @@
 - **映射方向**：
   - 严格类型与控制流收窄 → `tsconfig.json` 开启 `strict: true`（按需补 `noUncheckedIndexedAccess`、`exactOptionalPropertyTypes`）。
   - 禁用 `any` 与非空断言 `!` → `typescript-eslint` 的 `no-explicit-any`、`no-non-null-assertion`。
-  - 限制危险类型断言与双重断言 → `consistent-type-assertions`、`no-unsafe-type-assertion`（按当前安装版本核验可用规则名）。
+  - 限制危险类型断言与双重断言 → `consistent-type-assertions`、`no-unsafe-type-assertion`（按当前安装版本核验可用规则名），引导使用类型谓词（`x is T`）或断言函数完成复杂收窄。
   - 可辨识联合 `switch` 穷尽检查 → `switch-exhaustiveness-check`，配合源码默认分支的 `never` 赋值。
 
 ## `core:principle:programming-design-module/keep-module-dependencies-acyclic`

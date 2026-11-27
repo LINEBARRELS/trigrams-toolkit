@@ -31,11 +31,13 @@ class SourceCatalogTests(unittest.TestCase):
         return source_packages(self.root, SchemaCatalog(schema_paths()))
 
     def test_document_changes_need_no_generated_declarations(self):
+        declaration = self.manifest.read_bytes()
+        before = validate_source_catalog(self.root)
         path = self.root / "skills/how/SKILL.md"
         path.write_bytes(path.read_bytes() + b"\nFixture source update.\n")
-        declaration = self.manifest.read_bytes()
         result = validate_source_catalog(self.root)
-        self.assertEqual(result, {"resources": 111, "sources": ["core", "game", "toolkit-maintenance"]})
+        self.assertEqual(result, before)
+        self.assertEqual(result["sources"], ["core", "game", "toolkit-maintenance"])
         self.assertEqual(self.manifest.read_bytes(), declaration)
 
     def test_types_are_read_from_one_authority_without_sync(self):

@@ -5,8 +5,9 @@
 ## `core:principle:programming-python/model-python-data-and-protocols-with-explicit-types`
 
 - **可静态拦截**：
-  - 公开函数与入口完整类型注解 → Pyright / mypy 严格模式强制参数与返回值注解，校验 `Final` 常量不可重赋值、`NewType` 区分以及 `Protocol` 结构化匹配。
-- **留给 Review**：外部字典输入是否在入口完成运行时校验（注解、`TypedDict` 与 `NewType` 无运行时检查）、`@dataclass(frozen=True)`／`NamedTuple`／`TypedDict` 的场景选型、以及 `Protocol` 与 `ABC` 的抽象取舍。
+  - 公开函数与入口完整类型注解 → Pyright / mypy 严格模式强制参数与返回值注解，校验 `Final` 常量不可重赋值、`NewType` 区分、`TypeIs`／`TypeGuard` 收窄以及 `Protocol` 结构化匹配。
+  - 枚举与联合变体穷尽分派 → 启用 Pyright 严格穷尽检查或 mypy `exhaustive-match` 错误码，配合 `match/case` 与 `typing.assert_never` 拦截遗漏分支。
+- **留给 Review**：外部字典输入是否在入口完成运行时校验（注解、`TypedDict` 与 `NewType` 无运行时检查）、`@dataclass(frozen=True)`／`NamedTuple`／`TypedDict` 选型、以及开放变体是否通过 `Protocol`／`ABC` 与边界字典查表替代单类字符串 `if-elif` 分支。
 
 ## `core:principle:programming-python/manage-python-coroutines-and-keep-iterators-flat`
 
@@ -52,3 +53,4 @@
 - `core:principle:programming-design-abstraction/extract-shared-knowledge-not-coincidental-shape`：禁止用代码查重工具强制合并形似但变化轴不同的代码。
 - `core:principle:programming-review/eliminate-surplus-indirection`：静态分析无法可靠区分“冗余转发包装”与“为依赖倒置设立的合法边界接口”。
 - `core:principle:programming-review/expose-hidden-change-coupling`：跨模块隐式同步约定与双真相源无法由类型检查或 Linter 发现，应留给设计审查与状态不变量测试。
+- `core:principle:programming-review/reject-test-fitted-domain-models`：类型检查与 Linter 无法判断数据模型或状态分支是否面向单次验收样例退化硬编码，应留给架构与代码审查。
