@@ -856,21 +856,21 @@ def main(argv: list[str] | None = None) -> int:
             payload = json.load(stream)
         result = analyze_design_matrix(payload)
     except (OSError, json.JSONDecodeError, ValueError) as err:
-        print(json.dumps({"ok": False, "error": str(err)}, ensure_ascii=False, indent=2), file=sys.stderr)
+        print(json.dumps({"ok": False, "error": str(err)}, indent=2), file=sys.stderr)
         return 1
 
-    rendered_json = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     if args.json_out is not None:
         args.json_out.parent.mkdir(parents=True, exist_ok=True)
         with args.json_out.open("w", encoding="utf-8", newline="\n") as stream:
-            stream.write(rendered_json)
+            json.dump(result, stream, ensure_ascii=False, indent=2)
+            stream.write("\n")
 
     if args.md_out is not None:
         args.md_out.parent.mkdir(parents=True, exist_ok=True)
         with args.md_out.open("w", encoding="utf-8", newline="\n") as stream:
             stream.write(format_markdown_report(result))
 
-    print(rendered_json, end="")
+    print(json.dumps(result, indent=2))
     return 0
 
 

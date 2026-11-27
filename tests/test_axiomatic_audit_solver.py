@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -242,11 +243,12 @@ class AxiomaticMatrixSolverTests(unittest.TestCase):
                 capture_output=True,
                 text=True,
                 check=False,
+                env={**os.environ, "PYTHONIOENCODING": "cp1252"},
             )
             self.assertEqual(completed.returncode, 0, completed.stderr)
             parsed_stdout = json.loads(completed.stdout)
             self.assertEqual(parsed_stdout["summary"]["full_classification"], "decoupled")
-            self.assertTrue(json_out.is_file())
+            self.assertEqual(parsed_stdout, json.loads(json_out.read_text(encoding="utf-8")))
             self.assertTrue(md_out.is_file())
             md_text = md_out.read_text(encoding="utf-8")
             self.assertIn("## Reordered Design Matrix (D+C)", md_text)
