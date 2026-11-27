@@ -5,12 +5,12 @@
 ## 审核准备与职责
 
 1. **先读 Plan 与 `<review-rule>`**：审核前阅读 `summary.md`，聚焦本次审核对象的范围、验收标准、`<review-rule>` 与补充约束。
-2. **独立取证**：以真实代码、产物、运行回执与验收标准为裁决依据；`result.md` 与 `handoff.md` 仅作上次执行者的工作报告，不能替代真实证据。不修改业务代码、`result.md` 或 `handoff.md`，不更新 `summary.md` 状态头。
-3. **加载 principle**：审核前使用 principles skill 加载 `summary.md` 中适用于本次审核的原则（已读且仍适用的内容不必重读）；也可自主尝试检索并加载相关原则。
+2. **独立取证**：以真实代码、产物、运行回执与验收标准为裁决依据；`result.md` 与 `handoff.md` 仅作上次执行者的工作报告，不能替代真实证据。不修改业务代码、`result.md` 或 `handoff.md`，不更新 `summary.md` 状态。
+3. **加载 principle**：审核前使用 principles skill 加载 `summary.md` 中适用于本次审核的原则（已读且仍适用的内容不必重读）。
 
 ## 两类审核的核对重点
 
-- **Stub 审核**（维护 `<Plan目录>/<StubID>/stub-review.md`，有问题时在 `<Plan目录>/<StubID>/findings/` 下逐条建档）：仅针对当前 Stub 与当前审核轮次，核对是否严守范围边界、满足本 Stub 契约与 `<review-rule>`、遵守适用 `principle`、自验真实充分及目录清洁（无散落调试文件，探针均在项目根 `.tmp/`）；必要时独立重跑关键校验。Stub 审核不代替 Plan 总体终验。
+- **Stub 审核**（维护 `<Plan目录>/<StubID>/stub-review.md`，有问题时在 `<Plan目录>/<StubID>/findings/` 下逐条建档）：仅针对当前 Stub 与当前审核轮次，核对是否严守范围边界、满足本 Stub 契约与 `<review-rule>`、遵守适用 `principle`、自验真实充分及目录清洁（无散落调试文件，探针均在项目根 `.tmp/`）；必要时独立重跑关键校验。
 - **Plan 总体终验**（维护 `<Plan目录>/review.md`，有跨 Stub 问题时在 `<Plan目录>/findings/` 下逐条建档）：面向整个 Plan 的最终交付，对照 `summary.md` 的工作内容、总体验收标准与补充约束，核实 Plan 总体目标完成度、所有 `Sxx/stub-review.md` 均已 `pass` 且无未闭环的 `open` 问题并且目录清洁。
 
 ## 裁决判据

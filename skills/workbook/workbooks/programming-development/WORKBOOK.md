@@ -38,7 +38,7 @@ includes:
 按当前工作内容按需加载 principle：
 - **架构与抽象设计：** 必读 `programming-design-architecture` scope 下的全部原则。按设计问题选读：抽象、状态建模、模块边界和目录组织分别查 `programming-design-abstraction`、`programming-design-state`、`programming-design-module` 和 `programming-design-repo`。
 - **源码溯源标识：** 除单文件微小修补外，加载 `core:principle:programming-workflow/trace-source-declarations-to-plan-stubs` 维护 `@plan-stub` 注释。
-- **编程语言规范：** 按涉及编程语言从对应语言 scope（如 `programming-csharp`、`programming-python`、`programming-typescript-javascript`）加载对应 principle；检查参数量、文件与函数行数或嵌套深度时参考 `core:principle:programming-code-metrics/review-code-size-and-nesting`。
+- **编程语言规范：** 按涉及编程语言从对应语言 scope（如 `programming-csharp`、`programming-python`、`programming-typescript-javascript`）加载对应 principle。
 
 模块内有沉淀价值的局部经验时，可在模块所在目录用 `KNOWLEDGE.md` 记录简短、内聚的非强制建议；内容应聚焦模块内部，不外链或耦合模块外代码。
 </exec-rule>
