@@ -14,5 +14,5 @@
 ## 渲染与交付
 
 - 使用 `answer-me-with-html` Skill 生成单页 HTML 报告，按对应专项指引组织图表与版面。
-- 渲染时附加 `--no-open`，并通过 `-o` 将成品写入项目根 `.tmp/answer-me/` 下各自的报告路径。
+- 渲染时附加 `--no-open`，并通过 `-o` 将成品写入项目根 `.tmp/answer-me/arch-report` 下各自的报告路径。
 - 向主 Agent 返回 HTML 成品路径及必要核对摘要。

@@ -2,6 +2,14 @@
 
 本页记录工具包版本，版本号以 `toolkit.json` 为准。CLI 版本以 `pyproject.toml` 为准，见 [CLI 更新记录](docs/cli-changelog.md)。
 
+## 0.6.4
+
+- `architect` 在 DEVTECH 中记录架构层的工程载体、引用方向和组合根位置。Implementation Spec 按 DEVTECH 约束依赖接口，并明确领域模型和应用编排的职责。[架构设计 Skill](skills/architect/SKILL.md) · [DEVTECH 模板](skills/workbook/workbooks/project-setup/assets/templates/DEVTECH.md) · [Implementation Spec 模板](skills/architect/references/templates/implementation-spec.temp.md)
+- 新增领域不变量原则，将值约束、状态转移和业务规则放入领域模型。依赖方向原则明确内层接口由外层基础设施实现，并在组合根装配。[领域不变量原则](skills/principles/principles/programming-design-architecture/keep-domain-invariants-in-domain-models/PRINCIPLE.md) · [依赖方向原则](skills/principles/principles/programming-design-architecture/point-dependencies-inward-toward-business-decisions/PRINCIPLE.md)
+- `program-guard-setup` 依据 DEVTECH 与 ARD 配置 C#、Python 和 TypeScript 项目的架构门禁。架构待定时，先配置语言门禁和通用检查。[编程门禁 Skill](skills/program-guard-setup/SKILL.md)
+- 编程开发 workbook 将常规的新模块开发归入单轮交付，将复杂逻辑、应用框架或主循环重构等工作归入分阶段审核。[编程开发 workbook](skills/workbook/workbooks/programming-development/WORKBOOK.md)
+- 架构报告输出到 `.tmp/answer-me/arch-report/`。项目 `AGENTS.md` 模板的公共工具速查移除 `plan-toolkit` 条目。[报告指引](skills/architect/references/report-guide.md) · [AGENTS.md 模板](skills/workbook/workbooks/project-setup/assets/templates/AGENTS.md)
+
 ## 0.6.3
 
 - Agile 执行和审核约束要求子代理加载 `summary.md` 指定且适用于当前工作的 principle，移除自行检索的说明。审核约束同时明确 `summary.md` 的状态由调度者维护。[执行约束](skills/execute-plan/references/agile/dev-constraints.md) · [审核约束](skills/execute-plan/references/agile/review-constraints.md)

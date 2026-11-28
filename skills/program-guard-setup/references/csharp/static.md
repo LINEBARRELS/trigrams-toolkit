@@ -34,14 +34,14 @@
 - **验证工具**：.NET 多项目程序集引用（编译器天然禁止程序集级循环依赖）+ `NetArchTest.Rules` / `ArchUnitNET`。
 - **映射方向**：
   - 多程序集拆分时，编译器直接阻断程序集间循环依赖。
-  - 单程序集内跨模块命名空间，通过架构测试校验模块依赖图无环（允许单模块内部类型互引用）。
+  - 优先依据 `docs/ARD.md` 的模块划分，在单程序集内对跨模块命名空间通过架构测试校验模块依赖图无环（允许单模块内部类型互引用）。
 
 ## `core:principle:programming-design-architecture/point-dependencies-inward-toward-business-decisions`
 
 - **验证工具**：多程序集引用边界 + `NetArchTest.Rules` / `ArchUnitNET`。
 - **映射方向**：
-  - 识别领域决策层、编排层与外部交互层对应的程序集或命名空间。
-  - 禁止领域层引用 UI、存储、网络、框架与具体第三方 SDK 命名空间，仅允许依赖基础类库与内层领域类型。
+  - 优先依据 `DEVTECH.md`（“应用架构”）与 `docs/ARD.md` 识别各架构层及模块对应的程序集或命名空间，尚无架构文档时按实际代码结构识别。
+  - 按允许依赖方向配置全局边界规则：禁止核心领域与编排层引用 UI、存储、网络、框架与具体第三方 SDK 命名空间，守住依赖倒置与组合根装配边界。
 
 ## `core:principle:programming-design-repo/name-shared-code-by-domain-knowledge`
 

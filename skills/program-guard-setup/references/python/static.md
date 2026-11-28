@@ -33,14 +33,14 @@
 
 - **验证工具**：`import-linter` 或 `tach`。
 - **映射方向**：
-  - 声明模块／子包边界并启用无环依赖检查，阻断跨模块循环 `import`（允许单模块内部互引用）。
+  - 优先依据 `docs/ARD.md` 的模块划分或既有子包结构声明模块边界，启用无环依赖检查，阻断跨模块循环 `import`（允许单模块内部互引用）。
 
 ## `core:principle:programming-design-architecture/point-dependencies-inward-toward-business-decisions`
 
 - **验证工具**：`import-linter`（分层契约）或 `tach`。
 - **映射方向**：
-  - 识别领域决策层、编排层与外部交互层对应的 Python 包路径。
-  - 禁止领域层包导入 Web 框架、UI、ORM、存储、网络与具体第三方 SDK，仅允许依赖标准库与内层领域类型。
+  - 优先依据 `DEVTECH.md`（“应用架构”）与 `docs/ARD.md` 识别各架构层及模块对应的 Python 包路径，尚无架构文档时按实际代码结构识别。
+  - 按允许依赖方向配置分层契约：禁止核心领域与编排层导入 Web 框架、UI、ORM、存储、网络与具体第三方 SDK，守住依赖倒置与组合根装配边界。
 
 ## `core:principle:programming-design-repo/name-shared-code-by-domain-knowledge`
 
