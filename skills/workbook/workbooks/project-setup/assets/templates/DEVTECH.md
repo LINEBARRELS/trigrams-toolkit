@@ -6,7 +6,7 @@
 
 ## 应用架构
 
-<!-- 记录已确定的架构层（Architecture Layer）清单及各层宏观职责、依赖方向和边界。详细的 Module / Feature、ARD 与 Implementation Spec 留给后续设计，文档位置遵循 AGENTS.md 中的标准结构。 -->
+<!-- 记录已确定的架构层（Architecture Layer）清单及对应的工程载体（包、程序集或目录）、各层职责边界、允许直接引用的依赖方向与组合根装配位置。详细的 Module / Feature、ARD 与 Implementation Spec 留给后续设计，文档位置遵循 AGENTS.md 中的标准结构。 -->
 
 ## 核心术语
 

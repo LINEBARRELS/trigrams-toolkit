@@ -25,15 +25,15 @@
 
 - **验证工具**：`dependency-cruiser`（推荐，全图分析速度快）或 ESLint `import/no-cycle`。
 - **映射方向**：
-  - 禁止跨模块循环依赖 → `dependency-cruiser` 启用 `no-circular` 规则（模块内类型互引用按目录边界例外配置，不误伤单模块内部）。
+  - 优先依据 `docs/ARD.md` 的模块划分或既有目录边界配置 `dependency-cruiser` 的 `no-circular` 规则，阻断跨模块循环依赖（按模块目录例外配置，不误伤单模块内部互引用）。
 - **注意**：动态事件总线或反射隐藏的运行期环无法被静态依赖图捕获，仍需在 Review 时排查。
 
 ## `core:principle:programming-design-architecture/point-dependencies-inward-toward-business-decisions`
 
 - **验证工具**：`dependency-cruiser` 或 `eslint-plugin-boundaries`。
 - **映射方向**：
-  - 需先识别项目分层目录（如 `domain/`、`application/`、`infrastructure/`、`ui/`）。
-  - 为内层业务目录配置禁止规则：禁止 `import` 外层框架、UI、存储、网络与具体第三方 SDK 路径，仅允许依赖语言标准库与内层领域类型。
+  - 优先依据 `DEVTECH.md`（“应用架构”）与 `docs/ARD.md` 识别各架构层及模块对应的目录或工作区包，尚无架构文档时按实际代码结构识别。
+  - 按允许依赖方向配置导入约束：禁止核心领域与编排目录 `import` 外层框架、UI、存储、网络与具体第三方 SDK，守住依赖倒置与组合根装配边界。
 
 ## `core:principle:programming-design-repo/name-shared-code-by-domain-knowledge`
 
