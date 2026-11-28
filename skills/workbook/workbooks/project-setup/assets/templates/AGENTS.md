@@ -50,11 +50,10 @@
 
 ### 公共工具与项目配置
 
-四个公共 CLI 的帮助（`-h`）可在任意层级查看。
+三个公共 CLI 的帮助（`-h`）可在任意层级查看。
 
 | 命令 | 用途 |
 | --- | --- |
 | `handbook` | workbook 与 principle 的发现和加载 |
 | `project-state` | 项目内架构实体、成果与关系的登记和查询 |
-| `plan-toolkit` | plan（仅Flow 模式）的读取、依赖检查与当前状态 |
 | `harness-install` | 项目工具包资源装配 |
